@@ -304,6 +304,7 @@ export default function Home() {
                 </div>
               )}
             </div>
+            <input className='font-medium hover:font-semibold text-sm uppercase cursor-pointer text-red-500' type='button' value={'Delelete Logo'} onClick={handleLogoDelete} />
 
           </>
         );
@@ -506,7 +507,7 @@ export default function Home() {
         </div>
       </div>
       <div className={`relative w-full duration-500 ${open ? "w-[82%]" : "w-[100%]"}`}>
-        <div className="absolute top-0 w-full h-full flex justify-center items-center">
+        <div className="absolute -top-20 w-full h-full flex justify-center items-center">
           <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
             <Suspense fallback={null}>
               <ambientLight intensity={0.6} />
