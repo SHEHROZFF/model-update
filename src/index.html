@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Background Removal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    canvas {
+      border: 1px solid black;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Automated Background Removal</h1>
+  <input type="file" id="upload" accept="image/*" />
+  <button id="process">Remove Background</button>
+  <br />
+  <h3>Original Image</h3>
+  <canvas id="originalCanvas"></canvas>
+  <br />
+  <h3>Processed Image (Background Removed)</h3>
+  <canvas id="processedCanvas"></canvas>
+
+  <script>
+    const originalCanvas = document.getElementById('originalCanvas');
+    const processedCanvas = document.getElementById('processedCanvas');
+    const originalCtx = originalCanvas.getContext('2d');
+    const processedCtx = processedCanvas.getContext('2d');
+    const upload = document.getElementById('upload');
+    const processButton = document.getElementById('process');
+
+    let img = null;
+
+    upload.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        img = new Image();
+        img.onload = () => {
+          // Set canvas sizes
+          originalCanvas.width = img.width;
+          originalCanvas.height = img.height;
+          processedCanvas.width = img.width;
+          processedCanvas.height = img.height;
+
+          // Draw original image
+          originalCtx.drawImage(img, 0, 0);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    processButton.addEventListener('click', () => {
+      if (img) {
+        // Draw original image to processed canvas
+        processedCtx.drawImage(img, 0, 0);
+
+        // Get image data
+        const imageData = processedCtx.getImageData(0, 0, processedCanvas.width, processedCanvas.height);
+        const data = imageData.data;
+
+        // Detect the most frequent color
+        const bgColor = detectMostFrequentColor(data);
+        if (bgColor) {
+          const tolerance = 50; // Tolerance for color matching
+
+          // Process pixels for background removal
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+
+            if (Math.abs(r - bgColor.r) < tolerance && Math.abs(g - bgColor.g) < tolerance && Math.abs(b - bgColor.b) < tolerance) {
+              data[i + 3] = 0; // Set alpha to 0 (transparent)
+            }
+          }
+
+          // Put modified image data back to canvas
+          processedCtx.putImageData(imageData, 0, 0);
+        }
+      }
+    });
+
+    function detectMostFrequentColor(data) {
+      const colorCount = {};
+      let maxCount = 0;
+      let mostFrequentColor = null;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const colorKey = `${r},${g},${b}`;
+
+        if (!colorCount[colorKey]) {
+          colorCount[colorKey] = 0;
+        }
+        colorCount[colorKey]++;
+
+        if (colorCount[colorKey] > maxCount) {
+          maxCount = colorCount[colorKey];
+          mostFrequentColor = { r, g, b };
+        }
+      }
+
+      return mostFrequentColor;
+    }
+  </script>
+</body>
+</html>
