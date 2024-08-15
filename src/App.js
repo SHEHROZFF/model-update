@@ -36,9 +36,8 @@ import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 
 
 const cuffColorSwatches = ['#401e72', '#29217d', '#081e2c', '#5f6468', '#003b49', '##003e66'];
-const heelColorSwatches = ['#FF5733', '#33FF57', '#3357FF', '#FFD700', '#FF69B4', '#8A2BE2'];
-const toeColorSwatches = ['#FF5733', '#33FF57', '#3357FF', '#FFD700', '#FF69B4', '#8A2BE2'];
-
+const heelColorSwatches = ['#401e72', '#29217d', '#081e2c', '#5f6468', '#003b49', '##003e66'];
+const toeColorSwatches = ['#401e72', '#29217d', '#081e2c', '#5f6468', '#003b49', '##003e66'];
 
 export default function Home() {
   const [cuffColor, setCuffColor] = useState('#ffffff');
