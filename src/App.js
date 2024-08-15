@@ -4,18 +4,17 @@ import React, { useState, useEffect } from 'react';
 // import SidebarMain from "@/components/Sidebar/sidebar";
 // import ToolbarMain from "@/components/Toolbar/toolbar";
 import "./../src/globals.css";
+import Swatches from './components/colorswatches';
 import * as THREE from 'three';
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import { SketchPicker } from 'react-color';
 // Component Import
-import { combineTextures } from './../src/combine_texture';
-import { combinePattern } from './../src/combine_pattern';
-import { combineSockcolor } from './../src/combine_color';
-import { combineLogoChange } from './../src/comine_logo';
-
-
+import { combineTextures } from './combine_texture';
+import { combinePattern } from './combine_pattern';
+import { combineSockcolor } from './combine_color';
+import { combineLogoChange } from './comine_logo';
 // Component Import
 
 
@@ -35,14 +34,19 @@ import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 // Sidebar Icons
 
 
+
+const cuffColorSwatches = ['#401e72', '#29217d', '#081e2c', '#5f6468', '#003b49', '##003e66'];
+const heelColorSwatches = ['#FF5733', '#33FF57', '#3357FF', '#FFD700', '#FF69B4', '#8A2BE2'];
+const toeColorSwatches = ['#FF5733', '#33FF57', '#3357FF', '#FFD700', '#FF69B4', '#8A2BE2'];
+
+
 export default function Home() {
   const [cuffColor, setCuffColor] = useState('#ffffff');
   const [heelColor, setHeelColor] = useState('#ffffff');
-  const [dsockColor, setdsockColor] = useState('#ffffff');
+  const [dsockColor, setDsockColor] = useState('#ffffff');
   const [toeColor, setToeColor] = useState('#ffffff');
   const [texture, setTexture] = useState(null);
   const [logo, setLogo] = useState(null);
-  // const [logotype, setLogotype] = useState(null);
   const [defaultSockTexture, setDefaultSockTexture] = useState(null);
   const [pattern, setPattern] = useState(''); // Pattern state
   const [logoPlacement, setLogoPlacement] = useState('footbed');
@@ -114,7 +118,6 @@ export default function Home() {
     const newPattern = event.target.value;
     setPattern(newPattern);
     if (defaultSockTexture) {
-      console.log(logoPlacement);
       const updatedTexture = combinePattern(defaultSockTexture, logo, newPattern, logoPlacement);
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.minFilter = THREE.LinearFilter;
@@ -122,12 +125,22 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
-  const handleColorOnChange = (event) => {
-    const newcolor = event.target.value;
-    setdsockColor(newcolor);
+  // const handleColorOnChange = (event) => {
+  //   const newcolor = event.target.value;
+  //   setdsockColor(newcolor);
+  //   if (defaultSockTexture) {
+  //     const updatedTexture = combineSockcolor(defaultSockTexture, logo, logoPlacement, newcolor);
+  //     updatedTexture.encoding = THREE.sRGBEncoding;
+  //     updatedTexture.minFilter = THREE.LinearFilter;
+  //     updatedTexture.magFilter = THREE.LinearFilter;
+  //     setTexture(updatedTexture);
+  //   }
+  // };
+  const handleColorOnChange = (color) => {
+    setDsockColor(color);
+    // Call your function to apply the color to the model here
     if (defaultSockTexture) {
-      console.log(logoPlacement);
-      const updatedTexture = combineSockcolor(defaultSockTexture, logo, logoPlacement, newcolor);
+      const updatedTexture = combineSockcolor(defaultSockTexture, logo, logoPlacement, color);
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
@@ -147,7 +160,6 @@ export default function Home() {
     const newLogoPlacement = event.target.value;
     setLogoPlacement(newLogoPlacement);
     if (defaultSockTexture) {
-      // console.log(logoPlacement);
       const updatedTexture = combineLogoChange(defaultSockTexture, logo, newLogoPlacement);
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.minFilter = THREE.LinearFilter;
@@ -278,7 +290,7 @@ export default function Home() {
       case 'Upload Logo':
         return (
           <>
-            <div className='flex flex-col items-center space-y-2 p-3 bg-white rounded-lg shadow-md overflow-hidden'>
+            <div className='flex  flex-col items-center space-y-2 p-3 bg-white rounded-lg shadow-md overflow-hidden'>
               <label className='text-base font-medium text-gray-700'>
                 Upload Logo:
               </label>
@@ -380,53 +392,61 @@ export default function Home() {
       case 'Customize Color':
         return (
           <>
-            <h1 className='text-lg font-semibold text-gray-800 mb-4'>Customize Color</h1>
-            <div className='flex flex-col items-center space-y-6 p-4 bg-white rounded-lg shadow-md'>
-              <div className='w-full'>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Cuff Color:</label>
-                <SketchPicker
-                  color={cuffColor}
-                  onChangeComplete={(color) => setCuffColor(color.hex)}
-                  className='rounded-md shadow-lg'
-                />
+            <div className='p-6 rounded-lg shadow-lg'>
+              <h1 className='text-2xl font-bold text-gray-800 mb-6'>Customize Color</h1>
+              <div className='grid gap-6 sm:grid-cols-2 md:grid-cols-4'>
+                <div className='bg-white p-4 rounded-lg shadow-md'>
+                  <label className='block text-sm font-medium text-gray-700 mb-3'>Cuff Color:</label>
+                  <div className='flex flex-wrap gap-2'>
+                    {cuffColorSwatches.map((color) => (
+                      <button
+                        key={color}
+                        style={{ backgroundColor: color }}
+                        className={`w-10 h-10 rounded-full border-2 ${cuffColor === color ? 'border-blue-500' : 'border-gray-300'} transition-transform transform hover:scale-110`}
+                        onClick={() => setCuffColor(color)}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className='bg-white p-4 rounded-lg shadow-md'>
+                  <label className='block text-sm font-medium text-gray-700 mb-3'>Heel Color:</label>
+                  <div className='flex flex-wrap gap-2'>
+                    {heelColorSwatches.map((color) => (
+                      <button
+                        key={color}
+                        style={{ backgroundColor: color }}
+                        className={`w-10 h-10 rounded-full border-2 ${heelColor === color ? 'border-blue-500' : 'border-gray-300'} transition-transform transform hover:scale-110`}
+                        onClick={() => setHeelColor(color)}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className='bg-white p-4 rounded-lg shadow-md'>
+                  <label className='block text-sm font-medium text-gray-700 mb-3'>Sock Color:</label>
+                  <div className='flex flex-col items-center'>
+                    <Swatches onSelectColor={handleColorOnChange} />
+                  </div>
+                </div>
+
+                <div className='bg-white p-4 rounded-lg shadow-md'>
+                  <label className='block text-sm font-medium text-gray-700 mb-3'>Toe Color:</label>
+                  <div className='flex flex-wrap gap-2'>
+                    {toeColorSwatches.map((color) => (
+                      <button
+                        key={color}
+                        style={{ backgroundColor: color }}
+                        className={`w-10 h-10 rounded-full border-2 ${toeColor === color ? 'border-blue-500' : 'border-gray-300'} transition-transform transform hover:scale-110`}
+                        onClick={() => setToeColor(color)}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              <div className='w-full'>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Heel Color:</label>
-                <SketchPicker
-                  color={heelColor}
-                  onChangeComplete={(color) => setHeelColor(color.hex)}
-                  className='rounded-md shadow-lg'
-                />
-              </div>
-
-              <div className='w-full'>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Sock Color:</label>
-                <input
-                  type="color"
-                  value={dsockColor}
-                  onChange={handleColorOnChange}
-                  title="Choose a color"
-                  className='block w-full h-10 cursor-pointer rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out'
-                />
-              </div>
-
-              <div className='w-full'>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Toe Color:</label>
-                <SketchPicker
-                  color={toeColor}
-                  onChangeComplete={(color) => setToeColor(color.hex)}
-                  className='rounded-md shadow-lg'
-                />
-              </div>
-
-              <button
-                onClick={handleSave}
-                className='mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out'
-              >
-                Save Customized PNG
-              </button>
             </div>
+
 
           </>
         );
@@ -458,11 +478,16 @@ export default function Home() {
               </svg>
             </button>
           </div>
-          <svg
-            width={open ? 100 : 60}
-            height={open ? 100 : 60}
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z" /><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z" />
-          </svg>
+          {open && (
+            <span className='title flex justify-center flex-col gap-0 py-2'>
+              <p className='text-5xl uppercase tracking-wider font-bold text-[#273c75]'>
+                SOCK
+              </p>
+              <span className='text-sm font-medium tracking-[6px] text-center'>
+                Customizer
+              </span>
+            </span>
+          )}
         </div>
         <div className="px-2 flex flex-col gap-y-3">
           <div className="px-2 flex flex-col gap-y-3">
@@ -507,7 +532,7 @@ export default function Home() {
         </div>
       </div>
       <div className={`relative w-full duration-500 ${open ? "w-[82%]" : "w-[100%]"}`}>
-        <div className="absolute -top-20 w-full h-full flex justify-center items-center">
+        <div className="absolute -top-24 w-full h-full flex justify-center items-center">
           <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
             <Suspense fallback={null}>
               <ambientLight intensity={0.6} />
@@ -534,26 +559,36 @@ export default function Home() {
               />
             </Suspense>
           </Canvas>
+          <div className='mt-6 flex justify-center absolute top-20 right-2'>
+                <button
+                  onClick={handleSave}
+                  className='px-8 py-3 bg-[#273c75] text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out'
+                >
+                  Save Customized PNG
+                </button>
+              </div>
         </div>
         <div className="w-full absolute bottom-0 left-0 border bg-white">
-          <div className="flex overflow-x-auto h-56 scrollbar-hide scroll-container">
+          <div className="flex overflow-x-auto scrollbar-hide scroll-container">
             {activeOptions.map((option) => (
-              <><div
-                key={option}
-                className='p-5 flex-shrink-0 w-1/5 h-48 space-y-6 border rounded-lg bg-gray-100 shadow-md relative m-4'
-              >
-                {renderToolbarContent(option)}
-                <button
-                  onClick={() => handleDelete(option)}
-                  className='absolute bottom-2 right-2 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition'
+              <>
+                <div
+                  key={option}
+                  className='p-5 flex-shrink-0  h-full space-y-6 border rounded-lg bg-gray-100 shadow-md relative m-4'
                 >
-                  <DeleteSharpIcon />
-                </button>
+                  {renderToolbarContent(option)}
+                  <button
+                    onClick={() => handleDelete(option)}
+                    className='absolute bottom-2 right-2 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition'
+                  >
+                    <DeleteSharpIcon />
+                  </button>
 
-              </div><button
-                onClick={() => scroll(100)}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
-              >
+                </div>
+                <button
+                  onClick={() => scroll(100)}
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
+                >
                   {'>'}
                 </button><button
                   onClick={() => scroll(-100)}
