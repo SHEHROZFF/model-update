@@ -1,8 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-// import Header from "@/components/Header/header";
-// import SidebarMain from "@/components/Sidebar/sidebar";
-// import ToolbarMain from "@/components/Toolbar/toolbar";
 import "./../src/globals.css";
 import Swatches from "./components/colorswatches";
 import * as THREE from "three";
@@ -10,7 +7,7 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { SketchPicker } from "react-color";
-import { Tooltip } from 'antd';
+import { Tooltip } from "antd";
 // Component Import
 import { combineTextures } from "./combine_texture";
 import { combinePattern } from "./combine_pattern";
@@ -25,11 +22,10 @@ import DesignServicesSharpIcon from "@mui/icons-material/DesignServicesSharp";
 import TextureSharpIcon from "@mui/icons-material/TextureSharp";
 import PaletteSharpIcon from "@mui/icons-material/PaletteSharp";
 import LocationSearchingSharpIcon from "@mui/icons-material/LocationSearchingSharp";
-// Sidebar Icons
-
-// Sidebar Icons
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
-
+import ClearIcon from "@mui/icons-material/Clear";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 // Sidebar Icons
 
 const cuffColorSwatches = [
@@ -70,7 +66,6 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    // Load the default sock texture
     const loader = new THREE.TextureLoader();
     loader.load("/sockTexture.png", (texture) => {
       texture.encoding = THREE.sRGBEncoding;
@@ -157,20 +152,8 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
-  // const handleColorOnChange = (event) => {
-  //   const newcolor = event.target.value;
-  //   setdsockColor(newcolor);
-  //   if (defaultSockTexture) {
-  //     const updatedTexture = combineSockcolor(defaultSockTexture, logo, logoPlacement, newcolor);
-  //     updatedTexture.encoding = THREE.sRGBEncoding;
-  //     updatedTexture.minFilter = THREE.LinearFilter;
-  //     updatedTexture.magFilter = THREE.LinearFilter;
-  //     setTexture(updatedTexture);
-  //   }
-  // };
   const handleColorOnChange = (color) => {
     setDsockColor(color);
-    // Call your function to apply the color to the model here
     if (defaultSockTexture) {
       const updatedTexture = combineSockcolor(
         defaultSockTexture,
@@ -361,16 +344,27 @@ export default function Home() {
       case "Upload Logo":
         return (
           <>
-            <div className="flex  flex-col items-center space-y-2 p-3 bg-white rounded-lg shadow-md overflow-hidden">
-              <label className="text-base font-medium text-gray-700">
-                Upload Logo:
-              </label>
+            <div className="flex flex-col items-start space-y-2 p-3 bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="flex justify-between items-center w-full">
+                <label className="text-base font-medium text-gray-700">
+                  Upload Logo:
+                </label>
+                {selectedImage && (
+                  <Tooltip title="Delete Logo">
+                    <ClearIcon
+                      onClick={handleLogoDelete}
+                      htmlColor="#E3262C"
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+              </div>
               <input
                 type="file"
                 accept="image/*"
                 className="block w-full text-xs text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none
-               file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white
-               hover:file:bg-blue-700 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+      file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white
+      hover:file:bg-blue-700 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105"
                 onChange={handleLogoChange}
               />
               <p className="text-xs text-gray-500">PNG, JPG</p>
@@ -385,12 +379,6 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <input
-              className="font-medium hover:font-semibold text-sm uppercase cursor-pointer text-red-500"
-              type="button"
-              value={"Delelete Logo"}
-              onClick={handleLogoDelete}
-            />
           </>
         );
       case "Upload Texture":
@@ -589,14 +577,11 @@ export default function Home() {
             </button>
           </div>
           {open && (
-            <span className="title flex justify-center flex-col gap-0 py-2">
-              <p className="text-5xl uppercase tracking-wider font-bold text-[#273c75]">
-                SOCK
-              </p>
-              <span className="text-sm font-medium tracking-[6px] text-center">
-                Customizer
-              </span>
-            </span>
+            <img
+              src="https://socks.phpnode.net/wp-content/uploads/2024/07/Logo3_vectorized-removebg-preview-e1722618835447.png"
+              className="w-36"
+              alt=""
+            />
           )}
         </div>
         <div className="px-2 flex flex-col gap-y-3">
@@ -606,35 +591,35 @@ export default function Home() {
                 className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
                 onClick={() => handleOptionClick("Upload Logo")}
               >
-                <FitbitSharpIcon htmlColor="#273c75" />
+                <FitbitSharpIcon htmlColor="#E3262C" />
                 {open && <h1 className="text-sidebarTEXT">Upload Logo</h1>}
               </div>
               <div
                 className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
                 onClick={() => handleOptionClick("Upload Texture")}
               >
-                <TextureSharpIcon htmlColor="#273c75" />
+                <TextureSharpIcon htmlColor="#E3262C" />
                 {open && <h1 className="text-sidebarTEXT">Upload Texture</h1>}
               </div>
               <div
                 className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
                 onClick={() => handleOptionClick("Choose Pattern")}
               >
-                <DesignServicesSharpIcon htmlColor="#273c75" />
+                <DesignServicesSharpIcon htmlColor="#E3262C" />
                 {open && <h1 className="text-sidebarTEXT">Choose Pattern</h1>}
               </div>
               <div
                 className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
                 onClick={() => handleOptionClick("Logo Placement")}
               >
-                <PaletteSharpIcon htmlColor="#273c75" />
+                <PaletteSharpIcon htmlColor="#E3262C" />
                 {open && <h1 className="text-sidebarTEXT">Logo Placement</h1>}
               </div>
               <div
                 className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
                 onClick={() => handleOptionClick("Customize Color")}
               >
-                <LocationSearchingSharpIcon htmlColor="#273c75" />
+                <LocationSearchingSharpIcon htmlColor="#E3262C" />
                 {open && <h1 className="text-sidebarTEXT">Customize Color</h1>}
               </div>
             </div>
@@ -644,66 +629,70 @@ export default function Home() {
 
       {/* sidebar for small screens */}
       <div className="absolute top-[550px] left-1/2 transform -translate-x-1/2 w-[84px] z-10 md:hidden">
-      <div className="flex justify-center items-center h-20 px-3 mb-8">
-        <div className="px-2 flex flex-row gap-y-3">
-          <div className="px-2 flex flex-row gap-y-3 py-3 bg-slate-400 rounded-lg w-[360px] overflow-x-auto">
+        <div className="flex justify-center items-center h-20 px-3 mb-8">
+          <div className="px-2 flex flex-row gap-y-3">
+            <div className="px-2 flex flex-row gap-y-3 py-3 bg-red-100 rounded-lg w-[360px] overflow-x-auto">
+              <Tooltip title="Upload Logo" placement="bottomRight">
+                <div
+                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
+                  onClick={() => handleOptionClick("Upload Logo")}
+                >
+                  <FitbitSharpIcon htmlColor="#E3262C" className="ml-2" />
+                </div>
+              </Tooltip>
 
-            <Tooltip title="Upload Logo" placement="bottomRight">
-              <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                onClick={() => handleOptionClick("Upload Logo")}
-              >
-                <FitbitSharpIcon htmlColor="#273c75" className="ml-2" />
-              </div>
-            </Tooltip>
+              <Tooltip title="Upload Texture" placement="bottomRight">
+                <div
+                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
+                  onClick={() => handleOptionClick("Upload Texture")}
+                >
+                  <TextureSharpIcon htmlColor="#E3262C" className="ml-2" />
+                </div>
+              </Tooltip>
 
-            <Tooltip title="Upload Texture" placement="bottomRight">
-              <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                onClick={() => handleOptionClick("Upload Texture")}
-              >
-                <TextureSharpIcon htmlColor="#273c75" className="ml-2" />
-              </div>
-            </Tooltip>
+              <Tooltip title="Choose Pattern" placement="bottomRight">
+                <div
+                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
+                  onClick={() => handleOptionClick("Choose Pattern")}
+                >
+                  <DesignServicesSharpIcon
+                    htmlColor="#E3262C"
+                    className="ml-2"
+                  />
+                </div>
+              </Tooltip>
 
-            <Tooltip title="Choose Pattern" placement="bottomRight">
-              <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                onClick={() => handleOptionClick("Choose Pattern")}
-              >
-                <DesignServicesSharpIcon htmlColor="#273c75" className="ml-2" />
-              </div>
-            </Tooltip>
+              <Tooltip title="Logo Placement" placement="bottomRight">
+                <div
+                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-M3"
+                  onClick={() => handleOptionClick("Logo Placement")}
+                >
+                  <PaletteSharpIcon htmlColor="#E3262C" className="ml-2" />
+                </div>
+              </Tooltip>
 
-            <Tooltip title="Logo Placement" placement="bottomRight">
-              <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-M3"
-                onClick={() => handleOptionClick("Logo Placement")}
-              >
-                <PaletteSharpIcon htmlColor="#273c75" className="ml-2" />
-              </div>
-            </Tooltip>
-
-            <Tooltip title="Customize Color" placement="bottomRight">
-              <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                onClick={() => handleOptionClick("Customize Color")}
-              >
-                <LocationSearchingSharpIcon htmlColor="#273c75" className="ml-2" />
-              </div>
-            </Tooltip>
-
+              <Tooltip title="Customize Color" placement="bottomRight">
+                <div
+                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
+                  onClick={() => handleOptionClick("Customize Color")}
+                >
+                  <LocationSearchingSharpIcon
+                    htmlColor="#E3262C"
+                    className="ml-2"
+                  />
+                </div>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
       <div
         className={`relative w-full duration-500 ${
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="absolute lg:-top-20 top-0 w-full h-full flex justify-center items-center ">
+        <div className="absolute lg:-top-20 top-0 w-full h-full flex justify-center items-center">
           <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
@@ -741,13 +730,18 @@ export default function Home() {
               </Suspense>
             </Canvas>
           </div>
-          <div className="mt-6 flex justify-center absolute md:top-16 top-0 right-2 ">
+          <div className="mt-6 flex gap-x-2 absolute top-0 right-2 lg:top-20 lg:right-2">
             <button
               // onClick={handleSave}
-              className="px-8 py-3 bg-[#273c75] text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
             >
               Buy Now
             </button>
+            <a href="https://socks.phpnode.net/">
+              <button className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                Exit Editor
+              </button>
+            </a>
           </div>
         </div>
         <div className="w-full absolute bottom-0 left-0 border bg-white">
