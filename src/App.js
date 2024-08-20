@@ -17,7 +17,7 @@ import { combinePattern } from "./combine_pattern";
 import { combineSockcolor } from "./combine_color";
 import { combineLogoChange } from "./comine_logo";
 import Menu from "./components/menu";
-// Component Import
+// Component Importg
 
 
 // Sidebar Icons
