@@ -200,7 +200,7 @@ export default function Home() {
 
        
         // Application Password
-        const credentials = btoa(`${username}:${password}`);
+        const credentials = btoa(`${'socksadmin'}:${'8jPu epUh nWyj gHAF Gjbx aqiV'}`);
 
         try {
           const response = await fetch(
