@@ -10,7 +10,7 @@
 }
 body{
   overflow-y: hidden;
-  min-height: 100vh; 
+/*   min-height: 100vh;  */
 }
 
 /* Hide the sidebar on screens smaller than 768px */
