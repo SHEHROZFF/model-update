@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaCartPlus, FaSignOutAlt } from "react-icons/fa";
+
 import axios from "axios";
 import { spiral } from "ldrs";
 
@@ -180,10 +182,10 @@ export default function Home() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-// Assuming texture is managed here
+  // Assuming texture is managed here
   const handleOpenModal = () => {
     setIsModalVisible(true);
-  }
+  };
 
   const handleSave = async () => {
     if (texture) {
@@ -558,7 +560,7 @@ export default function Home() {
       case "Customize Color":
         return (
           <>
-            <div className="p-6 rounded-lg shadow-lg flex flex-col">
+            <div className="p-3 rounded-lg shadow-lg flex flex-col">
               <h1 className="text-2xl font-bold text-gray-800 mb-6">
                 Customize Color
               </h1>
@@ -721,7 +723,7 @@ export default function Home() {
       </div>
 
       {/* sidebar for small screens */}
-      <div className="absolute top-[550px] left-1/2 transform -translate-x-1/2 w-[84px] z-10 md:hidden">
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-[84px] z-10 md:hidden">
         <div className="flex justify-center items-center h-20 px-3 mb-8">
           <div className="px-2 flex flex-row gap-y-3">
             <div className="px-2 flex flex-row gap-y-3 py-3 bg-red-100 rounded-lg w-[360px] overflow-x-auto">
@@ -785,7 +787,7 @@ export default function Home() {
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="absolute lg:-top-20 top-0 w-full h-full flex justify-center items-center">
+        <div className="absolute lg:-top-20 top-28 w-full h-full flex justify-center items-center">
           <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
@@ -824,57 +826,85 @@ export default function Home() {
             </Canvas>
           </div>
           <div className="mt-6 flex gap-x-2 absolute top-0 right-2 lg:top-20 lg:right-2">
-            <button
-              onClick={handleOpenModal}
-              className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
-            >
-              Buy Now
-            </button>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-center">
+              <div className=" hidden sm:block">
+                <button
+                  onClick={handleOpenModal}
+                  className="mb-4 md:mb-0 md:mr-4 px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white font-semibold sm:rounded-lg rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                >
+                  Buy Now
+                </button>
+           
+              <a href="https://socks.phpnode.net/">
+                <button className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white sm:rounded-lg rounded-full font-semibold  shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                  Exit Editor
+                </button>
+              </a>
+              </div>
+            </div>
+
+            <div className="flex flex-col mt-24 md:flex-row md:items-center sm:hidden">
+              <div className="mb-4 md:mb-0 ">
+                <button
+                  onClick={handleOpenModal}
+                  className="flex items-center justify-center px-4 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white font-semibold  rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                >
+                  <span className="hidden md:inline">Buy Now</span>
+                  <FaCartPlus className="md:hidden h-5 w-5" />
+                </button>
+              </div>
+
+              <a href="https://socks.phpnode.net/">
+                <button className="flex items-center justify-center px-4 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white sm:rounded-lg rounded-full font-semibold shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                  <span className="hidden md:inline">Exit Editor</span>
+                  <FaSignOutAlt className="md:hidden h-5 w-5" />
+                </button>
+              </a>
+            </div>
+
             <ToastContainer />
 
             <Modal
-      title="Submit Your Order"
-      visible={isModalVisible}
-      onOk={handleSave}
-      onCancel={handleCloseModal}
-      okText="Upload and Submit" 
-      okButtonProps={{
-        style: { backgroundColor: 'rgba(227, 38, 44, 1)', borderColor: 'rgba(0, 0, 0, 0.25)'    }, // Set the button color to red
-      }}
-    >
-      <Form onFinish={handleSubmit}>
-        <Form.Item label="Name">
-          <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Form.Item>
-        <Form.Item label="Phone Number">
-          <Input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </Form.Item>
-        <Form.Item label="Email">
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Item>
-      </Form>
+              title="Submit Your Order"
+              visible={isModalVisible}
+              onOk={handleSave}
+              onCancel={handleCloseModal}
+              okText="Upload and Submit"
+              okButtonProps={{
+                style: {
+                  backgroundColor: "rgba(227, 38, 44, 1)",
+                  borderColor: "rgba(0, 0, 0, 0.25)",
+                }, // Set the button color to red
+              }}
+            >
+              <Form onFinish={handleSubmit}>
+                <Form.Item label="Name">
+                  <Input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Form.Item>
+                <Form.Item label="Phone Number">
+                  <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </Form.Item>
+                <Form.Item label="Email">
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Form.Item>
+              </Form>
 
-      {loading && (
-        <div style={{ textAlign: "center", marginTop: 20 }}>
-          <l-spiral size="40" speed="0.9" color="black"></l-spiral>
-        </div>
-      )}
-    </Modal>
-            <a href="https://socks.phpnode.net/">
-              <button className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
-                Exit Editor
-              </button>
-            </a>
+              {loading && (
+                <div style={{ textAlign: "center", marginTop: 20 }}>
+                  <l-spiral size="40" speed="0.9" color="black"></l-spiral>
+                </div>
+              )}
+            </Modal>
           </div>
         </div>
         <div className="w-full absolute bottom-0 left-0 border bg-white">
