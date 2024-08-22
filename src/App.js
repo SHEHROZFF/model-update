@@ -787,7 +787,7 @@ export default function Home() {
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="absolute lg:-top-20 top-24 w-full h-full flex justify-center items-center">
+        <div className="absolute lg:-top-20 top-28 w-full h-full flex justify-center items-center">
           <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
