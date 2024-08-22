@@ -723,7 +723,7 @@ export default function Home() {
       </div>
 
       {/* sidebar for small screens */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-[84px] z-10 md:hidden">
+      <div className="screen-responsive absolute top-4 left-1/2 transform -translate-x-1/2 w-[84px] z-10 md:hidden">
         <div className="flex justify-center items-center h-20 px-3 mb-8">
           <div className="px-2 flex flex-row gap-y-3">
             <div className="px-2 flex flex-row gap-y-3 py-3 bg-red-100 rounded-lg w-[360px] overflow-x-auto">
