@@ -9,7 +9,7 @@
   transition: width 0.3s;
 }
 body{
-  overflow-y: hidden;
+  overflow: hidden;
   min-height: 110vh; 
 }
 
