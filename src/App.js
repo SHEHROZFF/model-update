@@ -787,7 +787,7 @@ export default function Home() {
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="absolute lg:-top-20 top-28 w-full h-full flex justify-center items-center">
+        <div className="absolute lg:-top-20 top-24 w-full h-full flex justify-center items-center">
           <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
@@ -918,20 +918,20 @@ export default function Home() {
                   {renderToolbarContent(option)}
                   <button
                     onClick={() => handleDelete(option)}
-                    className="absolute bottom-2 right-2 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
+                    className="font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
                   >
                     <DeleteSharpIcon />
                   </button>
                 </div>
                 <button
                   onClick={() => scroll(100)}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
+                  className="absolute right-4 -top-8  lg:right-0 lg:top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
                 >
                   {">"}
                 </button>
                 <button
                   onClick={() => scroll(-100)}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
+                  className="absolute right-10 -top-8  lg:right-0 lg:top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
                 >
                   {"<"}
                 </button>
