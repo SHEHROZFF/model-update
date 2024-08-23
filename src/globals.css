@@ -10,7 +10,7 @@
 }
 body{
   overflow: hidden;
-  min-height: 110vh; 
+/*   min-height: 110vh;  */
 }
 
 @media screen and (max-width: 768px) {
