@@ -560,10 +560,8 @@ export default function Home() {
       case "Customize Color":
         return (
           <>
-            <div className="p-3 rounded-lg shadow-lg flex flex-col">
-              <h1 className="text-2xl font-bold text-gray-800 mb-6">
-                Customize Color
-              </h1>
+            <div className="bg-white p-3 rounded-lg shadow-lg flex flex-col">
+              
               <div className="grid gap-6 grid-cols-4 ">
                 <div className="bg-white p-4 rounded-lg shadow-md">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -782,7 +780,7 @@ export default function Home() {
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="absolute  lg:-top-20 top-28 w-full h-full flex justify-center items-center">
+        <div className="absolute  lg:-top-20 top-28 w-full h-screen flex justify-center items-center">
           <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
@@ -902,21 +900,22 @@ export default function Home() {
             </Modal>
           </div>
         </div>
-        <div className="w-full absolute bottom-14 left-0 border bg-white">
+        <div className="w-full h-48 absolute bottom-0 left-0 border bg-white">
           <div className="flex overflow-x-auto scrollbar-hide scroll-container">
             {activeOptions.map((option) => (
               <>
                 <div
                   key={option}
-                  className="p-5 flex-shrink-0  h-full space-y-6 border rounded-lg bg-gray-100 shadow-md relative m-4"
+                  className="p-3 flex-shrink-0  h-full space-y-6 border rounded-lg bg-gray-100 shadow-md relative m-4"
                 >
                   {renderToolbarContent(option)}
-                  <button
+                   <button
                     onClick={() => handleDelete(option)}
-                    className="absolute bottom-2 right-2 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
+                    className="absolute -bottom-6 -right-6 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
                   >
                     <DeleteSharpIcon />
                   </button>
+                 
                 </div>
                 <button
                   onClick={() => scroll(100)}
