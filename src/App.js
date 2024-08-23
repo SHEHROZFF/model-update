@@ -783,7 +783,7 @@ export default function Home() {
         }`}
       >
         <div className="absolute  lg:-top-20 top-28 w-full h-full flex justify-center items-center">
-          <div className="w-1/2 sm:w-full h-1/2 md:h-full mb-80 lg:mb-0">
+          <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />
