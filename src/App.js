@@ -900,7 +900,7 @@ export default function Home() {
             </Modal>
           </div>
         </div>
-        <div className="w-full h-48 absolute bottom-0 left-0 border bg-white">
+        <div className="w-full h-60 absolute bottom-0 left-0 border bg-white">
           <div className="flex overflow-x-auto scrollbar-hide scroll-container">
             {activeOptions.map((option) => (
               <>
