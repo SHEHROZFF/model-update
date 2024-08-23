@@ -723,72 +723,67 @@ export default function Home() {
       </div>
 
       {/* sidebar for small screens */}
-      <div className="screen-responsive absolute top-4 left-1/2 transform -translate-x-1/2 w-[84px] z-10 md:hidden">
-        <div className="flex justify-center items-center h-20 px-3 mb-8">
-          <div className="px-2 flex flex-row gap-y-3">
-            <div className="px-2 flex flex-row gap-y-3 py-3 bg-red-100 rounded-lg w-[360px] overflow-x-auto">
-              <Tooltip title="Upload Logo" placement="bottomRight">
-                <div
-                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                  onClick={() => handleOptionClick("Upload Logo")}
-                >
-                  <FitbitSharpIcon htmlColor="#E3262C" className="ml-2" />
-                </div>
-              </Tooltip>
-
-              <Tooltip title="Upload Texture" placement="bottomRight">
-                <div
-                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                  onClick={() => handleOptionClick("Upload Texture")}
-                >
-                  <TextureSharpIcon htmlColor="#E3262C" className="ml-2" />
-                </div>
-              </Tooltip>
-
-              <Tooltip title="Choose Pattern" placement="bottomRight">
-                <div
-                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                  onClick={() => handleOptionClick("Choose Pattern")}
-                >
-                  <DesignServicesSharpIcon
-                    htmlColor="#E3262C"
-                    className="ml-2"
-                  />
-                </div>
-              </Tooltip>
-
-              <Tooltip title="Logo Placement" placement="bottomRight">
-                <div
-                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-M3"
-                  onClick={() => handleOptionClick("Logo Placement")}
-                >
-                  <PaletteSharpIcon htmlColor="#E3262C" className="ml-2" />
-                </div>
-              </Tooltip>
-
-              <Tooltip title="Customize Color" placement="bottomRight">
-                <div
-                  className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-3"
-                  onClick={() => handleOptionClick("Customize Color")}
-                >
-                  <LocationSearchingSharpIcon
-                    htmlColor="#E3262C"
-                    className="ml-2"
-                  />
-                </div>
-              </Tooltip>
-            </div>
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-[72px] z-10 md:hidden">
+  <div className="flex justify-center items-center h-16 px-2 mb-6">
+    <div className="flex flex-row gap-y-2">
+      <div className="py-2 px-2 flex flex-row gap-y-2 bg-red-100 rounded-lg w-[220px]">
+        <Tooltip title="Upload Logo" placement="bottomRight">
+          <div
+            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+            onClick={() => handleOptionClick("Upload Logo")}
+          >
+            <FitbitSharpIcon htmlColor="#E3262C" className="text-sm" />
           </div>
-        </div>
+        </Tooltip>
+
+        <Tooltip title="Upload Texture" placement="bottomRight">
+          <div
+            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+            onClick={() => handleOptionClick("Upload Texture")}
+          >
+            <TextureSharpIcon htmlColor="#E3262C" className="text-sm" />
+          </div>
+        </Tooltip>
+
+        <Tooltip title="Choose Pattern" placement="bottomRight">
+          <div
+            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+            onClick={() => handleOptionClick("Choose Pattern")}
+          >
+            <DesignServicesSharpIcon htmlColor="#E3262C" className="text-sm" />
+          </div>
+        </Tooltip>
+
+        <Tooltip title="Logo Placement" placement="bottomRight">
+          <div
+            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+            onClick={() => handleOptionClick("Logo Placement")}
+          >
+            <PaletteSharpIcon htmlColor="#E3262C" className="text-sm" />
+          </div>
+        </Tooltip>
+
+        <Tooltip title="Customize Color" placement="bottomRight">
+          <div
+            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+            onClick={() => handleOptionClick("Customize Color")}
+          >
+            <LocationSearchingSharpIcon htmlColor="#E3262C" className="text-sm" />
+          </div>
+        </Tooltip>
       </div>
+    </div>
+  </div>
+</div>
+
 
       <div
         className={`relative w-full duration-500 ${
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="absolute lg:-top-20 top-28 w-full h-full flex justify-center items-center">
-          <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
+        <div className="absolute  lg:-top-20 top-28 w-full h-full flex justify-center items-center">
+          <div className="w-1/2 sm:w-full h-1/2 md:h-full mb-80 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />
@@ -918,20 +913,20 @@ export default function Home() {
                   {renderToolbarContent(option)}
                   <button
                     onClick={() => handleDelete(option)}
-                    className="font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
+                    className="absolute bottom-2 right-2 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
                   >
                     <DeleteSharpIcon />
                   </button>
                 </div>
                 <button
                   onClick={() => scroll(100)}
-                  className="absolute right-4 -top-8  lg:right-0 lg:top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
                 >
                   {">"}
                 </button>
                 <button
                   onClick={() => scroll(-100)}
-                  className="absolute right-10 -top-8  lg:right-0 lg:top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
                 >
                   {"<"}
                 </button>
