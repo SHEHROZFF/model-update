@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCartPlus, FaSignOutAlt } from "react-icons/fa";
 
+
 import axios from "axios";
 import { spiral } from "ldrs";
 
@@ -143,15 +144,131 @@ export default function Home() {
     }
   };
 
+  const [dotColors, setDotColors] = useState(['#85BFCB', '#01284D', '#D9D9D9',"#006868"]);
+  const [checkBoardColors, setCheckBoardColors] = useState(['#282A2C', '#E56E46', '#CFCFCF']);
+  const [illusionistic_colors, setIllusionisticColors] = useState([
+    "#000",
+    "#ff0000",
+    "#810808",
+  ]);
+  const [csts1, setCsts1] = useState([
+    "#ffffff",
+    "#FF0000",
+    "#0000FF",
+    "#FF0000",
+    "#0000FF",
+  ]);
+  const [csts2, setCsts2] = useState([
+    "#023865",
+    "#ffffff",
+    "#E4CB63",
+    "#EBB14A",
+    "#F1653F",
+  ]);
+  const [csts3, setCsts3] = useState([
+    "#ffffff",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+  ]);
+  const [csts4, setCsts4] = useState([
+    "#1F1E7A",
+    "#83C0CC",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+    "#83C0CC",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#83C0CC",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+    "#83C0CC",
+    "#83C0CC",
+    "#83C0CC",
+   
+  ]);
   const handlePatternChange = (event) => {
     const newPattern = event.target.value;
     setPattern(newPattern);
+    updateTexture(newPattern);
+  };
+
+  const handleDotColorChange = (event, index) => {
+    const updatedColors = [...dotColors];
+    updatedColors[index] = event.target.value;
+    setDotColors(updatedColors);
+    updateTexture(pattern);
+  };
+
+
+  const handleCheckBoardColorChange = (event, index) => {
+    const updatedColors = [...checkBoardColors];
+    updatedColors[index] = event.target.value;
+    setCheckBoardColors(updatedColors);
+    updateTexture(pattern);
+  };
+
+
+
+  const handleIllusionisticColorChange = (event, index) => {
+    const updatedColors = [...illusionistic_colors];
+    updatedColors[index] = event.target.value;
+    setIllusionisticColors(updatedColors);
+    updateTexture(pattern);
+  };
+
+  const handleCsts1Change = (event, index) => {
+    const updatedColors = [...csts1];
+    updatedColors[index] = event.target.value;
+    setCsts1(updatedColors);
+    updateTexture(pattern);
+  };
+
+  const handleCsts2Change = (event, index) => {
+    const updatedColors = [...csts2];
+    updatedColors[index] = event.target.value;
+    setCsts2(updatedColors);
+    updateTexture(pattern);
+  };
+
+  const handleCsts3Change = (event, index) => {
+    const updatedColors = [...csts3];
+    updatedColors[index] = event.target.value;
+    setCsts3(updatedColors);
+    updateTexture(pattern);
+  };
+
+  const handleCsts4Change = (event, index) => {
+    const updatedColors = [...csts4];
+    updatedColors[index] = event.target.value;
+    setCsts4(updatedColors);
+    updateTexture(pattern);
+  };
+
+  const updateTexture = (newPattern) => {
     if (defaultSockTexture) {
       const updatedTexture = combinePattern(
         defaultSockTexture,
         logo,
         newPattern,
-        logoPlacement
+        logoPlacement,
+        dotColors,
+        checkBoardColors,
+        illusionistic_colors,
+        csts1,
+        csts2,
+        csts3,
+        csts4
+
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.minFilter = THREE.LinearFilter;
@@ -159,6 +276,18 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
+
+  useEffect(() => {
+    updateTexture(pattern); // Ensure texture updates on pattern change
+  }, [dotColors, checkBoardColors, illusionistic_colors, csts1, csts2, csts3, csts4, pattern]);
+
+  useEffect(() => {
+    return () => {
+      if (texture) {
+        texture.dispose(); // Dispose of the texture to free up memory
+      }
+    };
+  }, [texture]);
   const handleColorOnChange = (color) => {
     setDsockColor(color);
     if (defaultSockTexture) {
@@ -506,7 +635,7 @@ export default function Home() {
       case "Choose Pattern":
         return (
           <>
-            <h1 className="text-lg font-semibold text-gray-700 mb-2">
+            <h1 className="text-lg w-[1000px] font-semibold text-gray-700 mb-2">
               Choose Pattern
             </h1>
             <div className="flex flex-col items-center space-y-2">
@@ -521,11 +650,144 @@ export default function Home() {
                 <option value="dots">Dots</option>
                 <option value="checkerboard">Checkerboard</option>
                 <option value="illusionistic">Illusionistic</option>
-                <option value="custom_1">cust-1</option>
-                <option value="custom_2">cust-2</option>
-                <option value="custom_3">cust-3</option>
-                <option value="custom_4">cust-4</option>
+                <option value="custom_1">Cust-1</option>
+                <option value="custom_2">Cust-2</option>
+                <option value="custom_3">Cust-3</option>
+                <option value="custom_4">Cust-4</option>
               </select>
+
+              {pattern === "dots" && (
+                <div className="flex w-[900px] flex-row gap-4   ">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600">
+                    Dot Colors:
+                  </h2>
+                  {dotColors.map((color, index) => (
+                    <input
+                      key={index}
+                      type="color"
+                      value={color}
+                      onChange={(event) => handleDotColorChange(event, index)}
+                      className="w-full border border-gray-300 rounded-lg"
+                    />
+                  ))}
+                </div>
+              )}
+
+              {pattern === "checkerboard" && (
+                <div className="flex w-[900px] flex-row gap-4  ">
+                  <h2 className="text-sm  text-nowrap font-semibold text-gray-600">
+                    Checkerboard Colors:
+                  </h2>
+                  {checkBoardColors.map((color, index) => (
+                    <input
+                      key={index}
+                      type="color"
+                      value={color}
+                      onChange={(event) =>
+                        handleCheckBoardColorChange(event, index)
+                      }
+                      className="w-full border text-nowrap border-gray-300 rounded-lg"
+                    />
+                  ))}
+                </div>
+              )}
+              {pattern === "illusionistic" && (
+                <div className="flex w-[900px] flex-row gap-4  ">
+                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
+                    Illusionistic Colors:
+                  </h2>
+                  {illusionistic_colors.map((color, index) => (
+                    <input
+                      key={index}
+                      type="color"
+                      value={color}
+                      onChange={(event) =>
+                        handleIllusionisticColorChange(event, index)
+                      }
+                      className="w-full border text-nowrap border-gray-300 rounded-lg"
+                    />
+                  ))}
+                </div>
+              )}
+
+              {pattern === "custom_1" && (
+                <div className="flex w-[900px] flex-row gap-4  ">
+                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
+                    Custom 1 Colors:
+                  </h2>
+                  {csts1.map((color, index) => (
+                    <input
+                      key={index}
+                      type="color"
+                      value={color}
+                      onChange={(event) =>
+                        handleCsts1Change(event, index)
+                      }
+                      className="w-full border text-nowrap border-gray-300 rounded-lg"
+                    />
+                  ))}
+                </div>
+              )}
+
+              {pattern === "custom_2" && (
+                <div className="flex w-[900px] flex-row gap-4  ">
+                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
+                    Custom 2 Colors:
+                  </h2>
+                  {csts2.map((color, index) => (
+                    <input
+                      key={index}
+                      type="color"
+                      value={color}
+                      onChange={(event) =>
+                        handleCsts2Change(event, index)
+                      }
+                      className="w-full border border-gray-300 rounded-lg"
+                    />
+                  ))}
+                </div>
+              )}
+
+              {pattern === "custom_3" && (
+                
+                <div className="flex w-[900px] flex-row gap-4  ">
+                   <h2 className="text-sm text-nowrap font-semibold text-gray-600">
+                    Custom 3 Colors:
+                  </h2>
+                 
+                  {csts3.map((color, index) => (
+                    <input
+                      key={index}
+                      type="color"
+                      value={color}
+                      onChange={(event) =>
+                        handleCsts3Change(event, index)
+                       
+                      }
+                      className="w-full flex border  gap-2 border-gray-300 rounded-lg"
+                    />
+                  ))}
+                </div>
+              )}
+
+              {pattern === "custom_4" && (
+                <div className="flex w-[1000px] flex-row gap-4  ">
+                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
+                    Custom 4 Colors:
+                  </h2>
+                  {csts4.map((color, index) => (
+                    <input
+                      key={index}
+                      type="color"
+                      value={color}
+                      onChange={(event) =>
+                        handleCsts4Change(event, index)
+                      }
+                      className="w-full border border-gray-300 rounded-lg"
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </>
         );
@@ -561,7 +823,6 @@ export default function Home() {
         return (
           <>
             <div className="bg-white p-3 rounded-lg shadow-lg flex flex-col">
-              
               <div className="grid gap-6 grid-cols-4 ">
                 <div className="bg-white p-4 rounded-lg shadow-md">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -722,58 +983,63 @@ export default function Home() {
 
       {/* sidebar for small screens */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-[72px] z-10 md:hidden">
-  <div className="flex justify-center items-center h-16 px-2 mb-6">
-    <div className="flex flex-row gap-y-2">
-      <div className="py-2 px-2 flex flex-row gap-y-2 bg-red-100 rounded-lg w-[220px]">
-        <Tooltip title="Upload Logo" placement="bottomRight">
-          <div
-            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
-            onClick={() => handleOptionClick("Upload Logo")}
-          >
-            <FitbitSharpIcon htmlColor="#E3262C" className="text-sm" />
-          </div>
-        </Tooltip>
+        <div className="flex justify-center items-center h-16 px-2 mb-6">
+          <div className="flex flex-row gap-y-2">
+            <div className="py-2 px-2 flex flex-row gap-y-2 bg-red-100 rounded-lg w-[220px]">
+              <Tooltip title="Upload Logo" placement="bottomRight">
+                <div
+                  className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+                  onClick={() => handleOptionClick("Upload Logo")}
+                >
+                  <FitbitSharpIcon htmlColor="#E3262C" className="text-sm" />
+                </div>
+              </Tooltip>
 
-        <Tooltip title="Upload Texture" placement="bottomRight">
-          <div
-            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
-            onClick={() => handleOptionClick("Upload Texture")}
-          >
-            <TextureSharpIcon htmlColor="#E3262C" className="text-sm" />
-          </div>
-        </Tooltip>
+              <Tooltip title="Upload Texture" placement="bottomRight">
+                <div
+                  className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+                  onClick={() => handleOptionClick("Upload Texture")}
+                >
+                  <TextureSharpIcon htmlColor="#E3262C" className="text-sm" />
+                </div>
+              </Tooltip>
 
-        <Tooltip title="Choose Pattern" placement="bottomRight">
-          <div
-            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
-            onClick={() => handleOptionClick("Choose Pattern")}
-          >
-            <DesignServicesSharpIcon htmlColor="#E3262C" className="text-sm" />
-          </div>
-        </Tooltip>
+              <Tooltip title="Choose Pattern" placement="bottomRight">
+                <div
+                  className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+                  onClick={() => handleOptionClick("Choose Pattern")}
+                >
+                  <DesignServicesSharpIcon
+                    htmlColor="#E3262C"
+                    className="text-sm"
+                  />
+                </div>
+              </Tooltip>
 
-        <Tooltip title="Logo Placement" placement="bottomRight">
-          <div
-            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
-            onClick={() => handleOptionClick("Logo Placement")}
-          >
-            <PaletteSharpIcon htmlColor="#E3262C" className="text-sm" />
-          </div>
-        </Tooltip>
+              <Tooltip title="Logo Placement" placement="bottomRight">
+                <div
+                  className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+                  onClick={() => handleOptionClick("Logo Placement")}
+                >
+                  <PaletteSharpIcon htmlColor="#E3262C" className="text-sm" />
+                </div>
+              </Tooltip>
 
-        <Tooltip title="Customize Color" placement="bottomRight">
-          <div
-            className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
-            onClick={() => handleOptionClick("Customize Color")}
-          >
-            <LocationSearchingSharpIcon htmlColor="#E3262C" className="text-sm" />
+              <Tooltip title="Customize Color" placement="bottomRight">
+                <div
+                  className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+                  onClick={() => handleOptionClick("Customize Color")}
+                >
+                  <LocationSearchingSharpIcon
+                    htmlColor="#E3262C"
+                    className="text-sm"
+                  />
+                </div>
+              </Tooltip>
+            </div>
           </div>
-        </Tooltip>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-
 
       <div
         className={`relative w-full duration-500 ${
@@ -827,12 +1093,12 @@ export default function Home() {
                 >
                   Buy Now
                 </button>
-           
-              <a href="https://socks.phpnode.net/">
-                <button className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white sm:rounded-lg rounded-full font-semibold  shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
-                  Exit Editor
-                </button>
-              </a>
+
+                <a href="https://socks.phpnode.net/">
+                  <button className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white sm:rounded-lg rounded-full font-semibold  shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                    Exit Editor
+                  </button>
+                </a>
               </div>
             </div>
 
@@ -900,7 +1166,7 @@ export default function Home() {
             </Modal>
           </div>
         </div>
-        <div className="w-full h-60 absolute bottom-0 left-0 border bg-white">
+        <div className="w-full h-32 absolute bottom-12 left-0 border bg-white">
           <div className="flex overflow-x-auto scrollbar-hide scroll-container">
             {activeOptions.map((option) => (
               <>
@@ -909,13 +1175,12 @@ export default function Home() {
                   className="p-3 flex-shrink-0  h-full space-y-6 border rounded-lg bg-gray-100 shadow-md relative m-4"
                 >
                   {renderToolbarContent(option)}
-                   <button
+                  <button
                     onClick={() => handleDelete(option)}
                     className="absolute -bottom-6 -right-6 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
                   >
                     <DeleteSharpIcon />
                   </button>
-                 
                 </div>
                 <button
                   onClick={() => scroll(100)}
