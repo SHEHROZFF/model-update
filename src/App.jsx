@@ -735,7 +735,7 @@ export default function Home() {
               </select>
 
               {pattern === "dots" && (
-                <div className="flex flex-col justify-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
                     Colors:
                   </h2>
@@ -746,7 +746,7 @@ export default function Home() {
                         type="color"
                         value={color}
                         onChange={(event) => handleDotColorChange(event, index)}
-                        className="w-full rounded-lg cursor-pointer"
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
                   </div>
@@ -754,7 +754,7 @@ export default function Home() {
               )}
 
               {pattern === "checkerboard" && (
-                <div className="flex flex-col justify-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
                     Colors:
                   </h2>
@@ -767,14 +767,14 @@ export default function Home() {
                         onChange={(event) =>
                           handleCheckBoardColorChange(event, index)
                         }
-                        className="w-full border text-nowrap border-gray-300 rounded-lg"
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
                   </div>
                 </div>
               )}
               {pattern === "illusionistic" && (
-                <div className="flex flex-col justify-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
                     Colors:
                   </h2>
@@ -787,7 +787,7 @@ export default function Home() {
                         onChange={(event) =>
                           handleIllusionisticColorChange(event, index)
                         }
-                        className="w-full border text-nowrap border-gray-300 rounded-lg"
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
                   </div>
@@ -795,7 +795,7 @@ export default function Home() {
               )}
 
               {pattern === "custom_1" && (
-                <div className="flex flex-col justify-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
                     Colors:
                   </h2>
@@ -806,7 +806,7 @@ export default function Home() {
                         type="color"
                         value={color}
                         onChange={(event) => handleCsts1Change(event, index)}
-                        className="w-full border text-nowrap border-gray-300 rounded-lg"
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
                   </div>
@@ -814,7 +814,7 @@ export default function Home() {
               )}
 
               {pattern === "custom_2" && (
-                <div className="flex flex-col justify-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
                     Colors:
                   </h2>
@@ -825,7 +825,7 @@ export default function Home() {
                         type="color"
                         value={color}
                         onChange={(event) => handleCsts2Change(event, index)}
-                        className="w-full border text-nowrap border-gray-300 rounded-lg"
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
                   </div>
@@ -833,7 +833,7 @@ export default function Home() {
               )}
 
               {pattern === "custom_3" && (
-                <div className="flex flex-col justify-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center">
                     Colors:<br />
                     <span className="text-xs">(Scroll To View)</span>
@@ -845,7 +845,7 @@ export default function Home() {
                         type="color"
                         value={color}
                         onChange={(event) => handleCsts3Change(event, index)}
-                        className="w-full border text-nowrap border-gray-300 rounded-lg"
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
                   </div>
@@ -853,7 +853,7 @@ export default function Home() {
               )}
 
               {pattern === "custom_4" && (
-                <div className="flex flex-col justify-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center">
                     Colors: <br />
                     <span className="text-xs">(Scroll To View)</span>
@@ -865,7 +865,7 @@ export default function Home() {
                         type="color"
                         value={color}
                         onChange={(event) => handleCsts4Change(event, index)}
-                        className="w-full border text-nowrap border-gray-300 rounded-lg"
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
                   </div>
