@@ -74,7 +74,7 @@ export default function Home() {
   const [logo, setLogo] = useState(null);
   const [defaultSockTexture, setDefaultSockTexture] = useState(null);
   const [pattern, setPattern] = useState(""); // Pattern state
-  const [logoPlacement, setLogoPlacement] = useState("footbed");
+  const [logoPlacement, setLogoPlacement] = useState("calf");
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageTexture, setSelectedImageTexture] = useState(null);
 
