@@ -1349,7 +1349,7 @@ export default function Home() {
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex overflow-x-auto scrollbar-hide scroll-container h-4/5 lg:h-auto w-full relative">
+          <div className="flex overflow-x-auto scrollbar-hide scroll-container h-full lg:h-auto w-full relative">
             {activeOptions.map((option) => (
               <motion.div
                 key={option}
