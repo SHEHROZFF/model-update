@@ -768,9 +768,9 @@ const handleLogoChange = (event) => {
                 onCancel={handleCancel}
                 footer={null}
                 centered
-                className="custom-modal rounded-lg"
+                className="custom-modal rounded-lg !font-[Raleway]"
               >
-                <div className="w-full h-auto p-6 lg:p-12 rounded-lg flex flex-col items-center">
+                <div className="w-full h-auto p-3 lg:p-12 rounded-lg flex flex-col items-center">
                   <div className="bg-red-300 rounded-full p-3 mb-6 flex items-center justify-center">
                     <IoIosWarning className="text-red-500 text-4xl animate-pulse" />
                   </div>
