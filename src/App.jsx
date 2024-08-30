@@ -1222,7 +1222,7 @@ export default function Home() {
         className={`relative w-full duration-500 ${open ? "w-[82%]" : "w-[100%]"
           }`}
       >
-        <div className="border border-t-gray-200 border-b-0 border-l-0 border-r-0 w-full h-[8%] flex justify-center items-center">
+        <div className="border border-t-gray-200 border-b-0 border-l-0 border-r-0 w-full h-[8%] flex justify-center items-center bg-transparent">
           <div className="w-full h-4/5 lg:h-full absolute left-0 top-3 lg:-top-20 mb-56 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
@@ -1343,7 +1343,7 @@ export default function Home() {
           </div>
         </div>
         <motion.div
-          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-2 md:bottom-12 bg-white overflow-visible"
+          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-10 md:-bottom-6 bg-transparent overflow-visible"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
@@ -1353,7 +1353,7 @@ export default function Home() {
             {activeOptions.map((option) => (
               <motion.div
                 key={option}
-                className="p-1 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-2 lg:m-4"
+                className="p-1 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-2 lg:m-3"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
@@ -1367,7 +1367,7 @@ export default function Home() {
                     >
                       <ArrowBackIosNewOutlinedIcon size="small" />
                     </button>
-                    <h3 className="font-bold text-red-800 text-base  lg:text-xl">{option}</h3>
+                    <h3 className="font-bold lg:font-medium text-red-800 text-base  lg:text-xl">{option}</h3>
                   </div>
                 </div>
                 <div className="relative z-10">
@@ -1378,7 +1378,7 @@ export default function Home() {
           </div>
 
           {/* Scroll buttons */}
-          <div className="absolute flex justify-between items-center gap-x-2 right-5 -top-10 transform -translate-y-1/2 z-20">
+          <div className="absolute flex justify-between items-center gap-x-2 right-5 -top-10 transform -translate-y-1/2 z-20 bg-transparent">
             <button
               onClick={() => scroll(-100)}
               className="bg-gray-200 py-3 px-4 rounded-full"
