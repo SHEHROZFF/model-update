@@ -1229,7 +1229,7 @@ const handleLogoChange = (event) => {
         }`}
       >
         <div className="border border-t-gray-200 border-b-0 border-l-0 border-r-0 w-full h-[8%] flex justify-center items-center">
-          <div className="w-full h-4/5 lg:h-full absolute left-0 top-5 lg:-top-20 mb-56 lg:mb-0">
+          <div className="w-full h-4/5 lg:h-full absolute left-0 top-3 lg:-top-20 mb-56 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />
@@ -1349,7 +1349,7 @@ const handleLogoChange = (event) => {
           </div>
         </div>
         <motion.div
-          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-2 md:bottom-6 bg-white overflow-visible"
+          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-2 md:bottom-12 bg-white overflow-visible"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
