@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCartPlus, FaSignOutAlt } from "react-icons/fa";
-
+import { IoIosWarning } from "react-icons/io";
 
 import axios from "axios";
 import { spiral } from "ldrs";
-
+import { IconButton } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Tooltip from "@mui/material/Tooltip";
 import "./../src/globals.css";
 import Swatches from "./components/colorswatches";
 import * as THREE from "three";
@@ -15,7 +17,7 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { SketchPicker } from "react-color";
-import { Tooltip, Modal, Button, Form, Input } from "antd";
+import { Modal, Button, Form, Input } from "antd";
 // Component Import
 import { combineTextures } from "./combine_texture";
 import { combinePattern } from "./combine_pattern";
@@ -24,6 +26,9 @@ import { combineLogoChange } from "./comine_logo";
 import Menu from "./components/menu";
 // Component Import
 
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 // Sidebar Icons
 import FitbitSharpIcon from "@mui/icons-material/FitbitSharp";
 import DesignServicesSharpIcon from "@mui/icons-material/DesignServicesSharp";
@@ -31,9 +36,8 @@ import TextureSharpIcon from "@mui/icons-material/TextureSharp";
 import PaletteSharpIcon from "@mui/icons-material/PaletteSharp";
 import LocationSearchingSharpIcon from "@mui/icons-material/LocationSearchingSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import ClearIcon from "@mui/icons-material/Clear";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 // Sidebar Icons
 
 const cuffColorSwatches = [
@@ -70,8 +74,38 @@ export default function Home() {
   const [logo, setLogo] = useState(null);
   const [defaultSockTexture, setDefaultSockTexture] = useState(null);
   const [pattern, setPattern] = useState(""); // Pattern state
-  const [logoPlacement, setLogoPlacement] = useState("footbed");
+  const [logoPlacement, setLogoPlacement] = useState("calf");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageTexture, setSelectedImageTexture] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newPlacement, setNewPlacement] = useState("");
+
+  const handleLogoPlacementChange = (event) => {
+    const newLogoPlacement = event.target.value;
+    setNewPlacement(newLogoPlacement);
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleContinue = () => {
+    setLogoPlacement(newPlacement);
+    if (defaultSockTexture) {
+      const updatedTexture = combineLogoChange(
+        defaultSockTexture,
+        logo,
+        newPlacement
+      );
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      updatedTexture.minFilter = THREE.LinearFilter;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const loader = new THREE.TextureLoader();
@@ -85,67 +119,133 @@ export default function Home() {
 
   const handleTextureChange = (event) => {
     const file = event.target.files[0];
-    if (file && defaultSockTexture) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = () => {
-          const newTexture = img;
-          const mergedTexture = combineTextures(
-            defaultSockTexture,
-            newTexture,
-            logo,
-            logoPlacement
-          );
-          mergedTexture.encoding = THREE.sRGBEncoding;
-          mergedTexture.minFilter = THREE.LinearFilter;
-          mergedTexture.magFilter = THREE.LinearFilter;
-          setTexture(mergedTexture);
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleLogoChange = (event) => {
-    const file = event.target.files[0];
+  
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = () => {
-          setLogo(null);
-          setLogo(img);
-          console.log(removeBackground(img));
-          if (defaultSockTexture) {
-            const updatedTexture = combineTextures(
-              defaultSockTexture,
-              texture?.image,
-              img,
-              logoPlacement
-            );
-            updatedTexture.encoding = THREE.sRGBEncoding;
-            updatedTexture.minFilter = THREE.LinearFilter;
-            updatedTexture.magFilter = THREE.LinearFilter;
-            setTexture(updatedTexture);
-          }
-        };
+        // Display the selected image in the UI
+        setSelectedImageTexture(reader.result);
+  
+        // Further process the image for texture merging
+        if (defaultSockTexture) {
+          const img = new Image();
+          img.src = reader.result;
+  
+          img.onload = () => {
+            // Create a canvas to draw the image and apply transformations
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+  
+            // Set canvas dimensions to match the image
+            canvas.width = img.width;
+            canvas.height = img.height;
+  
+            // Flip the image upside down
+            ctx.translate(0, img.height);
+            ctx.scale(1, -1);
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+  
+            // Create a new Image object with the flipped image
+            const flippedImage = new Image();
+            flippedImage.src = canvas.toDataURL();
+  
+            flippedImage.onload = () => {
+              // Merge the flipped image with the existing texture and logo
+              const mergedTexture = combineTextures(
+                defaultSockTexture,
+                flippedImage,
+                logo,
+                logoPlacement
+              );
+              mergedTexture.encoding = THREE.sRGBEncoding;
+              mergedTexture.minFilter = THREE.LinearFilter;
+              mergedTexture.magFilter = THREE.LinearFilter;
+              setTexture(mergedTexture);
+            };
+          };
+        }
       };
       reader.readAsDataURL(file);
     }
   };
+  
 
-  const [dotColors, setDotColors] = useState(['#85BFCB', '#01284D', '#D9D9D9',"#006868"]);
-  const [checkBoardColors, setCheckBoardColors] = useState(['#282A2C', '#E56E46', '#CFCFCF']);
+  const handleLogoChange = (event) => {
+    const file = event.target.files[0];
+  
+    if (file) {
+      // Create a FileReader to read the file and display the image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Set the selected image to display it in the UI
+        setSelectedImage(reader.result);
+  
+        // Process the image further for your custom logic
+        const imageReader = new FileReader();
+        imageReader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+  
+          img.onload = () => {
+            // Create a canvas to draw the image and apply transformations
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+  
+            // Set canvas dimensions to match the image
+            canvas.width = img.width;
+            canvas.height = img.height;
+  
+            // Flip the image upside down
+            ctx.translate(0, img.height);
+            ctx.scale(1, -1);
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+  
+            // Create a new Image object with the flipped image
+            const flippedImage = new Image();
+            flippedImage.src = canvas.toDataURL();
+  
+            flippedImage.onload = () => {
+              setLogo(null);
+              setLogo(flippedImage);
+  
+              // Call the removeBackground function and handle the result
+              console.log(removeBackground(flippedImage));
+  
+              if (defaultSockTexture) {
+                // Combine the textures and update the texture state
+                const updatedTexture = combineTextures(
+                  defaultSockTexture,
+                  texture?.image,
+                  flippedImage,
+                  logoPlacement
+                );
+                updatedTexture.encoding = THREE.sRGBEncoding;
+                updatedTexture.minFilter = THREE.LinearFilter;
+                updatedTexture.magFilter = THREE.LinearFilter;
+                setTexture(updatedTexture);
+              }
+            };
+          };
+        };
+        // Read the image data as a URL for further processing
+        imageReader.readAsDataURL(file);
+      };
+      // Read the file as a Data URL for displaying it in the UI
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const [dotColors, setDotColors] = useState([
+    "#85BFCB",
+    "#01284D",
+    "#D9D9D9",
+    "#006868",
+  ]);
+  const [checkBoardColors, setCheckBoardColors] = useState([
+    "#282A2C",
+    "#E56E46",
+    "#CFCFCF",
+  ]);
   const [illusionistic_colors, setIllusionisticColors] = useState([
     "#000",
     "#ff0000",
@@ -194,7 +294,6 @@ export default function Home() {
     "#83C0CC",
     "#83C0CC",
     "#83C0CC",
-   
   ]);
   const handlePatternChange = (event) => {
     const newPattern = event.target.value;
@@ -209,15 +308,12 @@ export default function Home() {
     updateTexture(pattern);
   };
 
-
   const handleCheckBoardColorChange = (event, index) => {
     const updatedColors = [...checkBoardColors];
     updatedColors[index] = event.target.value;
     setCheckBoardColors(updatedColors);
     updateTexture(pattern);
   };
-
-
 
   const handleIllusionisticColorChange = (event, index) => {
     const updatedColors = [...illusionistic_colors];
@@ -268,7 +364,6 @@ export default function Home() {
         csts2,
         csts3,
         csts4
-
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.minFilter = THREE.LinearFilter;
@@ -279,7 +374,16 @@ export default function Home() {
 
   useEffect(() => {
     updateTexture(pattern); // Ensure texture updates on pattern change
-  }, [dotColors, checkBoardColors, illusionistic_colors, csts1, csts2, csts3, csts4, pattern]);
+  }, [
+    dotColors,
+    checkBoardColors,
+    illusionistic_colors,
+    csts1,
+    csts2,
+    csts3,
+    csts4,
+    pattern,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -311,7 +415,6 @@ export default function Home() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  // Assuming texture is managed here
   const handleOpenModal = () => {
     setIsModalVisible(true);
   };
@@ -417,19 +520,50 @@ export default function Home() {
   };
 
   const handleLogoDelete = () => {
-    setLogo(null);
+    // Clear the logo state
+    setSelectedImage(null); // Ensure this matches the state used for preview
 
+    // Clear the image from the model
     if (defaultSockTexture) {
-      // console.log(logoPlacement);
       const updatedTexture = combineLogoChange(
         defaultSockTexture,
-        logo,
+        null, // Set to null or a default placeholder as needed
         "no_logo"
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
+    }
+
+    // Clear the file input value
+    const logoInput = document.getElementById("logoInput");
+    if (logoInput) {
+      logoInput.value = ""; // Reset the input value
+    }
+  };
+  const handleTextureDelete = () => {
+    // Clear the logo state
+    setSelectedImageTexture(null); // Ensure this matches the state used for preview
+
+    // Clear the image from the model
+    if (defaultSockTexture) {
+      const updatedTexture = combineTextures(
+        defaultSockTexture,
+        null, // Set to null or a default placeholder as needed
+        logo,
+        logoPlacement
+      );
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      updatedTexture.minFilter = THREE.LinearFilter;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
+
+    // Clear the file input value
+    const textureInput = document.getElementById("textureInput");
+    if (textureInput) {
+      textureInput.value = ""; // Reset the input value
     }
   };
 
@@ -490,11 +624,9 @@ export default function Home() {
       materials.Toe.map = defaultToeTexture;
       materials.Toe.needsUpdate = true;
 
-      // Apply sock texture
       materials.Sock_Texture.map = texture || defaultSockTexture;
       materials.Sock_Texture.needsUpdate = true;
 
-      // Apply color changes
       materials.Cuff.color.set(cuffColor);
       materials.Cuff.needsUpdate = true;
 
@@ -566,67 +698,139 @@ export default function Home() {
   const renderToolbarContent = (option) => {
     switch (option) {
       case "Upload Logo":
-        return (
-          <>
-            <div className="flex flex-col items-start space-y-2 p-3 bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="flex justify-between items-center w-full">
-                <label className="text-base font-medium text-gray-700">
-                  Upload Logo:
-                </label>
-                {selectedImage && (
-                  <Tooltip title="Delete Logo">
-                    <ClearIcon
-                      onClick={handleLogoDelete}
-                      htmlColor="#E3262C"
-                      style={{ cursor: "pointer" }}
+          return (
+            <>
+              <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
+                {!selectedImage ? (
+                  <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative h-24 w-[240px] md:w-96 flex flex-col justify-center items-center">
+                    <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
+                    <p className="text-gray-500 text-sm capitalize font-semibold">
+                      Upload your image here
+                    </p>
+                    <input
+                      id="logoInput"
+                      type="file"
+                      accept="image/*"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      onChange={handleLogoChange}
                     />
-                  </Tooltip>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <div className="w-20 h-20 rounded-lg  shadow-lg relative overflow-visible">
+                      <img
+                        src={selectedImage}
+                        alt="Selected"
+                        className="w-full h-full object-cover"
+                      />
+                      <Tooltip title="Delete">
+                        <ClearIcon
+                          onClick={handleLogoDelete}
+                          className="absolute -top-5 right-0 text-red-500 animate-bounce cursor-pointer"
+                          style={{ fontSize: 18 }}
+                        />
+                      </Tooltip>
+                    </div>
+                  </div>
                 )}
               </div>
-              <input
-                type="file"
-                accept="image/*"
-                className="block w-full text-xs text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none
-      file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white
-      hover:file:bg-blue-700 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105"
-                onChange={handleLogoChange}
-              />
-              <p className="text-xs text-gray-500">PNG, JPG</p>
+            </>
+          );
 
-              {selectedImage && (
-                <div className="mt-2 flex justify-center">
-                  <img
-                    src={selectedImage}
-                    alt="Selected"
-                    className="w-20 h-20 object-cover rounded-lg shadow-lg"
-                  />
+      case "Logo Placement":
+        return (
+          <>
+            <div className="w-[240px] h-24 flex justify-center items-center my-3 mx-0 md:mx-2">
+              <select
+                value={logoPlacement}
+                onChange={handleLogoPlacementChange}
+                className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg bg-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+              >
+                <option value="calf" className="text-gray-700">
+                  Calf
+                </option>
+                <option value="footbed" className="text-gray-700">
+                  Footbed
+                </option>
+                <option value="calf_footbed" className="text-gray-700">
+                  Calf + Footbed
+                </option>
+                <option value="repeating" className="text-gray-700">
+                  Repeating
+                </option>
+              </select>
+              <Modal
+                title={null}
+                visible={isModalOpen}
+                onCancel={handleCancel}
+                footer={null}
+                centered
+                className="custom-modal" // Add custom class for transparency
+              >
+                <div className="w-full h-auto p-12 rounded-lg flex flex-col items-center">
+                  <div className="bg-yellow-100 rounded-full p-3 mb-6">
+                    <IoIosWarning className="text-yellow-500 text-5xl animate-pulse" />
+                  </div>
+                  <h1 className="text-3xl font-bold text-red-600 text-center mb-5">
+                    Warning: Changing Logo Position Without Saving
+                  </h1>
+                  <p className="text-gray-500 text-lg text-center leading-7 mb-8">
+                    Switching to a different logo position without saving your
+                    current design will erase any changes you've made. If you
+                    are certain about changing the position and accept the loss
+                    of your current design, feel free to click "Continue".
+                  </p>
+                  <div className="flex flex-col space-y-4 w-full">
+                    <button
+                      onClick={handleCancel}
+                      className="border border-gray-600 py-4 rounded-md text-lg font-semibold text-gray-600 hover:bg-gray-600    hover:text-white focus:ring-blue-400 w-full"
+                    >
+                      Edit Current Design
+                    </button>
+                    <button
+                      onClick={handleContinue}
+                      className="bg-red-600 text-white py-4 text-lg rounded-md font-semibold hover:bg-red-700 focus:ring-red-400 w-full"
+                    >
+                      Continue
+                    </button>
+                  </div>
                 </div>
-              )}
+              </Modal>
             </div>
           </>
         );
       case "Upload Texture":
         return (
           <>
-            <div className="flex flex-col items-center space-y-2 p-3 bg-white rounded-lg shadow-md overflow-hidden">
-              <label className="text-base font-medium text-gray-700">
-                Upload Texture:
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                className="block w-full text-xs text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none
-               file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white
-               hover:file:bg-blue-700 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105"
-                onChange={handleTextureChange}
-              />
-              {selectedImage && (
-                <div className="mt-2 flex justify-center">
+            <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
+              {!selectedImageTexture ? (
+                <div className="border-2 border-dashed border-gray-300 h-24 w-[240px] md:w-96 flex flex-col justify-center items-center rounded-lg relative">
+                  <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
+                  <p className="text-gray-500 text-sm capitalize font-semibold">
+                    Upload your Texture
+                  </p>
+                  <input
+                    id="textureInput"
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={handleTextureChange}
+                  />
+                </div>
+              ) : (
+                <div className="relative w-full h-full">
                   <img
-                    src={selectedImage}
-                    alt="Selected"
+                    src={selectedImageTexture}
+                    alt="Selected Texture"
                     className="w-20 h-20 object-cover rounded-lg shadow-lg"
                   />
+                  <Tooltip title="Delete">
+                    <ClearIcon
+                      onClick={handleTextureDelete}
+                      className="absolute top-1 right-1 text-red-500 cursor-pointer"
+                      style={{ fontSize: 18 }}
+                    />
+                  </Tooltip>
                 </div>
               )}
             </div>
@@ -635,10 +839,7 @@ export default function Home() {
       case "Choose Pattern":
         return (
           <>
-            <h1 className="text-lg w-[1000px] font-semibold text-gray-700 mb-2">
-              Choose Pattern
-            </h1>
-            <div className="flex flex-col items-center space-y-2">
+            <div className="flex flex-col justify-center items-center my-3 mx-0 md:my-2 md:mx-2 h-32 w-[240px]">
               <select
                 value={pattern}
                 onChange={handlePatternChange}
@@ -657,174 +858,152 @@ export default function Home() {
               </select>
 
               {pattern === "dots" && (
-                <div className="flex w-[900px] flex-row gap-4   ">
-                  <h2 className="text-sm font-semibold text-nowrap text-gray-600">
-                    Dot Colors:
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
                   </h2>
-                  {dotColors.map((color, index) => (
-                    <input
-                      key={index}
-                      type="color"
-                      value={color}
-                      onChange={(event) => handleDotColorChange(event, index)}
-                      className="w-full border border-gray-300 rounded-lg"
-                    />
-                  ))}
+                  <div className="grid grid-cols-4 gap-2">
+                    {dotColors.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleDotColorChange(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
 
               {pattern === "checkerboard" && (
-                <div className="flex w-[900px] flex-row gap-4  ">
-                  <h2 className="text-sm  text-nowrap font-semibold text-gray-600">
-                    Checkerboard Colors:
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
                   </h2>
-                  {checkBoardColors.map((color, index) => (
-                    <input
-                      key={index}
-                      type="color"
-                      value={color}
-                      onChange={(event) =>
-                        handleCheckBoardColorChange(event, index)
-                      }
-                      className="w-full border text-nowrap border-gray-300 rounded-lg"
-                    />
-                  ))}
+                  <div className="grid grid-cols-4 items-center justify-center gap-2">
+                    {checkBoardColors.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) =>
+                          handleCheckBoardColorChange(event, index)
+                        }
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
               {pattern === "illusionistic" && (
-                <div className="flex w-[900px] flex-row gap-4  ">
-                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
-                    Illusionistic Colors:
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
                   </h2>
-                  {illusionistic_colors.map((color, index) => (
-                    <input
-                      key={index}
-                      type="color"
-                      value={color}
-                      onChange={(event) =>
-                        handleIllusionisticColorChange(event, index)
-                      }
-                      className="w-full border text-nowrap border-gray-300 rounded-lg"
-                    />
-                  ))}
+                  <div className="grid grid-cols-4 items-center justify-center gap-2">
+                    {illusionistic_colors.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) =>
+                          handleIllusionisticColorChange(event, index)
+                        }
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
 
               {pattern === "custom_1" && (
-                <div className="flex w-[900px] flex-row gap-4  ">
-                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
-                    Custom 1 Colors:
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
                   </h2>
-                  {csts1.map((color, index) => (
-                    <input
-                      key={index}
-                      type="color"
-                      value={color}
-                      onChange={(event) =>
-                        handleCsts1Change(event, index)
-                      }
-                      className="w-full border text-nowrap border-gray-300 rounded-lg"
-                    />
-                  ))}
+                  <div className="grid grid-cols-5 items-center justify-center gap-2">
+                    {csts1.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts1Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
 
               {pattern === "custom_2" && (
-                <div className="flex w-[900px] flex-row gap-4  ">
-                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
-                    Custom 2 Colors:
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
                   </h2>
-                  {csts2.map((color, index) => (
-                    <input
-                      key={index}
-                      type="color"
-                      value={color}
-                      onChange={(event) =>
-                        handleCsts2Change(event, index)
-                      }
-                      className="w-full border border-gray-300 rounded-lg"
-                    />
-                  ))}
+                  <div className="grid grid-cols-5 items-center justify-center gap-2">
+                    {csts2.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts2Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
 
               {pattern === "custom_3" && (
-                
-                <div className="flex w-[900px] flex-row gap-4  ">
-                   <h2 className="text-sm text-nowrap font-semibold text-gray-600">
-                    Custom 3 Colors:
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center">
+                    Colors:
+                    <br />
+                    <span className="text-xs">(Scroll To View)</span>
                   </h2>
-                 
-                  {csts3.map((color, index) => (
-                    <input
-                      key={index}
-                      type="color"
-                      value={color}
-                      onChange={(event) =>
-                        handleCsts3Change(event, index)
-                       
-                      }
-                      className="w-full flex border  gap-2 border-gray-300 rounded-lg"
-                    />
-                  ))}
+                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-12 overflow-y-auto">
+                    {csts3.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts3Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
 
               {pattern === "custom_4" && (
-                <div className="flex w-[1000px] flex-row gap-4  ">
-                  <h2 className="text-sm text-nowrap font-semibold text-gray-600">
-                    Custom 4 Colors:
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center">
+                    Colors: <br />
+                    <span className="text-xs">(Scroll To View)</span>
                   </h2>
-                  {csts4.map((color, index) => (
-                    <input
-                      key={index}
-                      type="color"
-                      value={color}
-                      onChange={(event) =>
-                        handleCsts4Change(event, index)
-                      }
-                      className="w-full border border-gray-300 rounded-lg"
-                    />
-                  ))}
+                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-12 overflow-y-auto">
+                    {csts4.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts4Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
-            </div>
-          </>
-        );
-      case "Logo Placement":
-        return (
-          <>
-            <h1 className="text-lg font-semibold text-gray-700 mb-2">
-              Logo Placement:
-            </h1>
-            <div className="flex flex-col items-center space-y-2">
-              <select
-                value={logoPlacement}
-                onChange={handleLogoPlacement}
-                className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg bg-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-              >
-                <option value="calf" className="text-gray-700">
-                  Calf
-                </option>
-                <option value="footbed" className="text-gray-700">
-                  Footbed
-                </option>
-                <option value="calf_footbed" className="text-gray-700">
-                  Calf + Footbed
-                </option>
-                <option value="repeating" className="text-gray-700">
-                  Repeating
-                </option>
-              </select>
             </div>
           </>
         );
       case "Customize Color":
         return (
           <>
-            <div className="bg-white p-3 rounded-lg shadow-lg flex flex-col">
-              <div className="grid gap-6 grid-cols-4 ">
-                <div className="bg-white p-4 rounded-lg shadow-md">
+            <div className="p-2 flex flex-col w-[1200px] h-24">
+              <div className="grid gap-3 grid-cols-4 ">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Cuff Color:
                   </label>
@@ -844,7 +1023,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-white p-4 rounded-lg shadow-md">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Heel Color:
                   </label>
@@ -864,7 +1043,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-white p-4 rounded-lg shadow-md">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Sock Color:
                   </label>
@@ -873,7 +1052,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-white p-4 rounded-lg shadow-md">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Toe Color:
                   </label>
@@ -1046,8 +1225,8 @@ export default function Home() {
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="absolute  lg:-top-20 top-28 w-full h-screen flex justify-center items-center">
-          <div className="w-full h-1/2 md:h-full mb-80 lg:mb-0">
+        <div className="w-full h-[8%] flex justify-center items-center">
+          <div className="w-full h-full absolute left-0 -top-5 lg:-top-20 mb-56 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />
@@ -1084,18 +1263,18 @@ export default function Home() {
               </Suspense>
             </Canvas>
           </div>
-          <div className="mt-6 flex gap-x-2 absolute top-0 right-2 lg:top-20 lg:right-2">
+          <div className="mt-6 flex gap-x-2 absolute top-0 right-2">
             <div className="flex flex-col md:flex-row md:items-center md:justify-center">
-              <div className=" hidden sm:block">
+              <div className="space-x-3 hidden sm:block">
                 <button
                   onClick={handleOpenModal}
-                  className="mb-4 md:mb-0 md:mr-4 px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white font-semibold sm:rounded-lg rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                  className="mb-4 p-2 text-sm lg:text-base bg-[#E3262C] text-white font-semibold sm:rounded-lg rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
                 >
                   Buy Now
                 </button>
 
                 <a href="https://socks.phpnode.net/">
-                  <button className="px-8 py-3 md:px-4 md:py-1 text-sm lg:text-base bg-[#E3262C] text-white sm:rounded-lg rounded-full font-semibold  shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                  <button className="mb-4 p-2 text-sm lg:text-base bg-[#E3262C] text-white font-semibold sm:rounded-lg rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out">
                     Exit Editor
                   </button>
                 </a>
@@ -1133,7 +1312,7 @@ export default function Home() {
                 style: {
                   backgroundColor: "rgba(227, 38, 44, 1)",
                   borderColor: "rgba(0, 0, 0, 0.25)",
-                }, // Set the button color to red
+                },
               }}
             >
               <Form onFinish={handleSubmit}>
@@ -1166,36 +1345,45 @@ export default function Home() {
             </Modal>
           </div>
         </div>
-        <div className="w-full h-32 absolute bottom-12 left-0 border bg-white">
-          <div className="flex overflow-x-auto scrollbar-hide scroll-container">
+        <div className="border w-full h-[22%] absolute left-0 bottom-0 bg-white overflow-visible">
+          <div className="flex overflow-x-auto scrollbar-hide scroll-container h-full w-full relative">
             {activeOptions.map((option) => (
-              <>
-                <div
-                  key={option}
-                  className="p-3 flex-shrink-0  h-full space-y-6 border rounded-lg bg-gray-100 shadow-md relative m-4"
-                >
-                  {renderToolbarContent(option)}
-                  <button
-                    onClick={() => handleDelete(option)}
-                    className="absolute -bottom-6 -right-6 font-bold bg-red-300 p-2 rounded-md text-red-500 hover:text-red-800 hover:-translate-y-1 transition"
-                  >
-                    <DeleteSharpIcon />
-                  </button>
+              <div
+                key={option}
+                className="p-1 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-4"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="flex justify-normal gap-x-1 items-center">
+                    <button
+                      onClick={() => handleDelete(option)}
+                      className="text-red-800 z-20"
+                    >
+                      <ArrowBackIosNewOutlinedIcon size="small" />
+                    </button>
+                    <h3 className="font-bold text-red-800">{option}</h3>
+                  </div>
                 </div>
-                <button
-                  onClick={() => scroll(100)}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
-                >
-                  {">"}
-                </button>
-                <button
-                  onClick={() => scroll(-100)}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 z-10"
-                >
-                  {"<"}
-                </button>
-              </>
+                <div className="relative z-10">
+                  {renderToolbarContent(option)}
+                </div>
+              </div>
             ))}
+          </div>
+
+          {/* Scroll buttons */}
+          <div className="absolute flex justify-between items-center gap-x-2 right-5 -top-10 transform -translate-y-1/2 z-20">
+            <button
+              onClick={() => scroll(-100)}
+              className="bg-gray-200 py-3 px-4 rounded-full"
+            >
+              <ArrowBackIcon htmlColor="red" />
+            </button>
+            <button
+              onClick={() => scroll(100)}
+              className="bg-gray-200 py-3 px-4 rounded-full"
+            >
+              <ArrowForwardIcon htmlColor="red" />
+            </button>
           </div>
         </div>
       </div>

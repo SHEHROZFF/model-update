@@ -40,3 +40,8 @@ body{
   scrollbar-width: none; /* Firefox */
 }
 
+.custom-modal .ant-modal-content {
+  background: rgba(255, 255, 255, 0.9) /* Change the alpha value for transparency /
+  border: none; / Optional: remove border */
+}
+
