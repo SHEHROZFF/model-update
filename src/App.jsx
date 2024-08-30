@@ -3,11 +3,18 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCartPlus, FaSignOutAlt } from "react-icons/fa";
+<<<<<<< HEAD
 import { IoIosWarning } from "react-icons/io";
 
 import axios from "axios";
 import { spiral } from "ldrs";
 import { IconButton } from "@mui/material";
+=======
+
+import axios from "axios";
+import { spiral } from "ldrs";
+import { IconButton } from '@mui/material';
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Tooltip from "@mui/material/Tooltip";
 import "./../src/globals.css";
@@ -26,8 +33,14 @@ import { combineLogoChange } from "./comine_logo";
 import Menu from "./components/menu";
 // Component Import
 
+<<<<<<< HEAD
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+=======
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
 
 // Sidebar Icons
 import FitbitSharpIcon from "@mui/icons-material/FitbitSharp";
@@ -36,7 +49,11 @@ import TextureSharpIcon from "@mui/icons-material/TextureSharp";
 import PaletteSharpIcon from "@mui/icons-material/PaletteSharp";
 import LocationSearchingSharpIcon from "@mui/icons-material/LocationSearchingSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+<<<<<<< HEAD
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+=======
+import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
 import ClearIcon from "@mui/icons-material/Clear";
 // Sidebar Icons
 
@@ -77,6 +94,7 @@ export default function Home() {
   const [logoPlacement, setLogoPlacement] = useState("calf");
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageTexture, setSelectedImageTexture] = useState(null);
+<<<<<<< HEAD
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPlacement, setNewPlacement] = useState("");
@@ -106,6 +124,8 @@ export default function Home() {
     }
     setIsModalOpen(false);
   };
+=======
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
 
   useEffect(() => {
     const loader = new THREE.TextureLoader();
@@ -119,17 +139,26 @@ export default function Home() {
 
   const handleTextureChange = (event) => {
     const file = event.target.files[0];
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         // Display the selected image in the UI
         setSelectedImageTexture(reader.result);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
         // Further process the image for texture merging
         if (defaultSockTexture) {
           const img = new Image();
           img.src = reader.result;
+<<<<<<< HEAD
   
           img.onload = () => {
             // Create a canvas to draw the image and apply transformations
@@ -162,6 +191,21 @@ export default function Home() {
               mergedTexture.magFilter = THREE.LinearFilter;
               setTexture(mergedTexture);
             };
+=======
+
+          img.onload = () => {
+            const newTexture = img;
+            const mergedTexture = combineTextures(
+              defaultSockTexture,
+              newTexture,
+              logo,
+              logoPlacement
+            );
+            mergedTexture.encoding = THREE.sRGBEncoding;
+            mergedTexture.minFilter = THREE.LinearFilter;
+            mergedTexture.magFilter = THREE.LinearFilter;
+            setTexture(mergedTexture);
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
           };
         }
       };
@@ -170,21 +214,33 @@ export default function Home() {
   };
   
 
+<<<<<<< HEAD
   const handleLogoChange = (event) => {
     const file = event.target.files[0];
   
+=======
+
+  const handleLogoChange = (event) => {
+    const file = event.target.files[0];
+
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
     if (file) {
       // Create a FileReader to read the file and display the image
       const reader = new FileReader();
       reader.onloadend = () => {
         // Set the selected image to display it in the UI
         setSelectedImage(reader.result);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
         // Process the image further for your custom logic
         const imageReader = new FileReader();
         imageReader.onload = (e) => {
           const img = new Image();
           img.src = e.target.result;
+<<<<<<< HEAD
   
           img.onload = () => {
             // Create a canvas to draw the image and apply transformations
@@ -225,6 +281,30 @@ export default function Home() {
                 setTexture(updatedTexture);
               }
             };
+=======
+
+          img.onload = () => {
+            // Set the image for further processing
+            setLogo(null);
+            setLogo(img);
+
+            // Call the removeBackground function and handle the result
+            console.log(removeBackground(img));
+
+            if (defaultSockTexture) {
+              // Combine the textures and update the texture state
+              const updatedTexture = combineTextures(
+                defaultSockTexture,
+                texture?.image,
+                img,
+                logoPlacement
+              );
+              updatedTexture.encoding = THREE.sRGBEncoding;
+              updatedTexture.minFilter = THREE.LinearFilter;
+              updatedTexture.magFilter = THREE.LinearFilter;
+              setTexture(updatedTexture);
+            }
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
           };
         };
         // Read the image data as a URL for further processing
@@ -234,7 +314,13 @@ export default function Home() {
       reader.readAsDataURL(file);
     }
   };
+<<<<<<< HEAD
   
+=======
+
+
+
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
   const [dotColors, setDotColors] = useState([
     "#85BFCB",
     "#01284D",
@@ -522,7 +608,11 @@ export default function Home() {
   const handleLogoDelete = () => {
     // Clear the logo state
     setSelectedImage(null); // Ensure this matches the state used for preview
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
     // Clear the image from the model
     if (defaultSockTexture) {
       const updatedTexture = combineLogoChange(
@@ -535,6 +625,7 @@ export default function Home() {
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
+<<<<<<< HEAD
 
     // Clear the file input value
     const logoInput = document.getElementById("logoInput");
@@ -564,8 +655,17 @@ export default function Home() {
     const textureInput = document.getElementById("textureInput");
     if (textureInput) {
       textureInput.value = ""; // Reset the input value
+=======
+  
+    // Clear the file input value
+    const logoInput = document.getElementById('logoInput');
+    if (logoInput) {
+      logoInput.value = ''; // Reset the input value
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
     }
   };
+  
+
 
   const removeBackground = (image) => {
     const canvas = document.createElement("canvas");
@@ -624,9 +724,17 @@ export default function Home() {
       materials.Toe.map = defaultToeTexture;
       materials.Toe.needsUpdate = true;
 
+<<<<<<< HEAD
       materials.Sock_Texture.map = texture || defaultSockTexture;
       materials.Sock_Texture.needsUpdate = true;
 
+=======
+
+      materials.Sock_Texture.map = texture || defaultSockTexture;
+      materials.Sock_Texture.needsUpdate = true;
+
+
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
       materials.Cuff.color.set(cuffColor);
       materials.Cuff.needsUpdate = true;
 
@@ -698,6 +806,7 @@ export default function Home() {
   const renderToolbarContent = (option) => {
     switch (option) {
       case "Upload Logo":
+<<<<<<< HEAD
           return (
             <>
               <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
@@ -992,12 +1101,271 @@ export default function Home() {
                         className="w-[35px] h-[35px] rounded-full cursor-pointer"
                       />
                     ))}
+=======
+        return (
+          <>
+            <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
+              {!selectedImage ? (
+                <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative h-24 w-[240px] md:w-96 flex flex-col justify-center items-center">
+                  <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
+                  <p className="text-gray-500 text-sm capitalize font-semibold">
+                    Upload your image here
+                  </p>
+                  <input
+                    id="logoInput"
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    onChange={handleLogoChange}
+                  />
+                </div>
+              ) : (
+                <div className="relative">
+                  <div className="w-20 h-20 rounded-lg  shadow-lg relative overflow-visible">
+                    <img
+                      src={selectedImage}
+                      alt="Selected"
+                      className="w-full h-full object-cover"
+                    />
+                    <Tooltip title="Delete">
+                      <ClearIcon
+                        onClick={handleLogoDelete}
+                        className="absolute -top-5 right-0 text-red-500 animate-bounce cursor-pointer"
+                        style={{ fontSize: 18 }}
+                      />
+                    </Tooltip>
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
                   </div>
                 </div>
               )}
             </div>
           </>
         );
+<<<<<<< HEAD
+=======
+      
+      case "Logo Placement":
+        return (
+          <>
+            <div className="w-[240px] h-24 flex justify-center items-center my-3 mx-0 md:mx-2">
+              <select
+                value={logoPlacement}
+                onChange={handleLogoPlacement}
+                className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg bg-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+              >
+                <option value="calf" className="text-gray-700">
+                  Calf
+                </option>
+                <option value="footbed" className="text-gray-700">
+                  Footbed
+                </option>
+                <option value="calf_footbed" className="text-gray-700">
+                  Calf + Footbed
+                </option>
+                <option value="repeating" className="text-gray-700">
+                  Repeating
+                </option>
+              </select>
+            </div>
+          </>
+        );
+      case "Upload Texture":
+        return (
+          <>
+            <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
+              {!selectedImageTexture ? (
+                <div className="border-2 border-dashed border-gray-300 h-24 w-[240px] md:w-96 flex flex-col justify-center items-center rounded-lg relative">
+                  <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
+                  <p className="text-gray-500 text-sm capitalize font-semibold">Upload your Texture</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={handleTextureChange}
+                  />
+                </div>
+              ) : (
+                <div className="relative w-full h-full">
+                  <img
+                    src={selectedImageTexture}
+                    alt="Selected Texture"
+                    className="w-20 h-20 object-cover rounded-lg shadow-lg"
+                  />
+                  {/* <Tooltip title="Delete">
+                    <ClearIcon
+                      onClick={() => setSelectedImageTexture(null)}
+                      className="absolute top-1 right-1 text-red-500 cursor-pointer"
+                      style={{ fontSize: 18 }}
+                    />
+                  </Tooltip> */}
+                </div>
+              )}
+            </div>
+
+          </>
+        );
+      case "Choose Pattern":
+        return (
+          <>
+            <div className="flex flex-col justify-center items-center my-3 mx-0 md:my-2 md:mx-2 h-32 w-[240px]">
+              <select
+                value={pattern}
+                onChange={handlePatternChange}
+                className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg bg-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+              >
+                <option value="" className="text-gray-500">
+                  None
+                </option>
+                <option value="dots">Dots</option>
+                <option value="checkerboard">Checkerboard</option>
+                <option value="illusionistic">Illusionistic</option>
+                <option value="custom_1">Cust-1</option>
+                <option value="custom_2">Cust-2</option>
+                <option value="custom_3">Cust-3</option>
+                <option value="custom_4">Cust-4</option>
+              </select>
+
+              {pattern === "dots" && (
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
+                  </h2>
+                  <div className="grid grid-cols-4 gap-2">
+                    {dotColors.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleDotColorChange(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {pattern === "checkerboard" && (
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
+                  </h2>
+                  <div className="grid grid-cols-4 items-center justify-center gap-2">
+                    {checkBoardColors.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) =>
+                          handleCheckBoardColorChange(event, index)
+                        }
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {pattern === "illusionistic" && (
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
+                  </h2>
+                  <div className="grid grid-cols-4 items-center justify-center gap-2">
+                    {illusionistic_colors.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) =>
+                          handleIllusionisticColorChange(event, index)
+                        }
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {pattern === "custom_1" && (
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
+                  </h2>
+                  <div className="grid grid-cols-5 items-center justify-center gap-2">
+                    {csts1.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts1Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {pattern === "custom_2" && (
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
+                    Colors:
+                  </h2>
+                  <div className="grid grid-cols-5 items-center justify-center gap-2">
+                    {csts2.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts2Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {pattern === "custom_3" && (
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center">
+                    Colors:<br />
+                    <span className="text-xs">(Scroll To View)</span>
+                  </h2>
+                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-12 overflow-y-auto">
+                    {csts3.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts3Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {pattern === "custom_4" && (
+                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                  <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center">
+                    Colors: <br />
+                    <span className="text-xs">(Scroll To View)</span>
+                  </h2>
+                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-12 overflow-y-auto">
+                    {csts4.map((color, index) => (
+                      <input
+                        key={index}
+                        type="color"
+                        value={color}
+                        onChange={(event) => handleCsts4Change(event, index)}
+                        className="w-[35px] h-[35px] rounded-full cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        );
+>>>>>>> 0a22739faf427f3113508afab56260e1edb7663f
       case "Customize Color":
         return (
           <>
@@ -1012,11 +1380,10 @@ export default function Home() {
                       <button
                         key={color}
                         style={{ backgroundColor: color }}
-                        className={`w-10 h-10 rounded-full border-2 ${
-                          cuffColor === color
-                            ? "border-blue-500"
-                            : "border-gray-300"
-                        } transition-transform transform hover:scale-110`}
+                        className={`w-10 h-10 rounded-full border-2 ${cuffColor === color
+                          ? "border-blue-500"
+                          : "border-gray-300"
+                          } transition-transform transform hover:scale-110`}
                         onClick={() => setCuffColor(color)}
                       />
                     ))}
@@ -1032,11 +1399,10 @@ export default function Home() {
                       <button
                         key={color}
                         style={{ backgroundColor: color }}
-                        className={`w-10 h-10 rounded-full border-2 ${
-                          heelColor === color
-                            ? "border-blue-500"
-                            : "border-gray-300"
-                        } transition-transform transform hover:scale-110`}
+                        className={`w-10 h-10 rounded-full border-2 ${heelColor === color
+                          ? "border-blue-500"
+                          : "border-gray-300"
+                          } transition-transform transform hover:scale-110`}
                         onClick={() => setHeelColor(color)}
                       />
                     ))}
@@ -1061,11 +1427,10 @@ export default function Home() {
                       <button
                         key={color}
                         style={{ backgroundColor: color }}
-                        className={`w-10 h-10 rounded-full border-2 ${
-                          toeColor === color
-                            ? "border-blue-500"
-                            : "border-gray-300"
-                        } transition-transform transform hover:scale-110`}
+                        className={`w-10 h-10 rounded-full border-2 ${toeColor === color
+                          ? "border-blue-500"
+                          : "border-gray-300"
+                          } transition-transform transform hover:scale-110`}
                         onClick={() => setToeColor(color)}
                       />
                     ))}
@@ -1084,17 +1449,15 @@ export default function Home() {
     <div className="h-screen w-full flex">
       {/* Sidebar for large screens */}
       <div
-        className={` sidebar border border-[#efeee8] shadow-xl duration-500 ${
-          open ? "w-[18%]" : "w-[84px]"
-        }`}
+        className={` sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
+          }`}
       >
         <div className="flex justify-normal items-center h-20 px-3 mb-8">
           <div>
             <button
               onClick={() => setOpen(!open)}
-              className={`rounded-full duration-500 p-5 ${
-                !open ? "rotate-180" : "rotate-0"
-              }`}
+              className={`rounded-full duration-500 p-5 ${!open ? "rotate-180" : "rotate-0"
+                }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1221,9 +1584,8 @@ export default function Home() {
       </div>
 
       <div
-        className={`relative w-full duration-500 ${
-          open ? "w-[82%]" : "w-[100%]"
-        }`}
+        className={`relative w-full duration-500 ${open ? "w-[82%]" : "w-[100%]"
+          }`}
       >
         <div className="w-full h-[8%] flex justify-center items-center">
           <div className="w-full h-full absolute left-0 -top-5 lg:-top-20 mb-56 lg:mb-0">
