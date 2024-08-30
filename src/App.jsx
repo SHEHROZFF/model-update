@@ -1228,7 +1228,7 @@ const handleLogoChange = (event) => {
           open ? "w-[82%]" : "w-[100%]"
         }`}
       >
-        <div className="w-full h-[8%] flex justify-center items-center">
+        <div className="border border-t-gray-200 border-b-0 border-l-0 border-r-0 w-full h-[8%] flex justify-center items-center">
           <div className="w-full h-4/5 lg:h-full absolute left-0 top-5 lg:-top-20 mb-56 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
