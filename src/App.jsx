@@ -703,7 +703,7 @@ export default function Home() {
       case "Upload Logo":
         return (
           <>
-            <div className="w-full h-full flex justify-center items-center my-2 mx-1  md:mx-2">
+            <div className="w-full h-full flex justify-center items-center my-2 mx-1 lg:mx-2">
               {!selectedImage ? (
                 <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
                   <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
@@ -1353,7 +1353,7 @@ export default function Home() {
             {activeOptions.map((option) => (
               <motion.div
                 key={option}
-                className="p-2 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-2 lg:m-3"
+                className="p-2 px-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-1 lg:m-2"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
