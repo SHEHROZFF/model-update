@@ -10,6 +10,7 @@ import axios from "axios";
 import { spiral } from "ldrs";
 import { IconButton } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import AddIcon from '@mui/icons-material/Add';
 
 import "./../src/globals.css";
 import Swatches from "./components/colorswatches";
@@ -18,7 +19,7 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { SketchPicker } from "react-color";
-import { Modal, Button, Form, Input, Tooltip } from "antd";
+import { Modal, Button, Form, Input, Tooltip, Checkbox } from "antd";
 // Component Import
 import { combineTextures } from "./combine_texture";
 import { combinePattern } from "./combine_pattern";
@@ -47,7 +48,6 @@ const cuffColorSwatches = [
   "#081e2c",
   "#5f6468",
   "#003b49",
-  "##003e66",
 ];
 const heelColorSwatches = [
   "#401e72",
@@ -55,7 +55,6 @@ const heelColorSwatches = [
   "#081e2c",
   "#5f6468",
   "#003b49",
-  "##003e66",
 ];
 const toeColorSwatches = [
   "#401e72",
@@ -63,7 +62,6 @@ const toeColorSwatches = [
   "#081e2c",
   "#5f6468",
   "#003b49",
-  "##003e66",
 ];
 spiral.register();
 export default function Home() {
@@ -78,6 +76,8 @@ export default function Home() {
   const [logoPlacement, setLogoPlacement] = useState("calf");
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageTexture, setSelectedImageTexture] = useState(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [notes, setNotes] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPlacement, setNewPlacement] = useState("");
@@ -421,62 +421,68 @@ export default function Home() {
     setIsModalVisible(true);
   };
 
+
   const handleSave = async () => {
-    if (texture) {
-      setLoading(true); // Show loader
-      const canvas = document.createElement("canvas");
-      canvas.width = texture.image.width;
-      canvas.height = texture.image.height;
-      const context = canvas.getContext("2d");
-      context.drawImage(texture.image, 0, 0);
-
-      canvas.toBlob(async (blob) => {
-        const formData = new FormData();
-        formData.append("file", blob, "customized_sock_texture.png");
-        const username = "socksadmin";
-        const password = "8jPu epUh nWyj gHAF Gjbx aqiV";
-
-        const credentials = btoa(`${username}:${password}`);
-
-        try {
-          const response = await fetch(
-            "https://socks.phpnode.net/wp-json/wp/v2/media",
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Basic ${credentials}`,
-              },
-              body: formData,
-            }
-          );
-
-          if (response.ok) {
-            const data = await response.json();
-            toast.success(`Upload successful! Image ID: ${data.id}`);
-            handleSubmit(data.id); // Pass the image ID to the submit function
-          } else {
-            const errorData = await response.json();
-            toast.error(
-              `Upload failed: ${errorData.message || "Unknown error"}`
-            );
-            setLoading(false); // Hide loader
-          }
-        } catch (error) {
-          toast.error("An error occurred during the upload.");
-          setLoading(false); // Hide loader
-        }
-      }, "image/png");
-    } else {
-      toast.error("No texture available to upload.");
-      setLoading(false); // Hide loader
+    if (!texture) {
+      // Show error if no texture is available
+      toast.error(
+        "No texture uploaded. Please upload a texture before saving."
+      );
+      return; // Exit the function early
     }
+
+    setLoading(true); // Show loader
+    const canvas = document.createElement("canvas");
+    canvas.width = texture.image.width;
+    canvas.height = texture.image.height;
+    const context = canvas.getContext("2d");
+    context.drawImage(texture.image, 0, 0);
+
+    canvas.toBlob(async (blob) => {
+      const formData = new FormData();
+      formData.append("file", blob, "customized_sock_texture.png");
+      const username = "socksadmin";
+      const password = "8jPu epUh nWyj gHAF Gjbx aqiV";
+
+      const credentials = btoa(`${username}:${password}`);
+
+      try {
+        const response = await fetch(
+          "https://socks.phpnode.net/wp-json/wp/v2/media",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Basic ${credentials}`,
+            },
+            body: formData,
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          toast.success(`Upload successful! Image ID: ${data.id}`);
+          handleSubmit(data.id); // Pass the image ID to the submit function
+        } else {
+          const errorData = await response.json();
+          toast.error(`Upload failed: ${errorData.message || "Unknown error"}`);
+        }
+      } catch (error) {
+        toast.error("An error occurred during the upload.");
+      } finally {
+        setLoading(false); // Hide loader
+      }
+    }, "image/png");
   };
 
   const handleSubmit = async (imageId) => {
+    // Set loading state to true when submitting the form
+    setLoading(true);
+
     const data = {
       name,
       phone,
       email,
+      notes,
       sockDesign: parseInt(imageId, 10),
     };
 
@@ -497,7 +503,7 @@ export default function Home() {
       console.error("Error sending data:", error);
       toast.error("Error submitting data.");
     } finally {
-      setLoading(false); // Hide loader
+      setLoading(false); // Hide loader after submission
     }
   };
 
@@ -1016,12 +1022,24 @@ export default function Home() {
                         key={color}
                         style={{ backgroundColor: color }}
                         className={`w-10 h-10 rounded-full border-2 ${cuffColor === color
-                            ? "border-blue-500"
-                            : "border-gray-300"
+                          ? "border-blue-500"
+                          : "border-gray-300"
                           } transition-transform transform hover:scale-110`}
                         onClick={() => setCuffColor(color)}
-                      />
+                      />  
                     ))}
+                    <div className="bg-transparent w-10 h-10 rounded-full flex justify-center items-center border border-gray-800 cursor-pointer">
+                      <label htmlFor="colorInput" className="flex justify-center items-center">
+                        <AddIcon htmlColor="#000000" />
+                      </label>
+                      <input
+                        type="color"
+                        id="colorInput"
+                        className="opacity-0 absolute  cursor-pointer"
+                        onClick={() => setCuffColor}
+                      />
+                    </div>
+
                   </div>
                 </div>
 
@@ -1035,12 +1053,23 @@ export default function Home() {
                         key={color}
                         style={{ backgroundColor: color }}
                         className={`w-10 h-10 rounded-full border-2 ${heelColor === color
-                            ? "border-blue-500"
-                            : "border-gray-300"
+                          ? "border-blue-500"
+                          : "border-gray-300"
                           } transition-transform transform hover:scale-110`}
                         onClick={() => setHeelColor(color)}
                       />
                     ))}
+                    <div className="bg-transparent w-10 h-10 rounded-full flex justify-center items-center border border-gray-800 cursor-pointer">
+                      <label htmlFor="colorInput" className="flex justify-center items-center">
+                        <AddIcon htmlColor="#000000" />
+                      </label>
+                      <input
+                        type="color"
+                        id="colorInput"
+                        className="opacity-0 absolute  cursor-pointer"
+                      />
+                    </div>
+
                   </div>
                 </div>
 
@@ -1048,9 +1077,20 @@ export default function Home() {
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Sock Color:
                   </label>
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-wrap gap-2">
                     <Swatches onSelectColor={handleColorOnChange} />
+                    <div className="bg-transparent w-10 h-10 rounded-full flex justify-center items-center border border-gray-800 cursor-pointer">
+                      <label htmlFor="colorInput" className="flex justify-center items-center">
+                        <AddIcon htmlColor="#000000" />
+                      </label>
+                      <input
+                        type="color"
+                        id="colorInput"
+                        className="opacity-0 absolute  cursor-pointer"
+                      />
+                    </div>
                   </div>
+
                 </div>
 
                 <div>
@@ -1063,12 +1103,23 @@ export default function Home() {
                         key={color}
                         style={{ backgroundColor: color }}
                         className={`w-10 h-10 rounded-full border-2 ${toeColor === color
-                            ? "border-blue-500"
-                            : "border-gray-300"
+                          ? "border-blue-500"
+                          : "border-gray-300"
                           } transition-transform transform hover:scale-110`}
                         onClick={() => setToeColor(color)}
                       />
                     ))}
+                    <div className="bg-transparent w-10 h-10 rounded-full flex justify-center items-center border border-gray-800 cursor-pointer">
+                      <label htmlFor="colorInput" className="flex justify-center items-center">
+                        <AddIcon htmlColor="#000000" />
+                      </label>
+                      <input
+                        type="color"
+                        id="colorInput"
+                        className="opacity-0 absolute  cursor-pointer"
+                      />
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -1300,36 +1351,101 @@ export default function Home() {
             <ToastContainer />
 
             <Modal
-              title="Submit Your Order"
               visible={isModalVisible}
               onOk={handleSave}
               onCancel={handleCloseModal}
               okText="Upload and Submit"
-              okButtonProps={{
-                style: {
-                  backgroundColor: "rgba(227, 38, 44, 1)",
-                  borderColor: "rgba(0, 0, 0, 0.25)",
-                },
-              }}
+              width={window.innerWidth < 540 ? '90%' : 600} // This gives a max width of 90% on mobile devices
+              centered
+              className="!font-[Raleway]"
+
+              footer={[
+                <div
+                  className="flex flex-col items-center space-y-2"
+                  key="footer-buttons"
+                >
+                  <div className="flex justify-center space-x-4 w-full">
+                    <button
+                      onClick={handleCloseModal}
+                      className=" md:text-xl text-lg text-black border border-black md:py-4 py-2 md:px-4  rounded w-full"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      className="bg-red-500 hover:bg-red-700 md:py-4 py-2 text-xl text-white px-4 rounded w-full"
+                    >
+                      Save
+                    </button>
+                  </div>
+                  <p className="text-center mt-2 text-lg font-semibold">
+                    Have an account?{" "}
+                    <a
+                      href="https://socks.phpnode.net/"
+                      className="text-blue-500 underline"
+                    >
+                      Login
+                    </a>
+                  </p>
+                </div>,
+              ]}
             >
-              <Form onFinish={handleSubmit}>
-                <Form.Item label="Name">
+              <Form onFinish={handleSubmit} layout="vertical" className="!font-[Raleway] space-y-3 lg:space-y-5">
+                <h1 className="text-center md:text-xl text-lg font-bold">
+                  Where should we send your socks design?
+                </h1>
+                <p className="text-center text-gray-600">
+                  Some designs may require adjustments to ensure optimal
+                  knitting quality. Our team of expert designers will carefully
+                  review your submission and provide feedback within 24 business
+                  hours.
+                </p>
+
+                <Form.Item label="Name" className="w-full font-medium">
                   <Input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    className="w-full bg-transparent border-gray-100 border  md:py-2 py-0"
                   />
                 </Form.Item>
-                <Form.Item label="Phone Number">
+
+                <Form.Item
+                  label="Phone Number (Optional)"
+                  className="w-full font-medium"
+                >
                   <Input
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    className="w-full bg-transparent border-gray-100 border  md:py-2 py-0"
                   />
                 </Form.Item>
-                <Form.Item label="Email">
+
+                <Form.Item label="Email" className="w-full font-medium">
                   <Input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent border-gray-100 border  md:py-2 py-0"
+                  />
+                </Form.Item>
+
+                <Form.Item className="w-full text-lg font-medium">
+                  <Checkbox
+                    checked={termsAccepted}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                  >
+                    <h1 className="text-lg text-red-700">
+                      Want free professional socks?
+                    </h1>
+                  </Checkbox>
+                </Form.Item>
+
+                <Form.Item label="Notes" className="w-full font-semibold">
+                  <Input.TextArea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full bg-transparent border-gray-100 border  md:py-2 py-0"
+                    rows={4}
                   />
                 </Form.Item>
               </Form>

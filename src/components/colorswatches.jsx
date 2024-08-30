@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-const swatchColors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF33A1', '#33FFF5'];
+const swatchColors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF33A1'];
 
 const Swatches = ({ onSelectColor }) => {
   return (
@@ -10,7 +10,7 @@ const Swatches = ({ onSelectColor }) => {
         <button
           key={color}
           style={{ backgroundColor: color }}
-          className='w-9 h-9 rounded-full border-2 border-gray-300'
+          className='w-10 h-10 rounded-full border-2 border-gray-300'
           onClick={() => onSelectColor(color)}
         />
       ))}
