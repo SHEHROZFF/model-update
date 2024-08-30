@@ -1349,17 +1349,17 @@ const handleLogoChange = (event) => {
           </div>
         </div>
         <motion.div
-          className="border w-full h-[28%] lg:h-[25%] absolute left-0 bottom-2 md:bottom-10 bg-white overflow-visible"
+          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-2 md:bottom-6 bg-white overflow-visible"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex overflow-x-auto scrollbar-hide scroll-container w-full relative">
+          <div className="flex overflow-x-auto scrollbar-hide scroll-container h-4/5 lg:h-auto w-full relative">
             {activeOptions.map((option) => (
               <motion.div
                 key={option}
-                className="p-1 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-4"
+                className="p-1 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-2 lg:m-4"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
@@ -1373,7 +1373,7 @@ const handleLogoChange = (event) => {
                     >
                       <ArrowBackIosNewOutlinedIcon size="small" />
                     </button>
-                    <h3 className="font-bold text-red-800">{option}</h3>
+                    <h3 className="font-bold text-red-800 text-base  lg:text-xl">{option}</h3>
                   </div>
                 </div>
                 <div className="relative z-10">
