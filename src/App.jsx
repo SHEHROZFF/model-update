@@ -1343,7 +1343,7 @@ export default function Home() {
           </div>
         </div>
         <motion.div
-          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-10 md:-bottom-6 bg-transparent overflow-visible"
+          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-10 md:-bottom-6 bg-transparent overflow-visible p-3"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
