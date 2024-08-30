@@ -842,7 +842,7 @@ const handleLogoChange = (event) => {
       case "Choose Pattern":
         return (
           <>
-            <div className="flex flex-col justify-center items-center my-3 mx-0 md:my-2 md:mx-2 h-32 w-[240px]">
+            <div className="flex flex-col justify-center items-center my-3 mx-0 md:my-2 md:mx-2 h-24 w-[240px]">
               <select
                 value={pattern}
                 onChange={handlePatternChange}
@@ -1229,7 +1229,7 @@ const handleLogoChange = (event) => {
         }`}
       >
         <div className="w-full h-[8%] flex justify-center items-center">
-          <div className="w-full h-full absolute left-0 -top-5 lg:-top-20 mb-56 lg:mb-0">
+          <div className="w-full h-5/6 md:h-full absolute left-0 top-5 lg:-top-20 mb-56 lg:mb-0">
             <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />
@@ -1349,7 +1349,7 @@ const handleLogoChange = (event) => {
           </div>
         </div>
         <motion.div
-          className="border w-full h-[22%] md:h-[25%] absolute left-0 bottom-2 bg-white overflow-visible"
+          className="border w-full h-[22%] md:h-[25%] absolute left-0 bottom-2 md:bottom-10 bg-white overflow-visible"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
