@@ -120,36 +120,36 @@ export default function Home() {
 
   const handleTextureChange = (event) => {
     const file = event.target.files[0];
-  
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         // Display the selected image in the UI
         setSelectedImageTexture(reader.result);
-  
+
         // Further process the image for texture merging
         if (defaultSockTexture) {
           const img = new Image();
           img.src = reader.result;
-  
+
           img.onload = () => {
             // Create a canvas to draw the image and apply transformations
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-  
+
             // Set canvas dimensions to match the image
             canvas.width = img.width;
             canvas.height = img.height;
-  
+
             // Flip the image upside down
             ctx.translate(0, img.height);
             ctx.scale(1, -1);
             ctx.drawImage(img, 0, 0, img.width, img.height);
-  
+
             // Create a new Image object with the flipped image
             const flippedImage = new Image();
             flippedImage.src = canvas.toDataURL();
-  
+
             flippedImage.onload = () => {
               // Merge the flipped image with the existing texture and logo
               const mergedTexture = combineTextures(
@@ -169,73 +169,73 @@ export default function Home() {
       reader.readAsDataURL(file);
     }
   };
-  
 
-const handleLogoChange = (event) => {
-  const file = event.target.files[0];
 
-  if (file) {
-    // Create a FileReader to read the file and display the image
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // Set the selected image to display it in the UI
-      setSelectedImage(reader.result);
+  const handleLogoChange = (event) => {
+    const file = event.target.files[0];
 
-      // Process the image further for your custom logic
-      const imageReader = new FileReader();
-      imageReader.onload = (e) => {
-        const img = new Image();
-        img.src = e.target.result;
+    if (file) {
+      // Create a FileReader to read the file and display the image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Set the selected image to display it in the UI
+        setSelectedImage(reader.result);
 
-        img.onload = () => {
-          // Create a canvas to draw the image and apply transformations
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
+        // Process the image further for your custom logic
+        const imageReader = new FileReader();
+        imageReader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
 
-          // Set canvas dimensions to match the image
-          canvas.width = img.width;
-          canvas.height = img.height;
+          img.onload = () => {
+            // Create a canvas to draw the image and apply transformations
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
 
-          // Flip the image upside down
-          ctx.translate(0, img.height);
-          ctx.scale(1, -1);
-          ctx.drawImage(img, 0, 0, img.width, img.height);
+            // Set canvas dimensions to match the image
+            canvas.width = img.width;
+            canvas.height = img.height;
 
-          // Create a new Image object with the flipped image
-          const flippedImage = new Image();
-          flippedImage.src = canvas.toDataURL();
+            // Flip the image upside down
+            ctx.translate(0, img.height);
+            ctx.scale(1, -1);
+            ctx.drawImage(img, 0, 0, img.width, img.height);
 
-          flippedImage.onload = () => {
-            setLogo(null);
-            setLogo(flippedImage);
+            // Create a new Image object with the flipped image
+            const flippedImage = new Image();
+            flippedImage.src = canvas.toDataURL();
 
-            // Call the removeBackground function and handle the result
-            console.log(removeBackground(flippedImage));
+            flippedImage.onload = () => {
+              setLogo(null);
+              setLogo(flippedImage);
 
-            if (defaultSockTexture) {
-              // Combine the textures and update the texture state
-              const updatedTexture = combineTextures(
-                defaultSockTexture,
-                texture?.image,
-                flippedImage,
-                logoPlacement
-              );
-              updatedTexture.encoding = THREE.sRGBEncoding;
-              updatedTexture.minFilter = THREE.LinearFilter;
-              updatedTexture.magFilter = THREE.LinearFilter;
-              setTexture(updatedTexture);
-            }
+              // Call the removeBackground function and handle the result
+              console.log(removeBackground(flippedImage));
+
+              if (defaultSockTexture) {
+                // Combine the textures and update the texture state
+                const updatedTexture = combineTextures(
+                  defaultSockTexture,
+                  texture?.image,
+                  flippedImage,
+                  logoPlacement
+                );
+                updatedTexture.encoding = THREE.sRGBEncoding;
+                updatedTexture.minFilter = THREE.LinearFilter;
+                updatedTexture.magFilter = THREE.LinearFilter;
+                setTexture(updatedTexture);
+              }
+            };
           };
         };
+        // Read the image data as a URL for further processing
+        imageReader.readAsDataURL(file);
       };
-      // Read the image data as a URL for further processing
-      imageReader.readAsDataURL(file);
-    };
-    // Read the file as a Data URL for displaying it in the UI
-    reader.readAsDataURL(file);
-  }
-};
-  
+      // Read the file as a Data URL for displaying it in the UI
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const [dotColors, setDotColors] = useState([
     "#85BFCB",
@@ -567,8 +567,8 @@ const handleLogoChange = (event) => {
     const textureInput = document.getElementById("textureInput");
     if (textureInput) {
       textureInput.value = ""; // Reset the input value
-  };
- }
+    };
+  }
 
   const removeBackground = (image) => {
     const canvas = document.createElement("canvas");
@@ -1015,11 +1015,10 @@ const handleLogoChange = (event) => {
                       <button
                         key={color}
                         style={{ backgroundColor: color }}
-                        className={`w-10 h-10 rounded-full border-2 ${
-                          cuffColor === color
+                        className={`w-10 h-10 rounded-full border-2 ${cuffColor === color
                             ? "border-blue-500"
                             : "border-gray-300"
-                        } transition-transform transform hover:scale-110`}
+                          } transition-transform transform hover:scale-110`}
                         onClick={() => setCuffColor(color)}
                       />
                     ))}
@@ -1035,11 +1034,10 @@ const handleLogoChange = (event) => {
                       <button
                         key={color}
                         style={{ backgroundColor: color }}
-                        className={`w-10 h-10 rounded-full border-2 ${
-                          heelColor === color
+                        className={`w-10 h-10 rounded-full border-2 ${heelColor === color
                             ? "border-blue-500"
                             : "border-gray-300"
-                        } transition-transform transform hover:scale-110`}
+                          } transition-transform transform hover:scale-110`}
                         onClick={() => setHeelColor(color)}
                       />
                     ))}
@@ -1064,11 +1062,10 @@ const handleLogoChange = (event) => {
                       <button
                         key={color}
                         style={{ backgroundColor: color }}
-                        className={`w-10 h-10 rounded-full border-2 ${
-                          toeColor === color
+                        className={`w-10 h-10 rounded-full border-2 ${toeColor === color
                             ? "border-blue-500"
                             : "border-gray-300"
-                        } transition-transform transform hover:scale-110`}
+                          } transition-transform transform hover:scale-110`}
                         onClick={() => setToeColor(color)}
                       />
                     ))}
@@ -1087,17 +1084,15 @@ const handleLogoChange = (event) => {
     <div className="h-screen w-full flex">
       {/* Sidebar for large screens */}
       <div
-        className={` sidebar border border-[#efeee8] shadow-xl duration-500 ${
-          open ? "w-[18%]" : "w-[84px]"
-        }`}
+        className={` sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
+          }`}
       >
         <div className="flex justify-normal items-center h-20 px-3 mb-8">
           <div>
             <button
               onClick={() => setOpen(!open)}
-              className={`rounded-full duration-500 p-5 ${
-                !open ? "rotate-180" : "rotate-0"
-              }`}
+              className={`rounded-full duration-500 p-5 ${!open ? "rotate-180" : "rotate-0"
+                }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1224,9 +1219,8 @@ const handleLogoChange = (event) => {
       </div>
 
       <div
-        className={`relative w-full duration-500 ${
-          open ? "w-[82%]" : "w-[100%]"
-        }`}
+        className={`relative w-full duration-500 ${open ? "w-[82%]" : "w-[100%]"
+          }`}
       >
         <div className="border border-t-gray-200 border-b-0 border-l-0 border-r-0 w-full h-[8%] flex justify-center items-center">
           <div className="w-full h-4/5 lg:h-full absolute left-0 top-3 lg:-top-20 mb-56 lg:mb-0">
