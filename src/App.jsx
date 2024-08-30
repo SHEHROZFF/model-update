@@ -705,7 +705,7 @@ const handleLogoChange = (event) => {
           <>
             <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
               {!selectedImage ? (
-                <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative h-24 w-[240px] md:w-96 flex flex-col justify-center items-center">
+                <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative h-24 w-60 md:w-96 flex flex-col justify-center items-center">
                   <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
                   <p className="text-gray-500 text-sm capitalize font-semibold">
                     Upload your image here
@@ -720,7 +720,7 @@ const handleLogoChange = (event) => {
                 </div>
               ) : (
                 <div className="relative">
-                  <div className="w-20 h-20 rounded-lg  shadow-lg relative overflow-visible">
+                  <div className="w-60 h-24 rounded-lg  shadow-lg relative overflow-visible bg-white">
                     <img
                       src={selectedImage}
                       alt="Selected"
@@ -768,16 +768,16 @@ const handleLogoChange = (event) => {
                 onCancel={handleCancel}
                 footer={null}
                 centered
-                className="custom-modal" // Add custom class for transparency
+                className="custom-modal rounded-lg"
               >
                 <div className="w-full h-auto p-12 rounded-lg flex flex-col items-center">
-                  <div className="bg-yellow-100 rounded-full p-3 mb-6">
-                    <IoIosWarning className="text-yellow-500 text-5xl animate-pulse" />
+                  <div className="bg-red-300 rounded-full p-3 mb-6 flex items-center justify-center">
+                    <IoIosWarning className="text-red-500 text-4xl animate-pulse" />
                   </div>
                   <h1 className="text-3xl font-bold text-red-600 text-center mb-5">
                     Warning: Changing Logo Position Without Saving
                   </h1>
-                  <p className="text-gray-500 text-lg text-center leading-7 mb-8">
+                  <p className="text-gray-500 text-lg text-center tracking-tight leading-7 mb-8">
                     Switching to a different logo position without saving your
                     current design will erase any changes you've made. If you
                     are certain about changing the position and accept the loss
@@ -786,7 +786,7 @@ const handleLogoChange = (event) => {
                   <div className="flex flex-col space-y-4 w-full">
                     <button
                       onClick={handleCancel}
-                      className="border border-gray-600 py-4 rounded-md text-lg font-semibold text-gray-600 hover:bg-gray-600    hover:text-white focus:ring-blue-400 w-full"
+                      className="border border-red-600 py-4 rounded-md text-lg font-semibold text-red-600 hover:bg-red-600  transition  hover:text-white focus:ring-blue-400 w-full"
                     >
                       Edit Current Design
                     </button>
@@ -821,11 +821,11 @@ const handleLogoChange = (event) => {
                   />
                 </div>
               ) : (
-                <div className="relative w-full h-full">
+                <div className="w-60 h-24 rounded-lg  shadow-lg relative overflow-visible bg-white">
                   <img
                     src={selectedImageTexture}
                     alt="Selected Texture"
-                    className="w-20 h-20 object-cover rounded-lg shadow-lg"
+                    className="w-full h-full object-cover"
                   />
                   <Tooltip title="Delete">
                     <ClearIcon
@@ -1355,7 +1355,7 @@ const handleLogoChange = (event) => {
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex overflow-x-auto scrollbar-hide scroll-container h-full w-full relative">
+          <div className="flex overflow-x-auto scrollbar-hide scroll-container w-full relative">
             {activeOptions.map((option) => (
               <motion.div
                 key={option}
