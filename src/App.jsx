@@ -1026,7 +1026,7 @@ export default function Home() {
                           : "border-gray-300"
                           } transition-transform transform hover:scale-110`}
                         onClick={() => setCuffColor(color)}
-                      />  
+                      />
                     ))}
                     <div className="bg-transparent w-10 h-10 rounded-full flex justify-center items-center border border-gray-800 cursor-pointer">
                       <label htmlFor="colorInput" className="flex justify-center items-center">
