@@ -703,9 +703,9 @@ export default function Home() {
       case "Upload Logo":
         return (
           <>
-            <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
+            <div className="w-full h-full flex justify-center items-center my-2 mx-1  md:mx-2">
               {!selectedImage ? (
-                <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative h-24 w-60 md:w-96 flex flex-col justify-center items-center">
+                <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
                   <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
                   <p className="text-gray-500 text-sm capitalize font-semibold">
                     Upload your image here
@@ -720,11 +720,11 @@ export default function Home() {
                 </div>
               ) : (
                 <div className="relative">
-                  <div className="w-60 h-24 rounded-lg  shadow-lg relative overflow-visible bg-white">
+                  <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
                     <img
                       src={selectedImage}
                       alt="Selected"
-                      className="w-full h-full object-cover"
+                      className="w-full h-24 object-cover"
                     />
                     <Tooltip title="Delete">
                       <ClearIcon
@@ -807,7 +807,7 @@ export default function Home() {
           <>
             <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
               {!selectedImageTexture ? (
-                <div className="border-2 border-dashed border-gray-300 h-24 w-[240px] md:w-96 flex flex-col justify-center items-center rounded-lg relative">
+                <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
                   <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
                   <p className="text-gray-500 text-sm capitalize font-semibold">
                     Upload your Texture
@@ -821,11 +821,11 @@ export default function Home() {
                   />
                 </div>
               ) : (
-                <div className="w-60 h-24 rounded-lg  shadow-lg relative overflow-visible bg-white">
+                <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
                   <img
                     src={selectedImageTexture}
                     alt="Selected Texture"
-                    className="w-full h-full object-cover"
+                    className="w-full h-24 object-cover"
                   />
                   <Tooltip title="Delete">
                     <ClearIcon
@@ -1353,7 +1353,7 @@ export default function Home() {
             {activeOptions.map((option) => (
               <motion.div
                 key={option}
-                className="p-1 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-2 lg:m-3"
+                className="p-2 px-3 md:p-3 flex flex-col border rounded-lg bg-gray-100 shadow-md m-2 lg:m-3"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
@@ -1370,7 +1370,7 @@ export default function Home() {
                     <h3 className="font-bold lg:font-medium text-red-800 text-base  lg:text-xl">{option}</h3>
                   </div>
                 </div>
-                <div className="relative z-10">
+                <div className="relative z-10 pb-2">
                   {renderToolbarContent(option)}
                 </div>
               </motion.div>
