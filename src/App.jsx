@@ -1210,10 +1210,10 @@ export default function Home() {
       </div>
 
       {/* sidebar for small screens */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-[72px] z-10 md:hidden">
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 md:hidden mx-auto">
         <div className="flex justify-center items-center h-16 px-2 mb-6">
-          <div className="flex flex-row gap-y-2">
-            <div className="py-2 px-2 flex flex-row gap-y-2 bg-red-100 rounded-lg w-[220px]">
+          <div className="flex flex-row justify-center items-center gap-y-2">
+            <div className="py-2 px-2 flex flex-row gap-y-2 bg-red-100 rounded-lg ">
               <Tooltip title="Upload Logo" placement="bottomRight">
                 <div
                   className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
@@ -1244,14 +1244,6 @@ export default function Home() {
                 </div>
               </Tooltip>
 
-              <Tooltip title="Logo Placement" placement="bottomRight">
-                <div
-                  className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
-                  onClick={() => handleOptionClick("Logo Placement")}
-                >
-                  <PaletteSharpIcon htmlColor="#E3262C" className="text-sm" />
-                </div>
-              </Tooltip>
 
               <Tooltip title="Customize Color" placement="bottomRight">
                 <div
