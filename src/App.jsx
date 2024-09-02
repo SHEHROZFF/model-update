@@ -720,7 +720,7 @@ export default function Home() {
       case "Upload Logo":
         return (
           <>
-            <div className="w-full h-full flex justify-center items-center my-2 mx-1 lg:mx-2">
+            <div className="w-full h-full flex justify-between gap-x-5 items-center my-2 mx-1 lg:mx-2">
               {!selectedImage ? (
                 <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
                   <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
@@ -753,14 +753,9 @@ export default function Home() {
                   </div>
                 </div>
               )}
-            </div>
-          </>
-        );
-
-      case "Logo Placement":
-        return (
-          <>
-            <div className="w-[240px] h-24 flex justify-center items-center my-3 mx-0 md:mx-2">
+              
+              <div className="w-full space-y-4 px-5">
+              <h1 className="text-red-500">Logo Placement</h1>
               <select
                 value={logoPlacement}
                 onChange={handleLogoPlacementChange}
@@ -779,6 +774,7 @@ export default function Home() {
                   Repeating
                 </option>
               </select>
+              </div>
               <Modal
                 title={null}
                 visible={isModalOpen}
@@ -847,7 +843,7 @@ export default function Home() {
                   <Tooltip title="Delete">
                     <ClearIcon
                       onClick={handleTextureDelete}
-                      className="absolute -top-8 right-1 text-red-500 cursor-pointer"
+                      className="absolute top-1 right-1 text-red-500 cursor-pointer"
                       style={{ fontSize: 18 }}
                     />
                   </Tooltip>
@@ -1047,7 +1043,7 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
-                        onChange={(e) => setCuffColor(e.target.value)}
+                        onClick={() => setCuffColor}
                       />
                     </div>
 
@@ -1078,7 +1074,6 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
-                        onChange={(e) => setHeelColor(e.target.value)}
                       />
                     </div>
 
@@ -1099,7 +1094,6 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
-                        onChange={(e) => handleColorOnChange(e.target.value)}
                       />
                     </div>
                   </div>
@@ -1130,7 +1124,6 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
-                        onChange={(e) => setToeColor(e.target.value)}
                       />
                     </div>
 
@@ -1203,13 +1196,6 @@ export default function Home() {
               >
                 <DesignServicesSharpIcon htmlColor="#E3262C" />
                 {open && <h1 className="text-sidebarTEXT">Choose Pattern</h1>}
-              </div>
-              <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
-                onClick={() => handleOptionClick("Logo Placement")}
-              >
-                <PaletteSharpIcon htmlColor="#E3262C" />
-                {open && <h1 className="text-sidebarTEXT">Logo Placement</h1>}
               </div>
               <div
                 className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
