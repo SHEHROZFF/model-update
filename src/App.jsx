@@ -491,6 +491,9 @@ export default function Home() {
       email,
       notes,
       sockDesign: parseInt(imageId, 10),
+      cuffColor,
+      toeColor,
+      heelColor
     };
 
     try {
