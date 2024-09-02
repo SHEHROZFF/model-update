@@ -16,7 +16,7 @@ import "./../src/globals.css";
 import Swatches from "./components/colorswatches";
 import * as THREE from "three";
 import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, events } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { SketchPicker } from "react-color";
 import { Modal, Button, Form, Input, Tooltip, Checkbox } from "antd";
@@ -310,6 +310,13 @@ export default function Home() {
     updateTexture(pattern);
   };
 
+  const handleCuffColorChange = (event, index) => {
+    const updatedColors = [...cuffColorSwatches];
+    updatedColors[index] = event.target.value;
+    setCuffColor(updatedColors);
+    // updateTexture(pattern);
+  };
+
   const handleCheckBoardColorChange = (event, index) => {
     const updatedColors = [...checkBoardColors];
     updatedColors[index] = event.target.value;
@@ -550,6 +557,7 @@ export default function Home() {
       logoInput.value = ""; // Reset the input value
     }
   };
+
 
   const handleTextureDelete = () => {
     // Clear the logo state
@@ -836,7 +844,7 @@ export default function Home() {
                   <Tooltip title="Delete">
                     <ClearIcon
                       onClick={handleTextureDelete}
-                      className="absolute top-1 right-1 text-red-500 cursor-pointer"
+                      className="absolute -top-8 right-1 text-red-500 cursor-pointer"
                       style={{ fontSize: 18 }}
                     />
                   </Tooltip>
@@ -1036,7 +1044,7 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
-                        onClick={() => setCuffColor}
+                        onChange={(e) => setCuffColor(e.target.value)}
                       />
                     </div>
 
@@ -1067,6 +1075,7 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
+                        onChange={(e) => setHeelColor(e.target.value)}
                       />
                     </div>
 
@@ -1087,6 +1096,7 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
+                        onChange={(e) => handleColorOnChange(e.target.value)}
                       />
                     </div>
                   </div>
@@ -1117,6 +1127,7 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
+                        onChange={(e) => setToeColor(e.target.value)}
                       />
                     </div>
 
