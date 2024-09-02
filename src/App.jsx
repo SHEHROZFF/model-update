@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCartPlus, FaSignOutAlt } from "react-icons/fa";
@@ -78,9 +78,40 @@ export default function Home() {
   const [selectedImageTexture, setSelectedImageTexture] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [notes, setNotes] = useState("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPlacement, setNewPlacement] = useState("");
+  const [isLogoUploadedOrSkipped, setIsLogoUploadedOrSkipped] = useState(false);
+  const [isLogoSkipped, setIsLogoSkipped] = useState(false);
+  const detailsRef = useRef(null);
+
+
+  const handleSkipLogo = () => {
+    if (detailsRef.current) {
+      detailsRef.current.removeAttribute('open');
+    }
+    setIsLogoUploadedOrSkipped(true);
+  };
+
+
+
+
+
+
+
+  const handleLogoUploadAndOptionClick = (option) => {
+
+    setIsLogoUploadedOrSkipped(true);
+
+    if (!activeOptions.includes(option)) {
+      setActiveOptions([...activeOptions, option]);
+    }
+  };
+
+
+
+
+
+
 
   const handleLogoPlacementChange = (event) => {
     const newLogoPlacement = event.target.value;
@@ -171,7 +202,7 @@ export default function Home() {
   };
 
 
-  const handleLogoChange = (event) => {
+ const handleLogoChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
@@ -181,60 +212,61 @@ export default function Home() {
         // Set the selected image to display it in the UI
         setSelectedImage(reader.result);
 
-        // Process the image further for your custom logic
-        const imageReader = new FileReader();
-        imageReader.onload = (e) => {
-          const img = new Image();
-          img.src = e.target.result;
+        // Create an Image object to handle the file
+        const img = new Image();
+        img.src = reader.result;
 
-          img.onload = () => {
-            // Create a canvas to draw the image and apply transformations
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+        img.onload = () => {
+          // Create a canvas to draw the image and apply transformations
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
 
-            // Set canvas dimensions to match the image
-            canvas.width = img.width;
-            canvas.height = img.height;
+          // Set canvas dimensions to match the image
+          canvas.width = img.width;
+          canvas.height = img.height;
 
-            // Flip the image upside down
-            ctx.translate(0, img.height);
-            ctx.scale(1, -1);
-            ctx.drawImage(img, 0, 0, img.width, img.height);
+          // Flip the image upside down
+          ctx.translate(0, img.height);
+          ctx.scale(1, -1);
+          ctx.drawImage(img, 0, 0, img.width, img.height);
 
-            // Create a new Image object with the flipped image
-            const flippedImage = new Image();
-            flippedImage.src = canvas.toDataURL();
+          // Create a new Image object with the flipped image
+          const flippedImage = new Image();
+          flippedImage.src = canvas.toDataURL();
 
-            flippedImage.onload = () => {
-              setLogo(null);
-              setLogo(flippedImage);
+          flippedImage.onload = () => {
+            setLogo(null);
+            setLogo(flippedImage);
 
-              // Call the removeBackground function and handle the result
-              console.log(removeBackground(flippedImage));
+            // Call the removeBackground function and handle the result
+            console.log(removeBackground(flippedImage));
 
-              if (defaultSockTexture) {
-                // Combine the textures and update the texture state
-                const updatedTexture = combineTextures(
-                  defaultSockTexture,
-                  texture?.image,
-                  flippedImage,
-                  logoPlacement
-                );
-                updatedTexture.encoding = THREE.sRGBEncoding;
-                updatedTexture.minFilter = THREE.LinearFilter;
-                updatedTexture.magFilter = THREE.LinearFilter;
-                setTexture(updatedTexture);
-              }
-            };
+            if (defaultSockTexture) {
+              // Combine the textures and update the texture state
+              const updatedTexture = combineTextures(
+                defaultSockTexture,
+                texture?.image,
+                flippedImage,
+                logoPlacement
+              );
+              updatedTexture.encoding = THREE.sRGBEncoding;
+              updatedTexture.minFilter = THREE.LinearFilter;
+              updatedTexture.magFilter = THREE.LinearFilter;
+              setTexture(updatedTexture);
+            }
           };
         };
-        // Read the image data as a URL for further processing
-        imageReader.readAsDataURL(file);
       };
       // Read the file as a Data URL for displaying it in the UI
       reader.readAsDataURL(file);
+
+      // Close the <details> tag after uploading the logo
+      if (detailsRef.current) {
+        detailsRef.current.removeAttribute('open');
+      }
     }
   };
+
 
 
   const [dotColors, setDotColors] = useState([
@@ -521,21 +553,7 @@ export default function Home() {
     setIsModalVisible(false);
     setLoading(false); // Reset loader state when closing the modal
   };
-  const handleLogoPlacement = (event) => {
-    const newLogoPlacement = event.target.value;
-    setLogoPlacement(newLogoPlacement);
-    if (defaultSockTexture) {
-      const updatedTexture = combineLogoChange(
-        defaultSockTexture,
-        logo,
-        newLogoPlacement
-      );
-      updatedTexture.encoding = THREE.sRGBEncoding;
-      updatedTexture.minFilter = THREE.LinearFilter;
-      updatedTexture.magFilter = THREE.LinearFilter;
-      setTexture(updatedTexture);
-    }
-  };
+
 
   const handleLogoDelete = () => {
     // Clear the logo state
@@ -563,14 +581,11 @@ export default function Home() {
 
 
   const handleTextureDelete = () => {
-    // Clear the logo state
-    setSelectedImageTexture(null); // Ensure this matches the state used for preview
-
-    // Clear the image from the model
+    setSelectedImageTexture(null);
     if (defaultSockTexture) {
       const updatedTexture = combineTextures(
         defaultSockTexture,
-        null, // Set to null or a default placeholder as needed
+        null,
         logo,
         logoPlacement
       );
@@ -579,11 +594,9 @@ export default function Home() {
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
-
-    // Clear the file input value
     const textureInput = document.getElementById("textureInput");
     if (textureInput) {
-      textureInput.value = ""; // Reset the input value
+      textureInput.value = "";
     };
   }
 
@@ -753,28 +766,22 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              
+
               <div className="w-full space-y-4 px-5">
-              <h1 className="text-red-500">Logo Placement</h1>
-              <select
-                value={logoPlacement}
-                onChange={handleLogoPlacementChange}
-                className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg bg-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-              >
-                <option value="calf" className="text-gray-700">
-                  Calf
-                </option>
-                <option value="footbed" className="text-gray-700">
-                  Footbed
-                </option>
-                <option value="calf_footbed" className="text-gray-700">
-                  Calf + Footbed
-                </option>
-                <option value="repeating" className="text-gray-700">
-                  Repeating
-                </option>
-              </select>
+                <div className="grid grid-cols-2 gap-4">
+                  {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
+                    <div
+                      key={placement}
+                      className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                        } hover:bg-blue-100 hover:text-black`}
+                      onClick={() => handleLogoPlacementChange({ target: { value: placement } })}
+                    >
+                      {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
+                    </div>
+                  ))}
+                </div>
               </div>
+
               <Modal
                 title={null}
                 visible={isModalOpen}
@@ -1142,7 +1149,7 @@ export default function Home() {
     <div className="h-screen w-full flex">
       {/* Sidebar for large screens */}
       <div
-        className={` sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
+        className={`sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
           }`}
       >
         <div className="flex justify-normal items-center h-20 px-3 mb-8">
@@ -1176,38 +1183,84 @@ export default function Home() {
         <div className="px-2 flex flex-col gap-y-3">
           <div className="px-2 flex flex-col gap-y-3">
             <div className="px-4 flex flex-col gap-y-10">
+              <details ref={detailsRef} className="w-full" open>
+                <summary
+                  className={`py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg p-1 ${isLogoSkipped ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                >
+                  <FitbitSharpIcon htmlColor="#E3262C" />
+                  {open && (
+                    <div>
+                      <h1 className="text-sidebarTEXT font-semibold">Logo and Placement</h1>
+                    </div>
+                  )}
+                </summary>
+                <div className="flex flex-col items-start text-sm px-10 space-y-3">
+                  {open && (
+                    <>
+                      <p
+                        className="text-base cursor-pointer"
+                        onClick={
+                          !isLogoSkipped
+                            ? () => handleLogoUploadAndOptionClick("Upload Logo")
+                            : null
+                        }
+                      >
+                        Trigger Me
+                      </p>
+
+                      <button
+                        className="bg-transparent text-blue-500 font-bold"
+                        onClick={handleSkipLogo}
+                      >
+                        Skip Logo Upload
+                      </button>
+                    </>
+                  )}
+                </div>
+              </details>
+
+
+              {/* Upload Texture option */}
               <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
-                onClick={() => handleOptionClick("Upload Logo")}
-              >
-                <FitbitSharpIcon htmlColor="#E3262C" />
-                {open && <h1 className="text-sidebarTEXT">Upload Logo</h1>}
-              </div>
-              <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
-                onClick={() => handleOptionClick("Upload Texture")}
+                className={`pb-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1 ${!isLogoUploadedOrSkipped && "opacity-50 cursor-not-allowed"
+                  }`}
+                onClick={
+                  isLogoUploadedOrSkipped ? () => handleOptionClick("Upload Texture") : null
+                }
               >
                 <TextureSharpIcon htmlColor="#E3262C" />
-                {open && <h1 className="text-sidebarTEXT">Upload Texture</h1>}
+                {open && <h1 className="text-sidebarTEXT font-semibold">Upload Texture</h1>}
               </div>
+
+              {/* Choose Pattern option */}
               <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
-                onClick={() => handleOptionClick("Choose Pattern")}
+                className={`py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1 ${!isLogoUploadedOrSkipped && "opacity-50 cursor-not-allowed"
+                  }`}
+                onClick={
+                  isLogoUploadedOrSkipped ? () => handleOptionClick("Choose Pattern") : null
+                }
               >
                 <DesignServicesSharpIcon htmlColor="#E3262C" />
-                {open && <h1 className="text-sidebarTEXT">Choose Pattern</h1>}
+                {open && <h1 className="text-sidebarTEXT font-semibold">Choose Pattern</h1>}
               </div>
+
+              {/* Customize Color option */}
               <div
-                className="py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1"
-                onClick={() => handleOptionClick("Customize Color")}
+                className={`py-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1 ${!isLogoUploadedOrSkipped && "opacity-50 cursor-not-allowed"
+                  }`}
+                onClick={
+                  isLogoUploadedOrSkipped ? () => handleOptionClick("Customize Color") : null
+                }
               >
                 <LocationSearchingSharpIcon htmlColor="#E3262C" />
-                {open && <h1 className="text-sidebarTEXT">Customize Color</h1>}
+                {open && <h1 className="text-sidebarTEXT font-semibold">Customize Color</h1>}
               </div>
             </div>
           </div>
         </div>
       </div>
+
 
       {/* sidebar for small screens */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 md:hidden mx-auto">
