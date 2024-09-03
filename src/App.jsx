@@ -67,7 +67,7 @@ spiral.register();
 export default function Home() {
   const [cuffColor, setCuffColor] = useState("#ffffff");
   const [heelColor, setHeelColor] = useState("#ffffff");
-  const [dsockColor, setDsockColor] = useState("#ffffff");
+  const [dsockColor, setDsockColor] = useState(null);
   const [toeColor, setToeColor] = useState("#ffffff");
   const [texture, setTexture] = useState(null);
   const [logo, setLogo] = useState(null);
@@ -124,6 +124,7 @@ export default function Home() {
   };
 
   const handleContinue = () => {
+    handleTextureDelete()
     setLogoPlacement(newPlacement);
     if (defaultSockTexture) {
       const updatedTexture = combineLogoChange(
@@ -766,59 +767,64 @@ export default function Home() {
                   </div>
                 </div>
               )}
-
-              <div className="w-full space-y-4 px-5">
-                <div className="grid grid-cols-2 gap-4">
-                  {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
-                    <div
-                      key={placement}
-                      className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                        } hover:bg-blue-100 hover:text-black`}
-                      onClick={() => handleLogoPlacementChange({ target: { value: placement } })}
-                    >
-                      {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
+              {selectedImage &&
+                <div className="w-full space-y-4 px-5">
+                  <div className="grid grid-cols-2 gap-4">
+                    {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
+                      <div
+                        key={placement}
+                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                          } hover:bg-blue-100 hover:text-black`}
+                        onClick={() => handleLogoPlacementChange({ target: { value: placement } })}
+                      >
+                        {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              }
+              {/* {(dsockColor !== null || pattern !== "" || selectedImageTexture !== null) && ( */}
+                
+                <Modal
+                  title={null}
+                  visible={isModalOpen}
+                  onCancel={handleCancel}
+                  footer={null}
+                  centered
+                  className="custom-modal rounded-lg !font-[Raleway]"
+                >
+                  <div className="w-full h-auto p-3 lg:p-12 rounded-lg flex flex-col items-center">
+                    <div className="bg-red-300 rounded-full p-3 mb-6 flex items-center justify-center">
+                      <IoIosWarning className="text-red-500 text-4xl animate-pulse" />
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <h1 className="text-3xl font-bold text-red-600 text-center mb-5">
+                      Warning: Changing Logo Position Without Saving
+                    </h1>
+                    <p className="text-gray-500 text-lg text-center tracking-tight leading-7 mb-8">
+                      Switching to a different logo position without saving your current
+                      design will erase any changes you've made. If you are certain about
+                      changing the position and accept the loss of your current design, feel
+                      free to click "Continue".
+                    </p>
+                    <div className="flex flex-col space-y-4 w-full">
+                      <button
+                        onClick={handleCancel}
+                        className="border border-red-600 py-4 rounded-md text-lg font-semibold text-red-600 hover:bg-red-600  transition  hover:text-white focus:ring-blue-400 w-full"
+                      >
+                        Edit Current Design
+                      </button>
+                      <button
+                        onClick={handleContinue}
+                        className="bg-red-600 text-white py-4 text-lg rounded-md font-semibold hover:bg-red-700 focus:ring-red-400 w-full"
+                      >
+                        Continue
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
+              {/* )} */}
 
-              <Modal
-                title={null}
-                visible={isModalOpen}
-                onCancel={handleCancel}
-                footer={null}
-                centered
-                className="custom-modal rounded-lg !font-[Raleway]"
-              >
-                <div className="w-full h-auto p-3 lg:p-12 rounded-lg flex flex-col items-center">
-                  <div className="bg-red-300 rounded-full p-3 mb-6 flex items-center justify-center">
-                    <IoIosWarning className="text-red-500 text-4xl animate-pulse" />
-                  </div>
-                  <h1 className="text-3xl font-bold text-red-600 text-center mb-5">
-                    Warning: Changing Logo Position Without Saving
-                  </h1>
-                  <p className="text-gray-500 text-lg text-center tracking-tight leading-7 mb-8">
-                    Switching to a different logo position without saving your
-                    current design will erase any changes you've made. If you
-                    are certain about changing the position and accept the loss
-                    of your current design, feel free to click "Continue".
-                  </p>
-                  <div className="flex flex-col space-y-4 w-full">
-                    <button
-                      onClick={handleCancel}
-                      className="border border-red-600 py-4 rounded-md text-lg font-semibold text-red-600 hover:bg-red-600  transition  hover:text-white focus:ring-blue-400 w-full"
-                    >
-                      Edit Current Design
-                    </button>
-                    <button
-                      onClick={handleContinue}
-                      className="bg-red-600 text-white py-4 text-lg rounded-md font-semibold hover:bg-red-700 focus:ring-red-400 w-full"
-                    >
-                      Continue
-                    </button>
-                  </div>
-                </div>
-              </Modal>
+
             </div>
           </>
         );
@@ -1206,7 +1212,7 @@ export default function Home() {
                             : null
                         }
                       >
-                        Trigger Me
+                        Click to upload Logo
                       </p>
 
                       <button
