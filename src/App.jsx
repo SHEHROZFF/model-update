@@ -733,7 +733,6 @@ export default function Home() {
     switch (option) {
       case "Upload Logo":
         return (
-          <>
             <div className="w-full h-full flex justify-between gap-x-5 items-center my-2 mx-1 lg:mx-2">
               {!selectedImage ? (
                 <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
@@ -767,14 +766,15 @@ export default function Home() {
                   </div>
                 </div>
               )}
+              
               {selectedImage &&
-                <div className="w-full space-y-4 px-5">
-                  <div className="grid grid-cols-2 gap-4">
+                <div className="w-32 lg:w-80 px-5">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
                       <div
                         key={placement}
-                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                          } hover:bg-blue-100 hover:text-black`}
+                        className={`col-span-1 flex items-center justify-center text-xs lg:text-sm p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                          } hover:bg-white hover:text-black`}
                         onClick={() => handleLogoPlacementChange({ target: { value: placement } })}
                       >
                         {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
@@ -782,6 +782,7 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
+                
               }
                 
                 <Modal
@@ -822,10 +823,7 @@ export default function Home() {
                   </div>
                 </Modal>
               {/* )} */}
-
-
             </div>
-          </>
         );
       case "Upload Texture":
         return (
@@ -1204,14 +1202,14 @@ export default function Home() {
                   {open && (
                     <>
                       <p
-                        className="text-base cursor-pointer"
+                        className="text-base cursor-pointer font-medium text-gray-500 hover:-translate-y-1 transition hover:text-gray-800"
                         onClick={
                           !isLogoSkipped
                             ? () => handleLogoUploadAndOptionClick("Upload Logo")
                             : null
                         }
                       >
-                        Click to upload Logo
+                        Upload Logo
                       </p>
 
                       <button
