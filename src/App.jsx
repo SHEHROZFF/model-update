@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaCartPlus, FaSignOutAlt } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { motion, AnimatePresence } from "framer-motion";
-
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import axios from "axios";
 import { spiral } from "ldrs";
 import { IconButton } from "@mui/material";
@@ -83,6 +83,11 @@ export default function Home() {
   const [isLogoUploadedOrSkipped, setIsLogoUploadedOrSkipped] = useState(false);
   const [isLogoSkipped, setIsLogoSkipped] = useState(false);
   const detailsRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
 
 
   const handleSkipLogo = () => {
@@ -193,7 +198,7 @@ export default function Home() {
   };
 
 
- const handleLogoChange = (event) => {
+  const handleLogoChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
@@ -752,9 +757,9 @@ export default function Home() {
                     onChange={handleLogoChange}
                   />
                 </div>
-             ) : (
-              <div className="relative">
-                <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
+              ) : (
+                <div className="relative">
+                  <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
                     <img
                       src={selectedImage}
                       alt="Selected"
@@ -770,15 +775,14 @@ export default function Home() {
                   </div>
                 </div>
               )}
-            {selectedImage && (
+              {selectedImage && (
                 <div className="w-32 lg:w-80 px-5">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
                       <div
                         key={placement}
-                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${
-                          logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                        } hover:bg-blue-100 hover:text-black`}
+                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                          } hover:bg-blue-100 hover:text-black`}
                         onClick={() => {
                           if ((dsockColor !== null || pattern !== "" || selectedImageTexture !== null)) {
                             handleLogoPlacementChange(placement)
@@ -796,7 +800,7 @@ export default function Home() {
               )}
 
               {(dsockColor !== null || pattern !== "" || selectedImageTexture !== null) && (
-                
+
                 <Modal
                   title={null}
                   visible={isModalOpen}
@@ -834,7 +838,7 @@ export default function Home() {
                     </div>
                   </div>
                 </Modal>
-               )} 
+              )}
 
 
             </div>
@@ -1173,7 +1177,7 @@ export default function Home() {
     <div className="h-screen w-full flex">
       {/* Sidebar for large screens */}
       <div
-        className={`sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
+        className={`sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px] relative"
           }`}
       >
         <div className="flex justify-normal items-center h-20 px-3 mb-8">
@@ -1220,30 +1224,30 @@ export default function Home() {
                   )}
                 </summary>
                 <div className="flex flex-col items-start px-4 space-y-3 w-full ml-3">
-                {open && (
-                  <>
-                    <button
-                      className={`w-full text-sm cursor-pointer px-4 py-2 rounded-full font-bold transition duration-150 ease-in-out
+                  {open && (
+                    <>
+                      <button
+                        className={`w-full text-sm cursor-pointer px-4 py-2 rounded-full font-bold transition duration-150 ease-in-out
                         ${!isLogoSkipped ? 'bg-[#E3262C] text-white hover:bg-red-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                      onClick={
-                        !isLogoSkipped
-                          ? () => handleLogoUploadAndOptionClick("Upload Logo")
-                          : null
-                      }
-                      disabled={isLogoSkipped}
-                    >
-                      Click to upload Logo
-                    </button>
+                        onClick={
+                          !isLogoSkipped
+                            ? () => handleLogoUploadAndOptionClick("Upload Logo")
+                            : null
+                        }
+                        disabled={isLogoSkipped}
+                      >
+                        Click to upload Logo
+                      </button>
 
-                    <button
-                      className="w-full text-sm bg-gray-500 text-white font-bold px-4 py-2 rounded-full hover:bg-gray-600 transition duration-150 ease-in-out"
-                      onClick={handleSkipLogo}
-                    >
-                      Skip Logo Upload
-                    </button>
-                  </>
-                )}
-              </div>
+                      <button
+                        className="w-full text-sm bg-gray-500 text-white font-bold px-4 py-2 rounded-full hover:bg-gray-600 transition duration-150 ease-in-out"
+                        onClick={handleSkipLogo}
+                      >
+                        Skip Logo Upload
+                      </button>
+                    </>
+                  )}
+                </div>
 
 
               </details>
@@ -1287,6 +1291,31 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {isVisible && (
+        <motion.div
+          initial={{ x: -300, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          exit={{ x: -300, opacity: 0 }}
+          className="bg-slate-100 w-64 h-32 absolute bottom-2 left-2 p-5 rounded-xl shadow-xl flex justify-center items-center"
+        >
+          <CloseSharpIcon
+            className="absolute right-1 top-1 cursor-pointer text-gray-600"
+            fontSize="24px"
+            onClick={handleClose}
+          />
+          <div className="flex flex-col w-full gap-4 relative">
+            <p className="text-xs capitalize font-semibold">
+              Let Our in-house design Team create custom sock designs for you!
+            </p>
+            <button className="bg-red-500 rounded-lg py-2 text-sm text-white font-bold w-2/3">
+              Get Free Designs
+            </button>
+          </div>
+        </motion.div>
+      )}
+
       </div>
 
 
