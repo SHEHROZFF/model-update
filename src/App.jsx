@@ -752,9 +752,9 @@ export default function Home() {
                     onChange={handleLogoChange}
                   />
                 </div>
-              ) : (
-                <div className="relative">
-                  <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
+             ) : (
+              <div className="relative">
+                <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
                     <img
                       src={selectedImage}
                       alt="Selected"
@@ -770,9 +770,9 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              {selectedImage && (
-                <div className="w-full space-y-4 px-5">
-                  <div className="grid grid-cols-2 gap-4">
+            {selectedImage && (
+                <div className="w-32 lg:w-80 px-5">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
                       <div
                         key={placement}
@@ -803,7 +803,7 @@ export default function Home() {
                   onCancel={handleCancel}
                   footer={null}
                   centered
-                  className="custom-modal rounded-lg !font-[Raleway]"
+                  className="custom-modal rounded-lg font-[Raleway] bg-white opacity-100"
                 >
                   <div className="w-full h-auto p-3 lg:p-12 rounded-lg flex flex-col items-center">
                     <div className="bg-red-300 rounded-full p-3 mb-6 flex items-center justify-center">
@@ -812,7 +812,7 @@ export default function Home() {
                     <h1 className="text-3xl font-bold text-red-600 text-center mb-5">
                       Warning: Changing Logo Position Without Saving
                     </h1>
-                    <p className="text-gray-500 text-lg text-center tracking-tight leading-7 mb-8">
+                    <p className="text-gray-500 text-base text-center tracking-tight leading-7 mb-8">
                       Switching to a different logo position without saving your current
                       design will erase any changes you've made. If you are certain about
                       changing the position and accept the loss of your current design, feel
