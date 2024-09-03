@@ -93,11 +93,6 @@ export default function Home() {
   };
 
 
-
-
-
-
-
   const handleLogoUploadAndOptionClick = (option) => {
 
     setIsLogoUploadedOrSkipped(true);
@@ -107,15 +102,9 @@ export default function Home() {
     }
   };
 
-
-
-
-
-
-
-  const handleLogoPlacementChange = (event) => {
-    const newLogoPlacement = event.target.value;
-    setNewPlacement(newLogoPlacement);
+  const handleLogoPlacementChange = (placement) => {
+    // const newLogoPlacement = event.target.value;
+    setNewPlacement(placement);
     setIsModalOpen(true);
   };
 
@@ -125,6 +114,7 @@ export default function Home() {
 
   const handleContinue = () => {
     handleTextureDelete()
+
     setLogoPlacement(newPlacement);
     if (defaultSockTexture) {
       const updatedTexture = combineLogoChange(
@@ -583,6 +573,8 @@ export default function Home() {
 
   const handleTextureDelete = () => {
     setSelectedImageTexture(null);
+    setDsockColor(null);
+    setPattern("");
     if (defaultSockTexture) {
       const updatedTexture = combineTextures(
         defaultSockTexture,
@@ -728,11 +720,23 @@ export default function Home() {
     const container = document.querySelector(".scroll-container");
     container?.scrollBy({ left: amount, behavior: "smooth" });
   };
-
+  const handleLogoPlacement2 = (placement) => {
+    // const newLogoPlacement = event.target.value;
+    setLogoPlacement(placement);
+    if (defaultSockTexture) {
+      // console.log(logoPlacement);
+      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement);
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      updatedTexture.minFilter = THREE.LinearFilter;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
+  }
   const renderToolbarContent = (option) => {
     switch (option) {
       case "Upload Logo":
         return (
+          <>
             <div className="w-full h-full flex justify-between gap-x-5 items-center my-2 mx-1 lg:mx-2">
               {!selectedImage ? (
                 <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
@@ -766,24 +770,32 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              
-              {selectedImage &&
-                <div className="w-32 lg:w-80 px-5">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {selectedImage && (
+                <div className="w-full space-y-4 px-5">
+                  <div className="grid grid-cols-2 gap-4">
                     {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
                       <div
                         key={placement}
-                        className={`col-span-1 flex items-center justify-center text-xs lg:text-sm p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                          } hover:bg-white hover:text-black`}
-                        onClick={() => handleLogoPlacementChange({ target: { value: placement } })}
+                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${
+                          logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                        } hover:bg-blue-100 hover:text-black`}
+                        onClick={() => {
+                          if ((dsockColor !== null || pattern !== "" || selectedImageTexture !== null)) {
+                            handleLogoPlacementChange(placement)
+                          } else {
+                            handleLogoPlacement2(placement);
+
+                          }
+                        }}
                       >
                         {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
                       </div>
                     ))}
                   </div>
                 </div>
-                
-              }
+              )}
+
+              {(dsockColor !== null || pattern !== "" || selectedImageTexture !== null) && (
                 
                 <Modal
                   title={null}
@@ -822,8 +834,11 @@ export default function Home() {
                     </div>
                   </div>
                 </Modal>
-              {/* )} */}
+               )} 
+
+
             </div>
+          </>
         );
       case "Upload Texture":
         return (
@@ -1053,7 +1068,7 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
-                        onClick={() => setCuffColor}
+                        onChange={(e) => setCuffColor(e.target.value)}
                       />
                     </div>
 
@@ -1084,6 +1099,8 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
+                        onChange={(e) => setHeelColor(e.target.value)}
+
                       />
                     </div>
 
@@ -1104,6 +1121,8 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
+                        onChange={(e) => setDsockColor(e.target.value)}
+
                       />
                     </div>
                   </div>
@@ -1134,6 +1153,8 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
+                        onChange={(e) => setToeColor(e.target.value)}
+
                       />
                     </div>
 
@@ -1198,29 +1219,33 @@ export default function Home() {
                     </div>
                   )}
                 </summary>
-                <div className="flex flex-col items-start text-sm px-10 space-y-3">
-                  {open && (
-                    <>
-                      <p
-                        className="text-base cursor-pointer font-medium text-gray-500 hover:-translate-y-1 transition hover:text-gray-800"
-                        onClick={
-                          !isLogoSkipped
-                            ? () => handleLogoUploadAndOptionClick("Upload Logo")
-                            : null
-                        }
-                      >
-                        Upload Logo
-                      </p>
+                <div className="flex flex-col items-start px-4 space-y-3 w-full ml-3">
+                {open && (
+                  <>
+                    <button
+                      className={`w-full text-sm cursor-pointer px-4 py-2 rounded-full font-bold transition duration-150 ease-in-out
+                        ${!isLogoSkipped ? 'bg-[#E3262C] text-white hover:bg-red-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+                      onClick={
+                        !isLogoSkipped
+                          ? () => handleLogoUploadAndOptionClick("Upload Logo")
+                          : null
+                      }
+                      disabled={isLogoSkipped}
+                    >
+                      Click to upload Logo
+                    </button>
 
-                      <button
-                        className="bg-transparent text-blue-500 font-bold"
-                        onClick={handleSkipLogo}
-                      >
-                        Skip Logo Upload
-                      </button>
-                    </>
-                  )}
-                </div>
+                    <button
+                      className="w-full text-sm bg-gray-500 text-white font-bold px-4 py-2 rounded-full hover:bg-gray-600 transition duration-150 ease-in-out"
+                      onClick={handleSkipLogo}
+                    >
+                      Skip Logo Upload
+                    </button>
+                  </>
+                )}
+              </div>
+
+
               </details>
 
 
