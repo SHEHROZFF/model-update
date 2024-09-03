@@ -783,7 +783,6 @@ export default function Home() {
                   </div>
                 </div>
               }
-              {/* {(dsockColor !== null || pattern !== "" || selectedImageTexture !== null) && ( */}
                 
                 <Modal
                   title={null}
