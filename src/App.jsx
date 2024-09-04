@@ -554,6 +554,7 @@ export default function Home() {
   const handleLogoDelete = () => {
     // Clear the logo state
     setSelectedImage(null); // Ensure this matches the state used for preview
+    setLogo(null)
 
     // Clear the image from the model
     if (defaultSockTexture) {
