@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaCartPlus, FaSignOutAlt } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { motion, AnimatePresence } from "framer-motion";
-import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+
 import axios from "axios";
 import { spiral } from "ldrs";
 import { IconButton } from "@mui/material";
@@ -40,6 +40,7 @@ import LocationSearchingSharpIcon from "@mui/icons-material/LocationSearchingSha
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import ClearIcon from "@mui/icons-material/Clear";
+import { createTextTexture } from "./textTexture";
 // Sidebar Icons
 
 const cuffColorSwatches = [
@@ -83,11 +84,6 @@ export default function Home() {
   const [isLogoUploadedOrSkipped, setIsLogoUploadedOrSkipped] = useState(false);
   const [isLogoSkipped, setIsLogoSkipped] = useState(false);
   const detailsRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleClose = () => {
-    setIsVisible(false);
-  };
 
 
   const handleSkipLogo = () => {
@@ -125,25 +121,20 @@ export default function Home() {
       const updatedTexture = combineLogoChange(
         defaultSockTexture,
         logo,
-        newPlacement
+        newPlacement,
+        "FISSION FOX",
+        "white"
+
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
-      updatedTexture.minFilter = THREE.LinearFilter;
+      // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    const loader = new THREE.TextureLoader();
-    loader.load("/sockTexture.png", (texture) => {
-      texture.encoding = THREE.sRGBEncoding;
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      setDefaultSockTexture(texture);
-    });
-  }, []);
+
 
   const handleTextureChange = (event) => {
     const file = event.target.files[0];
@@ -183,10 +174,12 @@ export default function Home() {
                 defaultSockTexture,
                 flippedImage,
                 logo,
-                logoPlacement
+                logoPlacement,
+                "FISSION FOX",
+                "white"
               );
               mergedTexture.encoding = THREE.sRGBEncoding;
-              mergedTexture.minFilter = THREE.LinearFilter;
+              // mergedTexture.minFilter = THREE.LinearFilter;
               mergedTexture.magFilter = THREE.LinearFilter;
               setTexture(mergedTexture);
             };
@@ -198,7 +191,7 @@ export default function Home() {
   };
 
 
-  const handleLogoChange = (event) => {
+ const handleLogoChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
@@ -243,10 +236,12 @@ export default function Home() {
                 defaultSockTexture,
                 texture?.image,
                 flippedImage,
-                logoPlacement
+                logoPlacement,
+                "FISSION FOX",
+                "white"
               );
               updatedTexture.encoding = THREE.sRGBEncoding;
-              updatedTexture.minFilter = THREE.LinearFilter;
+              // updatedTexture.minFilter = THREE.LinearFilter;
               updatedTexture.magFilter = THREE.LinearFilter;
               setTexture(updatedTexture);
             }
@@ -400,10 +395,12 @@ export default function Home() {
         csts1,
         csts2,
         csts3,
-        csts4
+        csts4,
+        "FISSION FOX",
+        "white"
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
-      updatedTexture.minFilter = THREE.LinearFilter;
+      // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
@@ -420,6 +417,8 @@ export default function Home() {
     csts3,
     csts4,
     pattern,
+    "FISSION FOX",
+    "white"
   ]);
 
   useEffect(() => {
@@ -430,16 +429,20 @@ export default function Home() {
     };
   }, [texture]);
   const handleColorOnChange = (color) => {
+    // console.log(color);
+    
     setDsockColor(color);
     if (defaultSockTexture) {
       const updatedTexture = combineSockcolor(
         defaultSockTexture,
         logo,
         logoPlacement,
-        color
+        color,
+        "FISSION FOX",
+        "white"
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
-      updatedTexture.minFilter = THREE.LinearFilter;
+      // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
@@ -554,17 +557,18 @@ export default function Home() {
   const handleLogoDelete = () => {
     // Clear the logo state
     setSelectedImage(null); // Ensure this matches the state used for preview
-    setLogo(null)
 
     // Clear the image from the model
     if (defaultSockTexture) {
       const updatedTexture = combineLogoChange(
         defaultSockTexture,
         null, // Set to null or a default placeholder as needed
-        "no_logo"
+        "no_logo",
+        "FISSION FOX",
+        "white"
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
-      updatedTexture.minFilter = THREE.LinearFilter;
+      // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
@@ -586,10 +590,12 @@ export default function Home() {
         defaultSockTexture,
         null,
         logo,
-        logoPlacement
+        logoPlacement,
+        "FISSION FOX",
+        "white"
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
-      updatedTexture.minFilter = THREE.LinearFilter;
+      // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
@@ -632,19 +638,89 @@ export default function Home() {
 
   // Modal Function Start //
 
-  function Model({ cuffColor, heelColor, toeColor, texture }) {
+  // function Model({ cuffColor, heelColor, toeColor, texture, cuffText, heelText, toeText }) {
+  //   const { nodes, materials } = useGLTF("/SockModel.gltf");
+  
+  //   useEffect(() => {
+  //     // Apply default textures
+  //     const defaultCuffTexture = new THREE.TextureLoader().load("/cuffTexture.png");
+  //     const defaultHeelTexture = new THREE.TextureLoader().load("/cuffTexture.png");
+  //     const defaultToeTexture = new THREE.TextureLoader().load("/cuffTexture.png");
+  //     const defaultSockTexture = new THREE.TextureLoader().load("/sockTexture.png");
+  
+  //     // Set textures
+  //     materials.Cuff.map = texture || defaultCuffTexture;
+  //     materials.Heel.map = texture || defaultHeelTexture;
+  //     materials.Toe.map = texture || defaultToeTexture;
+  //     materials.Sock_Texture.map = texture || defaultSockTexture;
+  
+  //     // Set colors
+  //     materials.Cuff.color.set(cuffColor);
+  //     materials.Heel.color.set(heelColor);
+  //     materials.Toe.color.set(toeColor);
+  
+  //     // Set text textures
+  //     if (cuffText) {
+  //       materials.Cuff.map = createTextTexture(cuffText, 30, cuffColor);
+  //     }
+  //     if (heelText) {
+  //       materials.Heel.map = createTextTexture(heelText, 30, heelColor);
+  //     }
+  //     if (toeText) {
+  //       materials.Toe.map = createTextTexture(toeText, 30, toeColor);
+  //     }
+  
+  //     // Mark materials for update
+  //     materials.Cuff.needsUpdate = true;
+  //     materials.Heel.needsUpdate = true;
+  //     materials.Toe.needsUpdate = true;
+  //     materials.Sock_Texture.needsUpdate = true;
+  //   }, [cuffColor, heelColor, toeColor, texture, cuffText, heelText, toeText]);
+  
+  //   // return null
+  // }
+  useEffect(() => {
+    const loader = new THREE.TextureLoader();
+    loader.load("/sockTexture.png", (texture) => {
+      texture.encoding = THREE.sRGBEncoding;
+      // texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.NearestFilter; // For a more pixelated, sharp look
+      texture.generateMipmaps = true;
+
+      setDefaultSockTexture(texture);
+    });
+  }, []);
+  
+  function Model({ cuffColor, heelColor, toeColor, texture, cuffText }) {
     const { nodes, materials } = useGLTF("/SockModel.gltf");
 
     useEffect(() => {
       // Apply default textures
       const defaultCuffTexture = new THREE.TextureLoader().load(
         "/cuffTexture.png"
+        // ,(defaultCuffTexture) => {
+        //   defaultCuffTexture.encoding = THREE.sRGBEncoding;
+        //   defaultCuffTexture.minFilter = THREE.LinearFilter;
+        //   defaultCuffTexture.magFilter = THREE.LinearFilter;
+        // }
       );
       const defaultHeelTexture = new THREE.TextureLoader().load(
         "/cuffTexture.png"
+        // ,(defaultHeelTexture) => {
+        //   defaultHeelTexture.encoding = THREE.sRGBEncoding;
+        //   // texture.minFilter = THREE.LinearFilter;
+        //   defaultHeelTexture.magFilter = THREE.LinearFilter;
+        //   }
       );
       const defaultToeTexture = new THREE.TextureLoader().load(
         "/cuffTexture.png"
+        // ,(defaultToeTexture) => {
+        //   defaultToeTexture.encoding = THREE.sRGBEncoding;
+        //   // texture.minFilter = THREE.LinearFilter;
+        //   defaultToeTexture.magFilter = THREE.LinearFilter;
+        //   }
+
       );
 
       materials.Cuff.map = defaultCuffTexture;
@@ -731,9 +807,9 @@ export default function Home() {
     setLogoPlacement(placement);
     if (defaultSockTexture) {
       // console.log(logoPlacement);
-      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement);
+      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement,"FISSION FOX","white");
       updatedTexture.encoding = THREE.sRGBEncoding;
-      updatedTexture.minFilter = THREE.LinearFilter;
+      // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
@@ -777,13 +853,14 @@ export default function Home() {
                 </div>
               )}
               {selectedImage && (
-                <div className="w-32 lg:w-80 px-5">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="w-full space-y-4 px-5">
+                  <div className="grid grid-cols-2 gap-4">
                     {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
                       <div
                         key={placement}
-                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                          } hover:bg-blue-100 hover:text-black`}
+                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${
+                          logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                        } hover:bg-blue-100 hover:text-black`}
                         onClick={() => {
                           if ((dsockColor !== null || pattern !== "" || selectedImageTexture !== null)) {
                             handleLogoPlacementChange(placement)
@@ -801,14 +878,14 @@ export default function Home() {
               )}
 
               {(dsockColor !== null || pattern !== "" || selectedImageTexture !== null) && (
-
+                
                 <Modal
                   title={null}
                   visible={isModalOpen}
                   onCancel={handleCancel}
                   footer={null}
                   centered
-                  className="custom-modal rounded-lg font-[Raleway] bg-white opacity-100"
+                  className="custom-modal rounded-lg !font-[Raleway]"
                 >
                   <div className="w-full h-auto p-3 lg:p-12 rounded-lg flex flex-col items-center">
                     <div className="bg-red-300 rounded-full p-3 mb-6 flex items-center justify-center">
@@ -817,7 +894,7 @@ export default function Home() {
                     <h1 className="text-3xl font-bold text-red-600 text-center mb-5">
                       Warning: Changing Logo Position Without Saving
                     </h1>
-                    <p className="text-gray-500 text-base text-center tracking-tight leading-7 mb-8">
+                    <p className="text-gray-500 text-lg text-center tracking-tight leading-7 mb-8">
                       Switching to a different logo position without saving your current
                       design will erase any changes you've made. If you are certain about
                       changing the position and accept the loss of your current design, feel
@@ -839,7 +916,7 @@ export default function Home() {
                     </div>
                   </div>
                 </Modal>
-              )}
+               )} 
 
 
             </div>
@@ -1126,8 +1203,7 @@ export default function Home() {
                         type="color"
                         id="colorInput"
                         className="opacity-0 absolute  cursor-pointer"
-                        onChange={(e) => setDsockColor(e.target.value)}
-
+                        onChange={(e) => handleColorOnChange(e.target.value)}
                       />
                     </div>
                   </div>
@@ -1178,7 +1254,7 @@ export default function Home() {
     <div className="h-screen w-full flex">
       {/* Sidebar for large screens */}
       <div
-        className={`sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px] relative"
+        className={`sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
           }`}
       >
         <div className="flex justify-normal items-center h-20 px-3 mb-8">
@@ -1225,30 +1301,30 @@ export default function Home() {
                   )}
                 </summary>
                 <div className="flex flex-col items-start px-4 space-y-3 w-full ml-3">
-                  {open && (
-                    <>
-                      <button
-                        className={`w-full text-sm cursor-pointer px-4 py-2 rounded-full font-bold transition duration-150 ease-in-out
+                {open && (
+                  <>
+                    <button
+                      className={`w-full text-sm cursor-pointer px-4 py-2 rounded-full font-bold transition duration-150 ease-in-out
                         ${!isLogoSkipped ? 'bg-[#E3262C] text-white hover:bg-red-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                        onClick={
-                          !isLogoSkipped
-                            ? () => handleLogoUploadAndOptionClick("Upload Logo")
-                            : null
-                        }
-                        disabled={isLogoSkipped}
-                      >
-                        Click to upload Logo
-                      </button>
+                      onClick={
+                        !isLogoSkipped
+                          ? () => handleLogoUploadAndOptionClick("Upload Logo")
+                          : null
+                      }
+                      disabled={isLogoSkipped}
+                    >
+                      Click to upload Logo
+                    </button>
 
-                      <button
-                        className="w-full text-sm bg-gray-500 text-white font-bold px-4 py-2 rounded-full hover:bg-gray-600 transition duration-150 ease-in-out"
-                        onClick={handleSkipLogo}
-                      >
-                        Skip Logo Upload
-                      </button>
-                    </>
-                  )}
-                </div>
+                    <button
+                      className="w-full text-sm bg-gray-500 text-white font-bold px-4 py-2 rounded-full hover:bg-gray-600 transition duration-150 ease-in-out"
+                      onClick={handleSkipLogo}
+                    >
+                      Skip Logo Upload
+                    </button>
+                  </>
+                )}
+              </div>
 
 
               </details>
@@ -1292,31 +1368,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {isVisible && (
-        <motion.div
-          initial={{ x: -300, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          exit={{ x: -300, opacity: 0 }}
-          className="bg-slate-100 w-64 h-32 absolute bottom-2 left-2 p-5 rounded-xl shadow-xl flex justify-center items-center"
-        >
-          <CloseSharpIcon
-            className="absolute right-1 top-1 cursor-pointer text-gray-600"
-            fontSize="24px"
-            onClick={handleClose}
-          />
-          <div className="flex flex-col w-full gap-4 relative">
-            <p className="text-xs capitalize font-semibold">
-              Let Our in-house design Team create custom sock designs for you!
-            </p>
-            <button className="bg-red-500 rounded-lg py-2 text-sm text-white font-bold w-2/3">
-              Get Free Designs
-            </button>
-          </div>
-        </motion.div>
-      )}
-
       </div>
 
 
@@ -1382,9 +1433,9 @@ export default function Home() {
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />
                 <spotLight
-                  intensity={0.9}
+                  intensity={0.5}
                   angle={0.6}
-                  penumbra={0}
+                  // penumbra={0}
                   position={[0, 5, 2]}
                   castShadow
                   shadow-mapSize-width={2048}

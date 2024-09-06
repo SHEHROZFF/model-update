@@ -1,6 +1,7 @@
 import { applyPattern } from "./pattern";
 import * as THREE from "three";
 import { applylogo } from "./apply_logo";
+import { drawVerticalText } from "./drawVerticalText";
 
 export const combinePattern = (
   sockTexture,
@@ -13,7 +14,9 @@ export const combinePattern = (
   csts1,
   csts2,
   csts3,
-  csts4
+  csts4,
+  text,
+  textColor
 ) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -37,14 +40,6 @@ export const combinePattern = (
     patternCtx.drawImage(sockTexture.image, 0, 0, canvasWidth, canvasHeight);
 
     // Add debug logs
-    console.log("Pattern:", pattern);
-    console.log("dotColors:", dotColors);
-    console.log("checkBoardColors:", checkBoardColors);
-    console.log("illusionistic_colors:", illusionistic_colors);
-    console.log("csts1:", csts1);
-    console.log("csts2:", csts2);
-    console.log("csts3:", csts3);
-    console.log("csts4:", csts4);
     applyPattern(
       patternCtx,
       canvasWidth,
@@ -66,6 +61,12 @@ export const combinePattern = (
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.globalCompositeOperation = "source-over";
   }
+  if(text) {
+    ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
+    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor);
+    updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
+  }
+
 
   if (logo) {
     applylogo(

@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { applylogo } from './apply_logo';
+import { drawVerticalText } from "./drawVerticalText";
 
-export const combineTextures = (sockTexture, newTexture, logo,logoPlacement) => {
+
+export const combineTextures = (sockTexture, newTexture, logo,logoPlacement,text,textColor) => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   const canvasWidth = sockTexture.image.width;
@@ -18,6 +20,11 @@ export const combineTextures = (sockTexture, newTexture, logo,logoPlacement) => 
     ctx.globalCompositeOperation = 'multiply';
     ctx.drawImage(newTexture, 0, 0, canvasWidth, canvasHeight);
     ctx.globalCompositeOperation = 'source-over';
+  }
+  if(text) {
+    ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
+    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor);
+    updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
   }
 
   // Apply logo if any

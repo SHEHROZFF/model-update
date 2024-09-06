@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { applylogo } from './apply_logo';
+import { drawVerticalText } from './drawVerticalText';
 // import { log } from 'three/examples/jsm/nodes/Nodes.js';
 
-export const combineLogoChange = (sockTexture, logo, logoPlacement) => {
+
+export const combineLogoChange = (sockTexture, logo, logoPlacement,text,textColor) => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   const canvasWidth = sockTexture.image.width;
@@ -16,6 +18,12 @@ export const combineLogoChange = (sockTexture, logo, logoPlacement) => {
     
   // Draw default sock texture
   ctx.drawImage(sockTexture.image, 0, 0, canvasWidth, canvasHeight);
+
+  if(text) {
+    ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
+    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor);
+    updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
+  }
 
   // Apply logo if any
   if (logo) {
