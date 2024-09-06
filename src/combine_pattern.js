@@ -16,7 +16,8 @@ export const combinePattern = (
   csts3,
   csts4,
   text,
-  textColor
+  textColor,
+  placement
 ) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -63,7 +64,7 @@ export const combinePattern = (
   }
   if(text) {
     ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
-    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor);
+    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor , placement);
     updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
   }
 

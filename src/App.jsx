@@ -40,7 +40,6 @@ import LocationSearchingSharpIcon from "@mui/icons-material/LocationSearchingSha
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import ClearIcon from "@mui/icons-material/Clear";
-import { createTextTexture } from "./textTexture";
 // Sidebar Icons
 
 const cuffColorSwatches = [
@@ -84,6 +83,11 @@ export default function Home() {
   const [isLogoUploadedOrSkipped, setIsLogoUploadedOrSkipped] = useState(false);
   const [isLogoSkipped, setIsLogoSkipped] = useState(false);
   const detailsRef = useRef(null);
+  const [sockText,setSockText] = useState(null);
+  const inputRef = useRef(null); // Use ref to access the input value directl
+  const [sockTextColor,setSockTextColor] = useState(null);
+  const [sockTextPlacement,setSockTextPlacement] = useState('Front')
+
 
 
   const handleSkipLogo = () => {
@@ -122,8 +126,9 @@ export default function Home() {
         defaultSockTexture,
         logo,
         newPlacement,
-        "FISSION FOX",
-        "white"
+        sockText,
+        sockTextColor,
+        sockTextPlacement
 
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
@@ -175,8 +180,9 @@ export default function Home() {
                 flippedImage,
                 logo,
                 logoPlacement,
-                "FISSION FOX",
-                "white"
+                sockText,
+                sockTextColor,
+                sockTextPlacement
               );
               mergedTexture.encoding = THREE.sRGBEncoding;
               // mergedTexture.minFilter = THREE.LinearFilter;
@@ -228,7 +234,7 @@ export default function Home() {
             setLogo(flippedImage);
 
             // Call the removeBackground function and handle the result
-            console.log(removeBackground(flippedImage));
+            // console.log(removeBackground(flippedImage));
 
             if (defaultSockTexture) {
               // Combine the textures and update the texture state
@@ -237,8 +243,9 @@ export default function Home() {
                 texture?.image,
                 flippedImage,
                 logoPlacement,
-                "FISSION FOX",
-                "white"
+                sockText,
+                sockTextColor,
+                sockTextPlacement
               );
               updatedTexture.encoding = THREE.sRGBEncoding;
               // updatedTexture.minFilter = THREE.LinearFilter;
@@ -396,8 +403,9 @@ export default function Home() {
         csts2,
         csts3,
         csts4,
-        "FISSION FOX",
-        "white"
+        sockText,
+        sockTextColor,
+        sockTextPlacement
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -417,8 +425,9 @@ export default function Home() {
     csts3,
     csts4,
     pattern,
-    "FISSION FOX",
-    "white"
+    sockText,
+    sockTextColor,
+    sockTextPlacement
   ]);
 
   useEffect(() => {
@@ -438,8 +447,9 @@ export default function Home() {
         logo,
         logoPlacement,
         color,
-        "FISSION FOX",
-        "white"
+        sockText,
+        sockTextColor,
+        sockTextPlacement
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -564,8 +574,9 @@ export default function Home() {
         defaultSockTexture,
         null, // Set to null or a default placeholder as needed
         "no_logo",
-        "FISSION FOX",
-        "white"
+        sockText,
+        sockTextColor,
+        sockTextPlacement
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -591,8 +602,9 @@ export default function Home() {
         null,
         logo,
         logoPlacement,
-        "FISSION FOX",
-        "white"
+        sockText,
+        sockTextColor,
+        sockTextPlacement
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -605,88 +617,16 @@ export default function Home() {
     };
   }
 
-  const removeBackground = (image) => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = image.width;
-    canvas.height = image.height;
-    ctx.drawImage(image, 0, 0);
-
-    // Get image data
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imgData.data;
-
-    // Loop through each pixel and make white pixels transparent
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      const a = data[i + 3];
-
-      // Assuming white background, you can adjust the threshold as needed
-      if (r > 200 && g > 200 && b > 200) {
-        data[i + 3] = 0; // Set alpha to 0 to make it transparent
-      }
-    }
-
-    ctx.putImageData(imgData, 0, 0);
-    const newImg = new Image();
-    newImg.src = canvas.toDataURL();
-    return newImg;
-  };
-
   // Modal Function Start //
 
-  // function Model({ cuffColor, heelColor, toeColor, texture, cuffText, heelText, toeText }) {
-  //   const { nodes, materials } = useGLTF("/SockModel.gltf");
-  
-  //   useEffect(() => {
-  //     // Apply default textures
-  //     const defaultCuffTexture = new THREE.TextureLoader().load("/cuffTexture.png");
-  //     const defaultHeelTexture = new THREE.TextureLoader().load("/cuffTexture.png");
-  //     const defaultToeTexture = new THREE.TextureLoader().load("/cuffTexture.png");
-  //     const defaultSockTexture = new THREE.TextureLoader().load("/sockTexture.png");
-  
-  //     // Set textures
-  //     materials.Cuff.map = texture || defaultCuffTexture;
-  //     materials.Heel.map = texture || defaultHeelTexture;
-  //     materials.Toe.map = texture || defaultToeTexture;
-  //     materials.Sock_Texture.map = texture || defaultSockTexture;
-  
-  //     // Set colors
-  //     materials.Cuff.color.set(cuffColor);
-  //     materials.Heel.color.set(heelColor);
-  //     materials.Toe.color.set(toeColor);
-  
-  //     // Set text textures
-  //     if (cuffText) {
-  //       materials.Cuff.map = createTextTexture(cuffText, 30, cuffColor);
-  //     }
-  //     if (heelText) {
-  //       materials.Heel.map = createTextTexture(heelText, 30, heelColor);
-  //     }
-  //     if (toeText) {
-  //       materials.Toe.map = createTextTexture(toeText, 30, toeColor);
-  //     }
-  
-  //     // Mark materials for update
-  //     materials.Cuff.needsUpdate = true;
-  //     materials.Heel.needsUpdate = true;
-  //     materials.Toe.needsUpdate = true;
-  //     materials.Sock_Texture.needsUpdate = true;
-  //   }, [cuffColor, heelColor, toeColor, texture, cuffText, heelText, toeText]);
-  
-  //   // return null
-  // }
   useEffect(() => {
     const loader = new THREE.TextureLoader();
     loader.load("/sockTexture.png", (texture) => {
       texture.encoding = THREE.sRGBEncoding;
       // texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.NearestFilter; // For a more pixelated, sharp look
-      texture.generateMipmaps = true;
+      // texture.magFilter = THREE.NearestFilter; // For a more pixelated, sharp look
+      // texture.generateMipmaps = true;
 
       setDefaultSockTexture(texture);
     });
@@ -807,13 +747,24 @@ export default function Home() {
     setLogoPlacement(placement);
     if (defaultSockTexture) {
       // console.log(logoPlacement);
-      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement,"FISSION FOX","white");
+      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement,sockText,sockTextColor,sockTextPlacement);
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
   }
+  
+  const handleSubmitText = (text) => {
+    setSockText(text); // Apply the text to the model here
+    // Your other submit logic goes here
+  };
+  const handleTextPlacement = (placement) => {
+    // const newLogoPlacement = event.target.value;
+    setSockTextPlacement(placement);
+
+  }
+
   const renderToolbarContent = (option) => {
     switch (option) {
       case "Upload Logo":
@@ -922,6 +873,66 @@ export default function Home() {
             </div>
           </>
         );
+        
+      case "Upload Text":
+        return (
+          <>
+          <div className="w-full h-full flex justify-between gap-x-5 items-center my-2 mx-1 lg:mx-2">
+
+            <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative w-60 md:w-96 flex flex-col justify-center items-center">
+              <p className="text-gray-500 text-sm capitalize font-semibold">
+                Enter your text here
+              </p>
+              <input
+                id="textInput"
+                type="text"
+                placeholder="Enter text"
+                className="border-2 border-gray-300 rounded-md p-2 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                ref={inputRef} // Reference to access the input value directly
+              />
+              <button
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                onClick={()=>handleSubmitText(inputRef.current.value)} // Submit on button click
+              >
+                Submit
+              </button>
+            </div>
+
+            {sockText && (
+              <>
+                <div className="bg-transparent w-10 h-10 rounded-full flex justify-center items-center border border-gray-800 cursor-pointer">
+                  <label htmlFor="colorInput" className="flex justify-center items-center">
+                    <AddIcon htmlColor="#000000" />
+                  </label>
+                  <input
+                    type="color"
+                    id="colorInput"
+                    className="opacity-0 absolute  cursor-pointer"
+                    onChange={(e) => setSockTextColor(e.target.value)}
+                  />
+                </div> 
+                <div className="w-full space-y-4 px-5">
+                  <div className="grid grid-cols-2 gap-4">
+                    {['bottom', 'Front'].map((placement) => (
+                      <div
+                        key={placement}
+                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${
+                          logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                        } hover:bg-blue-100 hover:text-black`}
+                        onClick={() => {
+                            handleTextPlacement(placement);
+                        }}
+                      >
+                        {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                </>
+            )}
+          </div>
+          </>
+       );
       case "Upload Texture":
         return (
           <>
@@ -1325,10 +1336,18 @@ export default function Home() {
                   </>
                 )}
               </div>
-
-
               </details>
 
+                <div
+                className={`pb-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1 ${!isLogoUploadedOrSkipped && "opacity-50 cursor-not-allowed"
+                  }`}
+                onClick={
+                  isLogoUploadedOrSkipped ? () => handleOptionClick("Upload Text") : null
+                }
+              >
+                <TextureSharpIcon htmlColor="#E3262C" />
+                {open && <h1 className="text-sidebarTEXT font-semibold">Upload Text</h1>}
+              </div>
 
               {/* Upload Texture option */}
               <div
@@ -1380,6 +1399,14 @@ export default function Home() {
                 <div
                   className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
                   onClick={() => handleOptionClick("Upload Logo")}
+                >
+                  <FitbitSharpIcon htmlColor="#E3262C" className="text-sm" />
+                </div>
+              </Tooltip>
+              <Tooltip title="Upload Text" placement="bottomRight">
+                <div
+                  className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
+                  onClick={() => handleOptionClick("Upload Text")}
                 >
                   <FitbitSharpIcon htmlColor="#E3262C" className="text-sm" />
                 </div>
