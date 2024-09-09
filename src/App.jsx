@@ -936,21 +936,21 @@ export default function Home() {
                 <>
                   <div className="w-full lg:w-1/2 border border-gray-200 bg-white p-5 space-y-1 lg:space-y-3">
                     <div className="flex justify-between items-center">
-                     <span className="text-sm font-bold tracking-tight"> Customize Color:</span>
-                    <div className="bg-transparent rounded-full flex justify-center items-center border border-gray-800 cursor-pointer w-8 h-8">
-                      <label htmlFor="colorInput" className="flex justify-center items-center">
-                        <AddIcon htmlColor="#000000" />
-                      </label>
-                      <input
-                        type="color"
-                        id="colorInput"
-                        className="opacity-0 absolute  cursor-pointer"
-                        onChange={(e) => setSockTextColor(e.target.value)}
-                      />
-                    </div>
+                      <span className="text-sm font-bold tracking-tight"> Customize Color:</span>
+                      <div className="bg-transparent rounded-full flex justify-center items-center border border-gray-800 cursor-pointer w-8 h-8">
+                        <label htmlFor="colorInput" className="flex justify-center items-center">
+                          <AddIcon htmlColor="#000000" />
+                        </label>
+                        <input
+                          type="color"
+                          id="colorInput"
+                          className="opacity-0 absolute  cursor-pointer"
+                          onChange={(e) => setSockTextColor(e.target.value)}
+                        />
+                      </div>
                     </div>
                     <div className="w-full">
-                    <span className="text-sm font-bold tracking-tight"> Text Positions:</span>
+                      <span className="text-sm font-bold tracking-tight"> Text Positions:</span>
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         {['bottom', 'Front'].map((placement) => (
                           <div
