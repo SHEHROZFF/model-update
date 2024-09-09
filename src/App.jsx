@@ -80,10 +80,10 @@ export default function Home() {
   const [isLogoUploadedOrSkipped, setIsLogoUploadedOrSkipped] = useState(false);
   const [isLogoSkipped, setIsLogoSkipped] = useState(false);
   const detailsRef = useRef(null);
-  const [sockText,setSockText] = useState(null);
+  const [sockText, setSockText] = useState(null);
   const inputRef = useRef(null); // Use ref to access the input value directl
-  const [sockTextColor,setSockTextColor] = useState('black');
-  const [sockTextPlacement,setSockTextPlacement] = useState('Front');
+  const [sockTextColor, setSockTextColor] = useState('black');
+  const [sockTextPlacement, setSockTextPlacement] = useState('Front');
   const [dotColors, setDotColors] = useState([
     "#85BFCB",
     "#01284D",
@@ -151,7 +151,7 @@ export default function Home() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-// ----------------------------Modell- ----------------------------------
+  // ----------------------------Modell- ----------------------------------
   // Modal Function Start //
 
   useEffect(() => {
@@ -166,7 +166,7 @@ export default function Home() {
       setDefaultSockTexture(texture);
     });
   }, []);
-  
+
   function Model({ cuffColor, heelColor, toeColor, texture }) {
     const { nodes, materials } = useGLTF("/SockModel.gltf");
 
@@ -257,7 +257,7 @@ export default function Home() {
       </group>
     );
   }
-// --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
   const handleSkipLogo = () => {
     if (detailsRef.current) {
@@ -283,14 +283,14 @@ export default function Home() {
     // updatePattern(pattern);
   };
 
-  
+
   // --------------------------SOCK COLOR-----------------------------
   const handleColorOnChange = (color) => {
     // console.log(color);
     setPattern(null);
     setSelectedUploadedTexture(null);
     setTexture(null);
-    
+
     setDsockColor(color);
     if (defaultSockTexture) {
       const updatedTexture = combineSockcolor(
@@ -308,13 +308,13 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
- 
-// --------------------textureUPload-----------------------------------------
+
+  // --------------------textureUPload-----------------------------------------
   const handleTextureChange = (event) => {
     setPattern(null);
     setDsockColor(null);
     setTexture(null);
-    
+
     const file = event.target.files[0];
 
     if (file) {
@@ -366,7 +366,7 @@ export default function Home() {
         }
       };
       reader.readAsDataURL(file);
-    } 
+    }
 
   };
   const handleTextureDelete = () => {
@@ -398,8 +398,8 @@ export default function Home() {
     setDsockColor(null);
     setSelectedUploadedTexture(null);
     setTexture(null)
-    console.log(sockText,sockTextColor,sockTextPlacement);
-    
+    console.log(sockText, sockTextColor, sockTextPlacement);
+
     if (defaultSockTexture) {
       const updatedTexture = combinePattern(
         defaultSockTexture,
@@ -436,9 +436,9 @@ export default function Home() {
     } else {
       console.log("noyhing");
       handleTextPlacement(sockTextPlacement); // Ensure texture updates on pattern change
-      
+
     }
-   
+
   }, [
     dotColors,
     checkBoardColors,
@@ -510,7 +510,7 @@ export default function Home() {
     updatePattern(pattern);
   };
 
-// ---------------------------------------------------------------------
+  // ---------------------------------------------------------------------
   // useEffect(() => {
   //   return () => {
   //     if (texture) {
@@ -577,7 +577,7 @@ export default function Home() {
     setIsModalOpen(false);
   };
 
- const handleLogoChange = (event) => {
+  const handleLogoChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
@@ -655,7 +655,7 @@ export default function Home() {
     setLogoPlacement(placement);
     if (defaultSockTexture) {
       // console.log(logoPlacement);
-      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement,sockText,sockTextColor,sockTextPlacement);
+      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement, sockText, sockTextColor, sockTextPlacement);
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
@@ -799,7 +799,7 @@ export default function Home() {
     container?.scrollBy({ left: amount, behavior: "smooth" });
   };
 
-  
+
   const renderToolbarContent = (option) => {
     switch (option) {
       case "Upload Logo":
@@ -844,9 +844,8 @@ export default function Home() {
                     {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
                       <div
                         key={placement}
-                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${
-                          logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                        } hover:bg-blue-100 hover:text-black`}
+                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                          } hover:bg-blue-100 hover:text-black`}
                         onClick={() => {
                           if ((dsockColor !== null || pattern !== "" || selectedUploadedTexture !== null)) {
                             handleLogoPlacementChange(placement)
@@ -864,7 +863,7 @@ export default function Home() {
               )}
 
               {(dsockColor !== null || pattern !== "" || selectedUploadedTexture !== null) && (
-                
+
                 <Modal
                   title={null}
                   visible={isModalOpen}
@@ -902,72 +901,77 @@ export default function Home() {
                     </div>
                   </div>
                 </Modal>
-               )} 
+              )}
 
 
             </div>
           </>
         );
-        
+
       case "Upload Text":
         return (
           <>
-          <div className="w-full h-full flex justify-between gap-x-5 items-center my-2 mx-1 lg:mx-2">
+            <div className="w-full h-full flex justify-between items-center my-2 mx-1 lg:mx-2">
 
-            <div className="p-6 rounded-lg text-center relative h-28 w-60 md:w-96 flex flex-col justify-center items-start space-y-3">
-              <p className="text-gray-500 text-sm capitalize font-semibold text-left">
-                Enter your text here
-              </p>
-              <input
-                id="textInput"
-                type="text"
-                placeholder="Type to Preview"
-                className="border-2 border-gray-300 rounded-md p-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                ref={inputRef} // Reference to access the input value directly
-              />
-              <button
-                className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-sm px-4 font-medium"
-                onClick={()=>handleSubmitText(inputRef.current.value)} // Submit on button click
-              >
-                Submit
-              </button>
-            </div>
+              <div className="p-6 rounded-lg text-center relative h-28 w-60 md:w-96 flex flex-col justify-center items-start space-y-3">
+                <p className="text-gray-500 text-sm capitalize font-semibold text-left">
+                  Enter your text here
+                </p>
+                <input
+                  id="textInput"
+                  type="text"
+                  placeholder="Type to Preview"
+                  className="border-2 border-gray-300 rounded-md p-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  ref={inputRef} // Reference to access the input value directly
+                />
+                <button
+                  className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-sm px-4 font-medium"
+                  onClick={() => handleSubmitText(inputRef.current.value)} // Submit on button click
+                >
+                  Submit
+                </button>
+              </div>
 
-            {sockText && (
-              <>
-                <div className="bg-transparent w-10 h-10 rounded-full flex justify-center items-center border border-gray-800 cursor-pointer">
-                  <label htmlFor="colorInput" className="flex justify-center items-center">
-                    <AddIcon htmlColor="#000000" />
-                  </label>
-                  <input
-                    type="color"
-                    id="colorInput"
-                    className="opacity-0 absolute  cursor-pointer"
-                    onChange={(e) => setSockTextColor(e.target.value)}
-                  />
-                </div> 
-                <div className="w-full space-y-4 px-5">
-                  <div className="grid grid-cols-2 gap-4">
-                    {['bottom', 'Front'].map((placement) => (
-                      <div
-                        key={placement}
-                        className={`flex items-center justify-center text-xs lg:text-base p-1 lg:p-2 text-center border rounded-lg cursor-pointer transition duration-150 ease-in-out ${
-                          logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                        } hover:bg-blue-100 hover:text-black`}
-                        onClick={() => {
-                            handleTextPlacement(placement);
-                        }}
-                      >
-                        {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
+              {sockText && (
+                <>
+                  <div className="w-full lg:w-1/2 border border-gray-200 bg-white p-5 space-y-1 lg:space-y-3">
+                    <div className="flex justify-between items-center">
+                     <span className="text-sm font-bold tracking-tight"> Customize Color:</span>
+                    <div className="bg-transparent rounded-full flex justify-center items-center border border-gray-800 cursor-pointer w-8 h-8">
+                      <label htmlFor="colorInput" className="flex justify-center items-center">
+                        <AddIcon htmlColor="#000000" />
+                      </label>
+                      <input
+                        type="color"
+                        id="colorInput"
+                        className="opacity-0 absolute  cursor-pointer"
+                        onChange={(e) => setSockTextColor(e.target.value)}
+                      />
+                    </div>
+                    </div>
+                    <div className="w-full">
+                    <span className="text-sm font-bold tracking-tight"> Text Positions:</span>
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        {['bottom', 'Front'].map((placement) => (
+                          <div
+                            key={placement}
+                            className={`flex items-center justify-center text-sm p1 lg:p-2 border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
+                              } hover:bg-blue-100 hover:text-black`}
+                            onClick={() => {
+                              handleTextPlacement(placement);
+                            }}
+                          >
+                            {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
                 </>
-            )}
-          </div>
+              )}
+            </div>
           </>
-       );
+        );
       case "Upload Texture":
         return (
           <>
@@ -1347,33 +1351,33 @@ export default function Home() {
                   )}
                 </summary>
                 <div className="flex flex-col items-start px-4 space-y-3 w-full ml-3">
-                {open && (
-                  <>
-                    <button
-                      className={`w-full text-sm cursor-pointer px-4 py-2 rounded-full font-bold transition duration-150 ease-in-out
+                  {open && (
+                    <>
+                      <button
+                        className={`w-full text-sm cursor-pointer px-4 py-2 rounded-full font-bold transition duration-150 ease-in-out
                         ${!isLogoSkipped ? 'bg-[#E3262C] text-white hover:bg-red-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                      onClick={
-                        !isLogoSkipped
-                          ? () => handleLogoUploadAndOptionClick("Upload Logo")
-                          : null
-                      }
-                      disabled={isLogoSkipped}
-                    >
-                      Click to upload Logo
-                    </button>
+                        onClick={
+                          !isLogoSkipped
+                            ? () => handleLogoUploadAndOptionClick("Upload Logo")
+                            : null
+                        }
+                        disabled={isLogoSkipped}
+                      >
+                        Click to upload Logo
+                      </button>
 
-                    <button
-                      className="w-full text-sm bg-gray-500 text-white font-bold px-4 py-2 rounded-full hover:bg-gray-600 transition duration-150 ease-in-out"
-                      onClick={handleSkipLogo}
-                    >
-                      Skip Logo Upload
-                    </button>
-                  </>
-                )}
-              </div>
+                      <button
+                        className="w-full text-sm bg-gray-500 text-white font-bold px-4 py-2 rounded-full hover:bg-gray-600 transition duration-150 ease-in-out"
+                        onClick={handleSkipLogo}
+                      >
+                        Skip Logo Upload
+                      </button>
+                    </>
+                  )}
+                </div>
               </details>
 
-                <div
+              <div
                 className={`pb-3 flex gap-x-4 cursor-pointer hover:bg-blue-50 rounded-lg w-full p-1 ${!isLogoUploadedOrSkipped && "opacity-50 cursor-not-allowed"
                   }`}
                 onClick={
