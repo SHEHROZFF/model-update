@@ -630,7 +630,7 @@ export default function Home() {
       }
     }
   };
-  
+
   const handleLogoPlacementChange = (placement) => {
     // const newLogoPlacement = event.target.value;
     setNewPlacement(placement);
@@ -675,7 +675,6 @@ export default function Home() {
     // setDsockColor(null);
 
   }
-
     useEffect(() => {
     handleTextPlacement(sockTextPlacement); // Ensure texture updates on pattern change
   }, [
@@ -684,10 +683,6 @@ export default function Home() {
     sockTextPlacement
   ]);
   // --------------------------------------------------------------------
-
-
-
-
 
   const handleSave = async () => {
     if (!texture) {
@@ -782,7 +777,6 @@ export default function Home() {
     setLoading(false); // Reset loader state when closing the modal
   };
 
-
   // Modal Function End //
 
   const [open, setOpen] = useState(true);
@@ -804,8 +798,6 @@ export default function Home() {
   };
 
   
-
-
   const renderToolbarContent = (option) => {
     switch (option) {
       case "Upload Logo":

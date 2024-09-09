@@ -25,7 +25,7 @@ export function drawVerticalText(ctx, text, canvas, color,placement) {
           const maxWidthB = canvas.width * 0.4; // Example: 80% of canvas width
 
           // Determine the appropriate font size
-          const fontSizeB = fitTextToCanvas(ctx, text, maxWidthB,40);
+          const fontSizeB = fitTextToCanvas(ctx, text, maxWidthB,50);
 
           ctx.font = `${fontSizeB}px Poppins`;
         
