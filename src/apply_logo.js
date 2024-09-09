@@ -24,10 +24,10 @@ export const applylogo = (ctx, canvasWidth, canvasHeight, logo,key,sockimg) => {
             ctx.save();
 
             // Set opacity (transparency)
-            // ctx.globalAlpha = 0.5; // Adjust opacity (0.0 is fully transparent, 1.0 is fully opaque)
+            ctx.globalAlpha = 0.8; // Adjust opacity (0.0 is fully transparent, 1.0 is fully opaque)
             
             // Apply blur effect if needed
-            ctx.filter = 'blur(2px)'; // Adjust the blur amount as needed
+            ctx.filter = 'blur(1px)'; // Adjust the blur amount as needed
         
             ctx.drawImage(logo, 1050, 275, 350,100 );
             ctx.drawImage(logo, -150, 275, 320,100 );
@@ -105,13 +105,13 @@ export const applylogo = (ctx, canvasWidth, canvasHeight, logo,key,sockimg) => {
             ctx.globalCompositeOperation = 'source-over'; // Reset to default
 
         break;
-        case 'no_logo':
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            ctx.drawImage(sockimg, 0, 0, canvasWidth, canvasHeight);
-            // ctx.globalAlpha = 1.0;
-            ctx.globalCompositeOperation = 'source-over'; // Reset to default
+        // case 'no_logo':
+        //     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        //     ctx.drawImage(sockimg, 0, 0, canvasWidth, canvasHeight);
+        //     // ctx.globalAlpha = 1.0;
+        //     ctx.globalCompositeOperation = 'source-over'; // Reset to default
 
-        break
+        // break
 
         default:
             break;

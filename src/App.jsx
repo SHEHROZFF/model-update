@@ -85,10 +85,167 @@ export default function Home() {
   const detailsRef = useRef(null);
   const [sockText,setSockText] = useState(null);
   const inputRef = useRef(null); // Use ref to access the input value directl
-  const [sockTextColor,setSockTextColor] = useState(null);
-  const [sockTextPlacement,setSockTextPlacement] = useState('Front')
+  const [sockTextColor,setSockTextColor] = useState('black');
+  const [sockTextPlacement,setSockTextPlacement] = useState('Front');
+  const [dotColors, setDotColors] = useState([
+    "#85BFCB",
+    "#01284D",
+    "#D9D9D9",
+    "#006868",
+  ]);
+  const [checkBoardColors, setCheckBoardColors] = useState([
+    "#282A2C",
+    "#E56E46",
+    "#CFCFCF",
+  ]);
+  const [illusionistic_colors, setIllusionisticColors] = useState([
+    "#000",
+    "#ff0000",
+    "#810808",
+  ]);
+  const [csts1, setCsts1] = useState([
+    "#ffffff",
+    "#FF0000",
+    "#0000FF",
+    "#FF0000",
+    "#0000FF",
+  ]);
+  const [csts2, setCsts2] = useState([
+    "#023865",
+    "#ffffff",
+    "#E4CB63",
+    "#EBB14A",
+    "#F1653F",
+  ]);
+  const [csts3, setCsts3] = useState([
+    "#ffffff",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+  ]);
+  const [csts4, setCsts4] = useState([
+    "#1F1E7A",
+    "#83C0CC",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+    "#83C0CC",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#83C0CC",
+    "#035CB5",
+    "#83C0CC",
+    "#E1C85F",
+    "#CA0F34",
+    "#83C0CC",
+    "#83C0CC",
+    "#83C0CC",
+  ]);
 
+  const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
+// Modell- ----------------------------------
+  function Model({ cuffColor, heelColor, toeColor, texture }) {
+    const { nodes, materials } = useGLTF("/SockModel.gltf");
+
+    useEffect(() => {
+      // Apply default textures
+      const defaultCuffTexture = new THREE.TextureLoader().load(
+        "/cuffTexture.png"
+        // ,(defaultCuffTexture) => {
+        //   defaultCuffTexture.encoding = THREE.sRGBEncoding;
+        //   defaultCuffTexture.minFilter = THREE.LinearFilter;
+        //   defaultCuffTexture.magFilter = THREE.LinearFilter;
+        // }
+      );
+      const defaultHeelTexture = new THREE.TextureLoader().load(
+        "/cuffTexture.png"
+        // ,(defaultHeelTexture) => {
+        //   defaultHeelTexture.encoding = THREE.sRGBEncoding;
+        //   // texture.minFilter = THREE.LinearFilter;
+        //   defaultHeelTexture.magFilter = THREE.LinearFilter;
+        //   }
+      );
+      const defaultToeTexture = new THREE.TextureLoader().load(
+        "/cuffTexture.png"
+        // ,(defaultToeTexture) => {
+        //   defaultToeTexture.encoding = THREE.sRGBEncoding;
+        //   // texture.minFilter = THREE.LinearFilter;
+        //   defaultToeTexture.magFilter = THREE.LinearFilter;
+        //   }
+
+      );
+
+      materials.Cuff.map = defaultCuffTexture;
+      materials.Cuff.needsUpdate = true;
+
+      materials.Heel.map = defaultHeelTexture;
+      materials.Heel.needsUpdate = true;
+
+      materials.Toe.map = defaultToeTexture;
+      materials.Toe.needsUpdate = true;
+
+      materials.Sock_Texture.map = texture || defaultSockTexture;
+      materials.Sock_Texture.needsUpdate = true;
+
+      materials.Cuff.color.set(cuffColor);
+      materials.Cuff.needsUpdate = true;
+
+      materials.Heel.color.set(heelColor);
+      materials.Heel.needsUpdate = true;
+
+      materials.Toe.color.set(toeColor);
+      materials.Toe.needsUpdate = true;
+    }, [
+      cuffColor,
+      heelColor,
+      toeColor,
+      dsockColor,
+      texture,
+      materials,
+      defaultSockTexture,
+    ]);
+
+    return (
+      <group dispose={null} position={[0, -0.15, 0]}>
+        <mesh
+          geometry={nodes.mesh005_3.geometry}
+          material={materials.Cuff}
+          castShadow
+          receiveShadow
+        />
+        <mesh
+          geometry={nodes.mesh005.geometry}
+          material={materials.Sock_Texture}
+          castShadow
+          receiveShadow
+        />
+        <mesh
+          geometry={nodes.mesh005_1.geometry}
+          material={materials.Heel}
+          castShadow
+          receiveShadow
+        />
+        <mesh
+          geometry={nodes.mesh005_2.geometry}
+          material={materials.Toe}
+          castShadow
+          receiveShadow
+        />
+      </group>
+    );
+  }
+// --------------------------------------------------------------------------
 
   const handleSkipLogo = () => {
     if (detailsRef.current) {
@@ -137,63 +294,6 @@ export default function Home() {
       setTexture(updatedTexture);
     }
     setIsModalOpen(false);
-  };
-
-
-
-  const handleTextureChange = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Display the selected image in the UI
-        setSelectedImageTexture(reader.result);
-
-        // Further process the image for texture merging
-        if (defaultSockTexture) {
-          const img = new Image();
-          img.src = reader.result;
-
-          img.onload = () => {
-            // Create a canvas to draw the image and apply transformations
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            // Set canvas dimensions to match the image
-            canvas.width = img.width;
-            canvas.height = img.height;
-
-            // Flip the image upside down
-            ctx.translate(0, img.height);
-            ctx.scale(1, -1);
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-
-            // Create a new Image object with the flipped image
-            const flippedImage = new Image();
-            flippedImage.src = canvas.toDataURL();
-
-            flippedImage.onload = () => {
-              // Merge the flipped image with the existing texture and logo
-              const mergedTexture = combineTextures(
-                defaultSockTexture,
-                flippedImage,
-                logo,
-                logoPlacement,
-                sockText,
-                sockTextColor,
-                sockTextPlacement
-              );
-              mergedTexture.encoding = THREE.sRGBEncoding;
-              // mergedTexture.minFilter = THREE.LinearFilter;
-              mergedTexture.magFilter = THREE.LinearFilter;
-              setTexture(mergedTexture);
-            };
-          };
-        }
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
 
@@ -267,176 +367,63 @@ export default function Home() {
 
 
 
-  const [dotColors, setDotColors] = useState([
-    "#85BFCB",
-    "#01284D",
-    "#D9D9D9",
-    "#006868",
-  ]);
-  const [checkBoardColors, setCheckBoardColors] = useState([
-    "#282A2C",
-    "#E56E46",
-    "#CFCFCF",
-  ]);
-  const [illusionistic_colors, setIllusionisticColors] = useState([
-    "#000",
-    "#ff0000",
-    "#810808",
-  ]);
-  const [csts1, setCsts1] = useState([
-    "#ffffff",
-    "#FF0000",
-    "#0000FF",
-    "#FF0000",
-    "#0000FF",
-  ]);
-  const [csts2, setCsts2] = useState([
-    "#023865",
-    "#ffffff",
-    "#E4CB63",
-    "#EBB14A",
-    "#F1653F",
-  ]);
-  const [csts3, setCsts3] = useState([
-    "#ffffff",
-    "#035CB5",
-    "#83C0CC",
-    "#E1C85F",
-    "#CA0F34",
-    "#035CB5",
-    "#83C0CC",
-    "#E1C85F",
-    "#CA0F34",
-  ]);
-  const [csts4, setCsts4] = useState([
-    "#1F1E7A",
-    "#83C0CC",
-    "#83C0CC",
-    "#E1C85F",
-    "#CA0F34",
-    "#83C0CC",
-    "#035CB5",
-    "#83C0CC",
-    "#E1C85F",
-    "#83C0CC",
-    "#035CB5",
-    "#83C0CC",
-    "#E1C85F",
-    "#CA0F34",
-    "#83C0CC",
-    "#83C0CC",
-    "#83C0CC",
-  ]);
-  const handlePatternChange = (event) => {
-    const newPattern = event.target.value;
-    setPattern(newPattern);
-    updateTexture(newPattern);
-  };
 
   const handleDotColorChange = (event, index) => {
     const updatedColors = [...dotColors];
     updatedColors[index] = event.target.value;
     setDotColors(updatedColors);
-    updateTexture(pattern);
+    updatePattern(pattern);
   };
 
   const handleCuffColorChange = (event, index) => {
     const updatedColors = [...cuffColorSwatches];
     updatedColors[index] = event.target.value;
     setCuffColor(updatedColors);
-    // updateTexture(pattern);
+    // updatePattern(pattern);
   };
 
   const handleCheckBoardColorChange = (event, index) => {
     const updatedColors = [...checkBoardColors];
     updatedColors[index] = event.target.value;
     setCheckBoardColors(updatedColors);
-    updateTexture(pattern);
+    updatePattern(pattern);
   };
 
   const handleIllusionisticColorChange = (event, index) => {
     const updatedColors = [...illusionistic_colors];
     updatedColors[index] = event.target.value;
     setIllusionisticColors(updatedColors);
-    updateTexture(pattern);
+    updatePattern(pattern);
   };
 
   const handleCsts1Change = (event, index) => {
     const updatedColors = [...csts1];
     updatedColors[index] = event.target.value;
     setCsts1(updatedColors);
-    updateTexture(pattern);
+    updatePattern(pattern);
   };
 
   const handleCsts2Change = (event, index) => {
     const updatedColors = [...csts2];
     updatedColors[index] = event.target.value;
     setCsts2(updatedColors);
-    updateTexture(pattern);
+    updatePattern(pattern);
   };
 
   const handleCsts3Change = (event, index) => {
     const updatedColors = [...csts3];
     updatedColors[index] = event.target.value;
     setCsts3(updatedColors);
-    updateTexture(pattern);
+    updatePattern(pattern);
   };
 
   const handleCsts4Change = (event, index) => {
     const updatedColors = [...csts4];
     updatedColors[index] = event.target.value;
     setCsts4(updatedColors);
-    updateTexture(pattern);
+    updatePattern(pattern);
   };
-
-  const updateTexture = (newPattern) => {
-    if (defaultSockTexture) {
-      const updatedTexture = combinePattern(
-        defaultSockTexture,
-        logo,
-        newPattern,
-        logoPlacement,
-        dotColors,
-        checkBoardColors,
-        illusionistic_colors,
-        csts1,
-        csts2,
-        csts3,
-        csts4,
-        sockText,
-        sockTextColor,
-        sockTextPlacement
-      );
-      updatedTexture.encoding = THREE.sRGBEncoding;
-      // updatedTexture.minFilter = THREE.LinearFilter;
-      updatedTexture.magFilter = THREE.LinearFilter;
-      setTexture(updatedTexture);
-    }
-  };
-
-  useEffect(() => {
-    updateTexture(pattern); // Ensure texture updates on pattern change
-  }, [
-    dotColors,
-    checkBoardColors,
-    illusionistic_colors,
-    csts1,
-    csts2,
-    csts3,
-    csts4,
-    pattern,
-    sockText,
-    sockTextColor,
-    sockTextPlacement
-  ]);
-
-  useEffect(() => {
-    return () => {
-      if (texture) {
-        texture.dispose(); // Dispose of the texture to free up memory
-      }
-    };
-  }, [texture]);
+  // --------------------------SOCK COLOR-----------------------------
   const handleColorOnChange = (color) => {
     // console.log(color);
     
@@ -457,14 +444,154 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
-  {
-    /* Modal to submit  */
+  // useEffect(()=>{
+  //   handleColorOnChange(dsockColor)
+  // },[
+  //   dsockColor,
+  //   sockText,
+  //   sockTextColor,
+  //   sockTextPlacement
+  // ])
+
+// --------------------textureUPload-----------------------------------------
+  const handleTextureChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Display the selected image in the UI
+        setSelectedImageTexture(reader.result);
+
+        // Further process the image for texture merging
+        if (defaultSockTexture) {
+          const img = new Image();
+          img.src = reader.result;
+
+          img.onload = () => {
+            // Create a canvas to draw the image and apply transformations
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas dimensions to match the image
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // Flip the image upside down
+            ctx.translate(0, img.height);
+            ctx.scale(1, -1);
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            // Create a new Image object with the flipped image
+            const flippedImage = new Image();
+            flippedImage.src = canvas.toDataURL();
+
+            flippedImage.onload = () => {
+              // Merge the flipped image with the existing texture and logo
+              const mergedTexture = combineTextures(
+                defaultSockTexture,
+                flippedImage,
+                logo,
+                logoPlacement,
+                sockText,
+                sockTextColor,
+                sockTextPlacement
+              );
+              mergedTexture.encoding = THREE.sRGBEncoding;
+              // mergedTexture.minFilter = THREE.LinearFilter;
+              mergedTexture.magFilter = THREE.LinearFilter;
+              setTexture(mergedTexture);
+            };
+          };
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleTextureDelete = () => {
+    setSelectedImageTexture(null);
+    setDsockColor(null);
+    setPattern("");
+    if (defaultSockTexture) {
+      const updatedTexture = combineTextures(
+        defaultSockTexture,
+        null,
+        logo,
+        logoPlacement,
+        sockText,
+        sockTextColor,
+        sockTextPlacement
+      );
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      // updatedTexture.minFilter = THREE.LinearFilter;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
+    const textureInput = document.getElementById("textureInput");
+    if (textureInput) {
+      textureInput.value = "";
+    };
   }
-  const [loading, setLoading] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  // useEffect(() => {
+  //   handleTextureChange(pattern); // Ensure texture updates on pattern change
+  // }, [
+  //   texture
+  // ]);
+  // -----------------PATTERN-------------------------------------------
+  const updatePattern = (newPattern) => {
+    if (defaultSockTexture) {
+      const updatedTexture = combinePattern(
+        defaultSockTexture,
+        logo,
+        newPattern,
+        logoPlacement,
+        dotColors,
+        checkBoardColors,
+        illusionistic_colors,
+        csts1,
+        csts2,
+        csts3,
+        csts4,
+        sockText,
+        sockTextColor,
+        sockTextPlacement,
+      );
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      // updatedTexture.minFilter = THREE.LinearFilter;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
+  };
+
+  const handlePatternChange = (event) => {
+    const newPattern = event.target.value;
+    setPattern(newPattern);
+    updatePattern(newPattern);
+  };
+  // useEffect(() => {
+  //   updatePattern(pattern); // Ensure texture updates on pattern change
+  // }, [
+  //   dotColors,
+  //   checkBoardColors,
+  //   illusionistic_colors,
+  //   csts1,
+  //   csts2,
+  //   csts3,
+  //   csts4,
+  //   pattern,
+  //   sockText,
+  //   sockTextColor,
+  //   sockTextPlacement
+  // ]);
+// ---------------------------------------------------------------------
+  // useEffect(() => {
+  //   return () => {
+  //     if (texture) {
+  //       texture.dispose(); // Dispose of the texture to free up memory
+  //     }
+  //   };
+  // }, [texture]);
+
   const handleOpenModal = () => {
     setIsModalVisible(true);
   };
@@ -567,12 +694,13 @@ export default function Home() {
   const handleLogoDelete = () => {
     // Clear the logo state
     setSelectedImage(null); // Ensure this matches the state used for preview
+    setLogo(null)
 
     // Clear the image from the model
     if (defaultSockTexture) {
       const updatedTexture = combineLogoChange(
         defaultSockTexture,
-        null, // Set to null or a default placeholder as needed
+        logo, // Set to null or a default placeholder as needed
         "no_logo",
         sockText,
         sockTextColor,
@@ -592,30 +720,7 @@ export default function Home() {
   };
 
 
-  const handleTextureDelete = () => {
-    setSelectedImageTexture(null);
-    setDsockColor(null);
-    setPattern("");
-    if (defaultSockTexture) {
-      const updatedTexture = combineTextures(
-        defaultSockTexture,
-        null,
-        logo,
-        logoPlacement,
-        sockText,
-        sockTextColor,
-        sockTextPlacement
-      );
-      updatedTexture.encoding = THREE.sRGBEncoding;
-      // updatedTexture.minFilter = THREE.LinearFilter;
-      updatedTexture.magFilter = THREE.LinearFilter;
-      setTexture(updatedTexture);
-    }
-    const textureInput = document.getElementById("textureInput");
-    if (textureInput) {
-      textureInput.value = "";
-    };
-  }
+
 
   // Modal Function Start //
 
@@ -632,96 +737,6 @@ export default function Home() {
     });
   }, []);
   
-  function Model({ cuffColor, heelColor, toeColor, texture, cuffText }) {
-    const { nodes, materials } = useGLTF("/SockModel.gltf");
-
-    useEffect(() => {
-      // Apply default textures
-      const defaultCuffTexture = new THREE.TextureLoader().load(
-        "/cuffTexture.png"
-        // ,(defaultCuffTexture) => {
-        //   defaultCuffTexture.encoding = THREE.sRGBEncoding;
-        //   defaultCuffTexture.minFilter = THREE.LinearFilter;
-        //   defaultCuffTexture.magFilter = THREE.LinearFilter;
-        // }
-      );
-      const defaultHeelTexture = new THREE.TextureLoader().load(
-        "/cuffTexture.png"
-        // ,(defaultHeelTexture) => {
-        //   defaultHeelTexture.encoding = THREE.sRGBEncoding;
-        //   // texture.minFilter = THREE.LinearFilter;
-        //   defaultHeelTexture.magFilter = THREE.LinearFilter;
-        //   }
-      );
-      const defaultToeTexture = new THREE.TextureLoader().load(
-        "/cuffTexture.png"
-        // ,(defaultToeTexture) => {
-        //   defaultToeTexture.encoding = THREE.sRGBEncoding;
-        //   // texture.minFilter = THREE.LinearFilter;
-        //   defaultToeTexture.magFilter = THREE.LinearFilter;
-        //   }
-
-      );
-
-      materials.Cuff.map = defaultCuffTexture;
-      materials.Cuff.needsUpdate = true;
-
-      materials.Heel.map = defaultHeelTexture;
-      materials.Heel.needsUpdate = true;
-
-      materials.Toe.map = defaultToeTexture;
-      materials.Toe.needsUpdate = true;
-
-      materials.Sock_Texture.map = texture || defaultSockTexture;
-      materials.Sock_Texture.needsUpdate = true;
-
-      materials.Cuff.color.set(cuffColor);
-      materials.Cuff.needsUpdate = true;
-
-      materials.Heel.color.set(heelColor);
-      materials.Heel.needsUpdate = true;
-
-      materials.Toe.color.set(toeColor);
-      materials.Toe.needsUpdate = true;
-    }, [
-      cuffColor,
-      heelColor,
-      toeColor,
-      dsockColor,
-      texture,
-      materials,
-      defaultSockTexture,
-    ]);
-
-    return (
-      <group dispose={null} position={[0, -0.15, 0]}>
-        <mesh
-          geometry={nodes.mesh005_3.geometry}
-          material={materials.Cuff}
-          castShadow
-          receiveShadow
-        />
-        <mesh
-          geometry={nodes.mesh005.geometry}
-          material={materials.Sock_Texture}
-          castShadow
-          receiveShadow
-        />
-        <mesh
-          geometry={nodes.mesh005_1.geometry}
-          material={materials.Heel}
-          castShadow
-          receiveShadow
-        />
-        <mesh
-          geometry={nodes.mesh005_2.geometry}
-          material={materials.Toe}
-          castShadow
-          receiveShadow
-        />
-      </group>
-    );
-  }
 
   // Modal Function End //
 
@@ -762,6 +777,23 @@ export default function Home() {
   const handleTextPlacement = (placement) => {
     // const newLogoPlacement = event.target.value;
     setSockTextPlacement(placement);
+    if (defaultSockTexture) {
+      const updatedTexture = combineLogoChange(
+        defaultSockTexture,
+        logo,
+        newPlacement,
+        sockText,
+        sockTextColor,
+        placement
+
+      );
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      // updatedTexture.minFilter = THREE.LinearFilter;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
+    // setPattern(null);
+    // setDsockColor(null);
 
   }
 

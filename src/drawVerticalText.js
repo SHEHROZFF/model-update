@@ -1,5 +1,5 @@
-function fitTextToCanvas(ctx, text, maxWidth) {
-    let fontSize = 70; // Start with a large font size
+function fitTextToCanvas(ctx, text, maxWidth, fs) {
+    let fontSize = fs; // Start with a large font size
     let textWidth;
   
     // Set initial font size
@@ -19,20 +19,20 @@ function fitTextToCanvas(ctx, text, maxWidth) {
 }
   
 export function drawVerticalText(ctx, text, canvas, color,placement) {
-
-        // Define max width for text to fit within
-        const maxWidth = canvas.width * 0.8; // Example: 80% of canvas width
-    
-        // Determine the appropriate font size
-        const fontSize = fitTextToCanvas(ctx, text, maxWidth);
-      
-        // Measure the adjusted text width
-        const textWidth = ctx.measureText(text).width;
- 
     switch (placement) {
       case 'bottom':
+          // Define max width for text to fit within
+          const maxWidthB = canvas.width * 0.4; // Example: 80% of canvas width
+
+          // Determine the appropriate font size
+          const fontSizeB = fitTextToCanvas(ctx, text, maxWidthB,40);
+
+          ctx.font = `${fontSizeB}px Poppins`;
+        
+          // Measure the adjusted text width
+          const textWidthB = ctx.measureText(text).width;
           // Save the current context state
-          // ctx.save();
+          ctx.save();
 
           // Translate the context to the desired position (center of the canvas)
           ctx.translate(canvas.width / 2, canvas.height / 2);
@@ -47,7 +47,7 @@ export function drawVerticalText(ctx, text, canvas, color,placement) {
           ctx.fillStyle = color; // Set dynamic text color
 
           const rightHalfX = canvas.width * -0.25; // Move to right half of canvas
-          const x = rightHalfX - textWidth / 2; // Center the text within the right half
+          const x = rightHalfX - textWidthB / 2; // Center the text within the right half
 
           // Draw the text
 
@@ -62,6 +62,16 @@ export function drawVerticalText(ctx, text, canvas, color,placement) {
           // Return the context
           return ctx;
         case 'Front':
+                  // Define max width for text to fit within
+          const maxWidthF = canvas.width * 0.8; // Example: 80% of canvas width
+      
+          // Determine the appropriate font size
+          const fontSizeF = fitTextToCanvas(ctx, text, maxWidthF,70);
+
+          ctx.font = `${fontSizeF}px Poppins`;
+        
+          // Measure the adjusted text width
+          const textWidthF = ctx.measureText(text).width;
           // Save the current context state
           ctx.save();
         
@@ -78,7 +88,7 @@ export function drawVerticalText(ctx, text, canvas, color,placement) {
           ctx.fillStyle = color; // Set dynamic text color
         
           // Calculate the x position to center the text
-          const x1 = -textWidth / 2; // Adjusting x position to center the text horizontally
+          const x1 = -textWidthF / 2; // Adjusting x position to center the text horizontally
         
           // Draw the text
           ctx.fillText(text, x1, 0);
