@@ -10,17 +10,11 @@ export const combineLogoChange = (sockTexture, logo, logoPlacement,text,textColo
   const canvasHeight = sockTexture.image.height;
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
-  
+
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     
   // Draw default sock texture
   ctx.drawImage(sockTexture.image, 0, 0, canvasWidth, canvasHeight);
-
-  if(text) {
-    ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
-    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor,placement);
-    updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
-  }
 
   // Apply logo if any
   if (logo) {
@@ -28,6 +22,12 @@ export const combineLogoChange = (sockTexture, logo, logoPlacement,text,textColo
     applylogo(ctx, canvasWidth, canvasHeight, logo, logoPlacement,sockTexture.image);
 
   }
+  if(text) {
+    ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
+    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor,placement);
+    updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
+  }
+
 
   return new THREE.CanvasTexture(canvas);
 };

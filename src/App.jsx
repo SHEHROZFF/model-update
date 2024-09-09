@@ -75,7 +75,7 @@ export default function Home() {
   const [pattern, setPattern] = useState(""); // Pattern state
   const [logoPlacement, setLogoPlacement] = useState("calf");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedImageTexture, setSelectedImageTexture] = useState(null);
+  const [selectedUploadedTexture, setSelectedUploadedTexture] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [notes, setNotes] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -290,6 +290,9 @@ export default function Home() {
   // --------------------------SOCK COLOR-----------------------------
   const handleColorOnChange = (color) => {
     // console.log(color);
+    setPattern(null);
+    setSelectedUploadedTexture(null);
+    setTexture(null);
     
     setDsockColor(color);
     if (defaultSockTexture) {
@@ -319,13 +322,17 @@ export default function Home() {
 
 // --------------------textureUPload-----------------------------------------
   const handleTextureChange = (event) => {
+    setPattern(null);
+    setDsockColor(null);
+    setTexture(null);
+    
     const file = event.target.files[0];
 
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         // Display the selected image in the UI
-        setSelectedImageTexture(reader.result);
+        setSelectedUploadedTexture(reader.result);
 
         // Further process the image for texture merging
         if (defaultSockTexture) {
@@ -370,10 +377,11 @@ export default function Home() {
         }
       };
       reader.readAsDataURL(file);
-    }
+    } 
+
   };
   const handleTextureDelete = () => {
-    setSelectedImageTexture(null);
+    setSelectedUploadedTexture(null);
     setDsockColor(null);
     setPattern("");
     if (defaultSockTexture) {
@@ -403,6 +411,11 @@ export default function Home() {
   // ]);
   // -----------------PATTERN-------------------------------------------
   const updatePattern = (newPattern) => {
+    setDsockColor(null);
+    setSelectedUploadedTexture(null);
+    setTexture(null)
+    console.log(sockText,sockTextColor,sockTextPlacement);
+    
     if (defaultSockTexture) {
       const updatedTexture = combinePattern(
         defaultSockTexture,
@@ -418,7 +431,7 @@ export default function Home() {
         csts4,
         sockText,
         sockTextColor,
-        sockTextPlacement,
+        sockTextPlacement
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -426,6 +439,37 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
+  useEffect(() => {
+    if (pattern) {
+      console.log(pattern);
+      updatePattern(pattern); // Ensure texture updates on pattern change
+    } else if (selectedUploadedTexture) {
+      console.log(selectedUploadedTexture);
+      // handleTextureChange();
+    } else if (dsockColor) {
+      console.log(dsockColor);
+      handleColorOnChange(dsockColor)
+    } else {
+      console.log("noyhing");
+      handleTextPlacement(sockTextPlacement); // Ensure texture updates on pattern change
+      
+    }
+   
+  }, [
+    dotColors,
+    checkBoardColors,
+    illusionistic_colors,
+    csts1,
+    csts2,
+    csts3,
+    csts4,
+    pattern,
+    sockText,
+    sockTextColor,
+    sockTextPlacement,
+    dsockColor,
+    selectedUploadedTexture
+  ]);
 
   const handlePatternChange = (event) => {
     const newPattern = event.target.value;
@@ -481,21 +525,7 @@ export default function Home() {
     setCsts4(updatedColors);
     updatePattern(pattern);
   };
-  // useEffect(() => {
-  //   updatePattern(pattern); // Ensure texture updates on pattern change
-  // }, [
-  //   dotColors,
-  //   checkBoardColors,
-  //   illusionistic_colors,
-  //   csts1,
-  //   csts2,
-  //   csts3,
-  //   csts4,
-  //   pattern,
-  //   sockText,
-  //   sockTextColor,
-  //   sockTextPlacement
-  // ]);
+
 // ---------------------------------------------------------------------
   // useEffect(() => {
   //   return () => {
@@ -651,10 +681,8 @@ export default function Home() {
   // ---------------------------------Handle Text--------------------------------------
   const handleSubmitText = (text) => {
     setSockText(text); // Apply the text to the model here
-    // Your other submit logic goes here
   };
   const handleTextPlacement = (placement) => {
-    // const newLogoPlacement = event.target.value;
     setSockTextPlacement(placement);
     if (defaultSockTexture) {
       const updatedTexture = combineLogoChange(
@@ -671,17 +699,7 @@ export default function Home() {
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
-    // setPattern(null);
-    // setDsockColor(null);
-
   }
-    useEffect(() => {
-    handleTextPlacement(sockTextPlacement); // Ensure texture updates on pattern change
-  }, [
-    sockText,
-    sockTextColor,
-    sockTextPlacement
-  ]);
   // --------------------------------------------------------------------
 
   const handleSave = async () => {
@@ -846,7 +864,7 @@ export default function Home() {
                           logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
                         } hover:bg-blue-100 hover:text-black`}
                         onClick={() => {
-                          if ((dsockColor !== null || pattern !== "" || selectedImageTexture !== null)) {
+                          if ((dsockColor !== null || pattern !== "" || selectedUploadedTexture !== null)) {
                             handleLogoPlacementChange(placement)
                           } else {
                             handleLogoPlacement2(placement);
@@ -861,7 +879,7 @@ export default function Home() {
                 </div>
               )}
 
-              {(dsockColor !== null || pattern !== "" || selectedImageTexture !== null) && (
+              {(dsockColor !== null || pattern !== "" || selectedUploadedTexture !== null) && (
                 
                 <Modal
                   title={null}
@@ -970,7 +988,7 @@ export default function Home() {
         return (
           <>
             <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
-              {!selectedImageTexture ? (
+              {!selectedUploadedTexture ? (
                 <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
                   <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
                   <p className="text-gray-500 text-sm capitalize font-semibold">
@@ -987,7 +1005,7 @@ export default function Home() {
               ) : (
                 <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
                   <img
-                    src={selectedImageTexture}
+                    src={selectedUploadedTexture}
                     alt="Selected Texture"
                     className="w-full h-24 object-cover"
                   />
@@ -1018,10 +1036,10 @@ export default function Home() {
                 <option value="dots">Dots</option>
                 <option value="checkerboard">Checkerboard</option>
                 <option value="illusionistic">Illusionistic</option>
-                <option value="custom_1">Cust-1</option>
-                <option value="custom_2">Cust-2</option>
-                <option value="custom_3">Cust-3</option>
-                <option value="custom_4">Cust-4</option>
+                <option value="custom_1">Custom-1</option>
+                <option value="custom_2">Custom-2</option>
+                <option value="custom_3">Custom-3</option>
+                <option value="custom_4">Custom-4</option>
               </select>
 
               {pattern === "dots" && (

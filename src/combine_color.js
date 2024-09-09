@@ -21,18 +21,19 @@ export const combineSockcolor = (sockTexture, logo, logoPlacement, color, text, 
     ctx.fillStyle = color; // Set the color you want
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.globalCompositeOperation = 'source-over'; // Reset to default
+
+    if(text) {
+      ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
+      const updatedCtx = drawVerticalText(ctx, text, canvas, textColor,placement);
+      updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
+    }
   }
   
-  if(text) {
-    ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
-    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor,placement);
-    updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
-  }
-
   // Apply logo if any
   if (logo) {
     applylogo(ctx, canvasWidth, canvasHeight, logo, logoPlacement,sockTexture.image);
   }
+
 
   return new THREE.CanvasTexture(canvas);
 };
