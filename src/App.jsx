@@ -971,7 +971,7 @@ export default function Home() {
       case "Upload Texture":
         return (
           <>
-            <div className="w-full h-full flex justify-center items-center my-3 mx-0 md:mx-2">
+            <div className="w-full h-full flex justify-between items-center my-3 mx-0 md:mx-2">
               {!selectedUploadedTexture ? (
                 <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative  w-60 md:w-96 flex flex-col justify-center items-center">
                   <CloudUploadIcon style={{ fontSize: 35, color: "red" }} />
