@@ -17,7 +17,7 @@ import Swatches from "./components/colorswatches";
 import * as THREE from "three";
 import { Suspense } from "react";
 import { Canvas, events } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { OrbitControls, useGLTF, softShadows } from "@react-three/drei";
 import { SketchPicker } from "react-color";
 import { Modal, Button, Form, Input, Tooltip, Checkbox } from "antd";
 // Component Import
@@ -1293,7 +1293,7 @@ export default function Home() {
         return <p>Unknown Option</p>;
     }
   };
-
+  // softShadows();
   return (
     <div className="h-screen w-full flex">
       {/* Sidebar for large screens */}
@@ -1489,7 +1489,7 @@ export default function Home() {
       >
         <div className="border border-t-gray-200 border-b-0 border-l-0 border-r-0 w-full h-[8%] flex justify-center items-center bg-transparent">
           <div className="w-full h-4/5 lg:h-full absolute left-0 top-3 lg:-top-20 mb-56 lg:mb-0">
-            <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows>
+            <Canvas camera={{ position: [1, 0, 1], fov: 50 }} shadows >
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />
                 <spotLight
@@ -1513,10 +1513,10 @@ export default function Home() {
                   rotation={[-Math.PI / 2, 0, 0]}
                 >
                   <planeGeometry args={[5, 5]} />
-                  <shadowMaterial opacity={0.3} />
+                  <shadowMaterial opacity={0.2} />
                 </mesh>
                 <OrbitControls
-                  enablePan={true}
+                  enablePan={false}
                   enableZoom={true}
                   enableRotate={true}
                   maxDistance={0.6}
