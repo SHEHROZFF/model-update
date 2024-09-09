@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import axios from "axios";
 import { spiral } from "ldrs";
-import { IconButton } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddIcon from '@mui/icons-material/Add';
 
@@ -16,9 +15,8 @@ import "./../src/globals.css";
 import Swatches from "./components/colorswatches";
 import * as THREE from "three";
 import { Suspense } from "react";
-import { Canvas, events } from "@react-three/fiber";
-import { OrbitControls, useGLTF, softShadows } from "@react-three/drei";
-import { SketchPicker } from "react-color";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Modal, Button, Form, Input, Tooltip, Checkbox } from "antd";
 // Component Import
 import { combineTextures } from "./combine_texture";
@@ -35,11 +33,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FitbitSharpIcon from "@mui/icons-material/FitbitSharp";
 import DesignServicesSharpIcon from "@mui/icons-material/DesignServicesSharp";
 import TextureSharpIcon from "@mui/icons-material/TextureSharp";
-import PaletteSharpIcon from "@mui/icons-material/PaletteSharp";
 import LocationSearchingSharpIcon from "@mui/icons-material/LocationSearchingSharp";
-import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import ClearIcon from "@mui/icons-material/Clear";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 // Sidebar Icons
 
 const cuffColorSwatches = [
@@ -311,15 +308,7 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
-  // useEffect(()=>{
-  //   handleColorOnChange(dsockColor)
-  // },[
-  //   dsockColor,
-  //   sockText,
-  //   sockTextColor,
-  //   sockTextPlacement
-  // ])
-
+ 
 // --------------------textureUPload-----------------------------------------
   const handleTextureChange = (event) => {
     setPattern(null);
@@ -404,11 +393,6 @@ export default function Home() {
       textureInput.value = "";
     };
   }
-  // useEffect(() => {
-  //   handleTextureChange(pattern); // Ensure texture updates on pattern change
-  // }, [
-  //   texture
-  // ]);
   // -----------------PATTERN-------------------------------------------
   const updatePattern = (newPattern) => {
     setDsockColor(null);
@@ -930,19 +914,19 @@ export default function Home() {
           <>
           <div className="w-full h-full flex justify-between gap-x-5 items-center my-2 mx-1 lg:mx-2">
 
-            <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative w-60 md:w-96 flex flex-col justify-center items-center">
-              <p className="text-gray-500 text-sm capitalize font-semibold">
+            <div className="p-6 rounded-lg text-center relative h-28 w-60 md:w-96 flex flex-col justify-center items-start space-y-3">
+              <p className="text-gray-500 text-sm capitalize font-semibold text-left">
                 Enter your text here
               </p>
               <input
                 id="textInput"
                 type="text"
-                placeholder="Enter text"
-                className="border-2 border-gray-300 rounded-md p-2 w-full mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Type to Preview"
+                className="border-2 border-gray-300 rounded-md p-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 ref={inputRef} // Reference to access the input value directly
               />
               <button
-                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-sm px-4 font-medium"
                 onClick={()=>handleSubmitText(inputRef.current.value)} // Submit on button click
               >
                 Submit
@@ -1316,7 +1300,7 @@ export default function Home() {
     <div className="h-screen w-full flex">
       {/* Sidebar for large screens */}
       <div
-        className={`sidebar border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
+        className={`sidebar lg:block sm:hidden md:hidden border border-[#efeee8] shadow-xl duration-500 ${open ? "w-[18%]" : "w-[84px]"
           }`}
       >
         <div className="flex justify-normal items-center h-20 px-3 mb-8">
@@ -1396,7 +1380,7 @@ export default function Home() {
                   isLogoUploadedOrSkipped ? () => handleOptionClick("Upload Text") : null
                 }
               >
-                <TextureSharpIcon htmlColor="#E3262C" />
+                <EditNoteIcon htmlColor="#E3262C" />
                 {open && <h1 className="text-sidebarTEXT font-semibold">Upload Text</h1>}
               </div>
 
@@ -1442,7 +1426,7 @@ export default function Home() {
 
 
       {/* sidebar for small screens */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 md:hidden mx-auto">
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 lg:hidden mx-auto">
         <div className="flex justify-center items-center h-16 px-2 mb-6">
           <div className="flex flex-row justify-center items-center gap-y-2">
             <div className="py-2 px-2 flex flex-row gap-y-2 bg-red-100 rounded-lg ">
@@ -1459,7 +1443,7 @@ export default function Home() {
                   className="flex justify-center items-center gap-x-2 cursor-pointer hover:bg-blue-50 rounded-lg p-2"
                   onClick={() => handleOptionClick("Upload Text")}
                 >
-                  <FitbitSharpIcon htmlColor="#E3262C" className="text-sm" />
+                  <EditNoteIcon htmlColor="#E3262C" className="text-sm" />
                 </div>
               </Tooltip>
 
