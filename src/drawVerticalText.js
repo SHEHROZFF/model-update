@@ -3,7 +3,7 @@ function fitTextToCanvas(ctx, text, maxWidth, fs) {
     let textWidth;
   
     // Set initial font size
-    ctx.font = `${fontSize}px Poppins`;
+    ctx.font = `${fontSize}px `;
   
     // Measure text width
     textWidth = ctx.measureText(text).width;
@@ -11,14 +11,14 @@ function fitTextToCanvas(ctx, text, maxWidth, fs) {
     // Adjust font size until the text fits within the maxWidth
     while (textWidth > maxWidth && fontSize > 10) { // Avoid too small font size
       fontSize -= 1; // Decrease font size
-      ctx.font = `${fontSize}px Poppins`;
+      ctx.font = `${fontSize}px `;
       textWidth = ctx.measureText(text).width;
     }
   
     return fontSize;
 }
   
-export function drawVerticalText(ctx, text, canvas, color,placement) {
+export function drawVerticalText(ctx, text, canvas, color,placement, fontStyle) {
     switch (placement) {
       case 'bottom':
           // Define max width for text to fit within
@@ -27,7 +27,7 @@ export function drawVerticalText(ctx, text, canvas, color,placement) {
           // Determine the appropriate font size
           const fontSizeB = fitTextToCanvas(ctx, text, maxWidthB,50);
 
-          ctx.font = `${fontSizeB}px Poppins`;
+          ctx.font = `${fontSizeB}px ${fontStyle}`;
         
           // Measure the adjusted text width
           const textWidthB = ctx.measureText(text).width;
@@ -68,7 +68,7 @@ export function drawVerticalText(ctx, text, canvas, color,placement) {
           // Determine the appropriate font size
           const fontSizeF = fitTextToCanvas(ctx, text, maxWidthF,70);
 
-          ctx.font = `${fontSizeF}px Poppins`;
+          ctx.font = `${fontSizeF}px ${fontStyle}`;
         
           // Measure the adjusted text width
           const textWidthF = ctx.measureText(text).width;

@@ -51,3 +51,20 @@ body{
   border: none; /* Optional: remove border */
 }
 
+
+/* Add this to your CSS file */
+select {
+  font-family: 'Roboto', sans-serif;
+}
+
+option[value='Roboto'] {
+  font-family: 'Roboto', sans-serif;
+}
+
+option[value='Open Sans'] {
+  font-family: 'Open Sans', sans-serif;
+}
+
+option[value='Lato'] {
+  font-family: 'Lato', sans-serif;
+}

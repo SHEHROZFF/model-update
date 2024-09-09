@@ -151,6 +151,8 @@ export default function Home() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
+  const [selectedFont, setSelectedFont] = useState('Raleway'); // Default font
+
   // ----------------------------Modell- ----------------------------------
   // Modal Function Start //
 
@@ -300,7 +302,8 @@ export default function Home() {
         color,
         sockText,
         sockTextColor,
-        sockTextPlacement
+        sockTextPlacement,
+        selectedFont
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -355,7 +358,8 @@ export default function Home() {
                 logoPlacement,
                 sockText,
                 sockTextColor,
-                sockTextPlacement
+                sockTextPlacement,
+                selectedFont
               );
               mergedTexture.encoding = THREE.sRGBEncoding;
               // mergedTexture.minFilter = THREE.LinearFilter;
@@ -381,7 +385,8 @@ export default function Home() {
         logoPlacement,
         sockText,
         sockTextColor,
-        sockTextPlacement
+        sockTextPlacement,
+        selectedFont
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -415,7 +420,8 @@ export default function Home() {
         csts4,
         sockText,
         sockTextColor,
-        sockTextPlacement
+        sockTextPlacement,
+        selectedFont
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -452,7 +458,8 @@ export default function Home() {
     sockTextColor,
     sockTextPlacement,
     dsockColor,
-    selectedUploadedTexture
+    selectedUploadedTexture,
+    selectedFont
   ]);
 
   const handlePatternChange = (event) => {
@@ -540,7 +547,8 @@ export default function Home() {
         "no_logo",
         sockText,
         sockTextColor,
-        sockTextPlacement
+        sockTextPlacement,
+        selectedFont
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
@@ -566,7 +574,8 @@ export default function Home() {
         newPlacement,
         sockText,
         sockTextColor,
-        sockTextPlacement
+        sockTextPlacement,
+        selectedFont
 
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
@@ -625,7 +634,8 @@ export default function Home() {
                 logoPlacement,
                 sockText,
                 sockTextColor,
-                sockTextPlacement
+                sockTextPlacement,
+                selectedFont
               );
               updatedTexture.encoding = THREE.sRGBEncoding;
               // updatedTexture.minFilter = THREE.LinearFilter;
@@ -655,7 +665,7 @@ export default function Home() {
     setLogoPlacement(placement);
     if (defaultSockTexture) {
       // console.log(logoPlacement);
-      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement, sockText, sockTextColor, sockTextPlacement);
+      const updatedTexture = combineLogoChange(defaultSockTexture, logo, placement, sockText, sockTextColor, sockTextPlacement, selectedFont);
       updatedTexture.encoding = THREE.sRGBEncoding;
       // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
@@ -675,16 +685,21 @@ export default function Home() {
         logoPlacement,
         sockText,
         sockTextColor,
-        placement
-
+        placement,
+        selectedFont
+        
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
-      // updatedTexture.minFilter = THREE.LinearFilter;
       updatedTexture.magFilter = THREE.LinearFilter;
       setTexture(updatedTexture);
     }
-  }
+  };
   // --------------------------------------------------------------------
+
+  const handleFontChange = (event) => {
+    setSelectedFont(event.target.value);
+  };
+
 
   const handleSave = async () => {
     if (!texture) {
@@ -913,24 +928,37 @@ export default function Home() {
           <>
             <div className="w-full h-full flex justify-between items-center my-2 mx-1 lg:mx-2">
 
-              <div className="p-6 rounded-lg text-center relative h-28 w-60 md:w-96 flex flex-col justify-center items-start space-y-3">
-                <p className="text-gray-500 text-sm capitalize font-semibold text-left">
-                  Enter your text here
-                </p>
-                <input
-                  id="textInput"
-                  type="text"
-                  placeholder="Type to Preview"
-                  className="border-2 border-gray-300 rounded-md p-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  ref={inputRef} // Reference to access the input value directly
-                />
-                <button
-                  className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-sm px-4 font-medium"
-                  onClick={() => handleSubmitText(inputRef.current.value)} // Submit on button click
-                >
-                  Submit
-                </button>
-              </div>
+            <div className="p-6 rounded-lg text-center relative h-28 w-60 md:w-96 flex flex-col justify-center items-start space-y-3">
+      <p className="text-gray-500 text-sm capitalize font-semibold text-left">
+        Enter your text here
+      </p>
+      <input
+        id="textInput"
+        type="text"
+        placeholder="Type to Preview"
+        className={`border-2 border-gray-300 rounded-md p-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm`}
+        style={{ fontFamily: selectedFont }} // Apply selected Google Font
+        ref={inputRef} // Reference to access the input value directly
+      />
+      <button
+        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-sm px-4 font-medium"
+        onClick={() => handleSubmitText(inputRef.current.value)} // Submit on button click
+      >
+        Submit
+      </button>
+      <div className="mt-3">
+        <label className="text-gray-600 text-sm font-medium mr-2">Choose Font:</label>
+        <select
+          value={selectedFont}
+          onChange={handleFontChange} // Update selected Google Font
+          className="border border-gray-300 rounded-md p-1 text-sm"
+        >
+          <option value="Roboto">Roboto</option>
+          <option value="Open Sans">Open Sans</option>
+          <option value="Lato">Lato</option>
+        </select>
+      </div>
+    </div>
 
               {sockText && (
                 <>

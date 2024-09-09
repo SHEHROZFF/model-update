@@ -3,7 +3,7 @@ import { applylogo } from './apply_logo';
 import { drawVerticalText } from './drawVerticalText';
 
 
-export const combineLogoChange = (sockTexture, logo, logoPlacement,text,textColor,placement) => {
+export const combineLogoChange = (sockTexture, logo, logoPlacement,text,textColor,placement, fontStyle) => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   const canvasWidth = sockTexture.image.width;
@@ -19,7 +19,7 @@ export const combineLogoChange = (sockTexture, logo, logoPlacement,text,textColo
   // Apply logo if any
   if (logo) {
     console.log(logo);
-    applylogo(ctx, canvasWidth, canvasHeight, logo, logoPlacement,sockTexture.image);
+    applylogo(ctx, canvasWidth, canvasHeight, logo, logoPlacement,sockTexture.image, fontStyle);
 
   }
   if(text) {

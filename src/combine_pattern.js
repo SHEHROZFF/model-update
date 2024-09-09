@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { applylogo } from "./apply_logo";
 import { drawVerticalText } from "./drawVerticalText";
 
-export const combinePattern = (sockTexture,logo,pattern,logoPlacement,dotColors,checkBoardColors,illusionistic_colors,csts1,csts2,csts3,csts4,text,textColor,placement) => {
+export const combinePattern = (sockTexture,logo,pattern,logoPlacement,dotColors,checkBoardColors,illusionistic_colors,csts1,csts2,csts3,csts4,text,textColor,placement, fontStyle) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
@@ -49,7 +49,7 @@ export const combinePattern = (sockTexture,logo,pattern,logoPlacement,dotColors,
     
     if(text) {
       ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
-      const updatedCtx = drawVerticalText(ctx, text, canvas, textColor , placement);
+      const updatedCtx = drawVerticalText(ctx, text, canvas, textColor , placement, fontStyle);
       updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
     }
   }
