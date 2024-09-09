@@ -435,12 +435,16 @@ export default function Home() {
       updatePattern(pattern); // Ensure texture updates on pattern change
     } else if (selectedUploadedTexture) {
       // console.log(selectedUploadedTexture);
+      console.log("texture");
+      
       processTexture(selectedUploadedTexture);
     } else if (dsockColor) {
       // console.log(dsockColor);
       handleColorOnChange(dsockColor);
     } else {
       // console.log("nothing");
+      console.log("nothing");
+      
       handleTextPlacement(sockTextPlacement); // Ensure texture updates on pattern change
     }
 
@@ -455,10 +459,10 @@ export default function Home() {
     pattern,
     sockText,
     sockTextColor,
+    selectedFont,
     sockTextPlacement,
     dsockColor,
-    selectedUploadedTexture,
-    selectedFont
+    selectedUploadedTexture
   ]);
 
   const handlePatternChange = (event) => {
@@ -539,21 +543,21 @@ export default function Home() {
     setLogo(null)
 
     // Clear the image from the model
-    if (defaultSockTexture) {
-      const updatedTexture = combineLogoChange(
-        defaultSockTexture,
-        logo, // Set to null or a default placeholder as needed
-        "no_logo",
-        sockText,
-        sockTextColor,
-        sockTextPlacement,
-        selectedFont
-      );
-      updatedTexture.encoding = THREE.sRGBEncoding;
-      // updatedTexture.minFilter = THREE.LinearFilter;
-      updatedTexture.magFilter = THREE.LinearFilter;
-      setTexture(updatedTexture);
-    }
+    // if (defaultSockTexture) {
+    //   const updatedTexture = combineLogoChange(
+    //     defaultSockTexture,
+    //     logo, // Set to null or a default placeholder as needed
+    //     "no_logo",
+    //     sockText,
+    //     sockTextColor,
+    //     sockTextPlacement,
+    //     selectedFont
+    //   );
+    //   updatedTexture.encoding = THREE.sRGBEncoding;
+    //   // updatedTexture.minFilter = THREE.LinearFilter;
+    //   updatedTexture.magFilter = THREE.LinearFilter;
+    //   setTexture(updatedTexture);
+    // }
 
     // Clear the file input value
     const logoInput = document.getElementById("logoInput");

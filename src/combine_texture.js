@@ -17,7 +17,7 @@ export const combineTextures = (sockTexture, newTexture, logo,logoPlacement,text
 
   // Apply new texture if any
   if (newTexture) {
-    console.log(newTexture);
+    // console.log(newTexture);
     
     ctx.globalCompositeOperation = 'multiply';
     ctx.drawImage(newTexture, 0, 0, canvasWidth, canvasHeight);
