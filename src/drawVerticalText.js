@@ -1,9 +1,9 @@
-function fitTextToCanvas(ctx, text, maxWidth, fs) {
+function fitTextToCanvas(ctx, text, maxWidth, fs, fontst) {
     let fontSize = fs; // Start with a large font size
     let textWidth;
   
     // Set initial font size
-    ctx.font = `${fontSize}px `;
+    ctx.font = `${fontSize}px ${fontst} `;
   
     // Measure text width
     textWidth = ctx.measureText(text).width;
@@ -11,7 +11,7 @@ function fitTextToCanvas(ctx, text, maxWidth, fs) {
     // Adjust font size until the text fits within the maxWidth
     while (textWidth > maxWidth && fontSize > 10) { // Avoid too small font size
       fontSize -= 1; // Decrease font size
-      ctx.font = `${fontSize}px `;
+      ctx.font = `${fontSize}px ${fontst}`;
       textWidth = ctx.measureText(text).width;
     }
   
@@ -25,9 +25,12 @@ export function drawVerticalText(ctx, text, canvas, color,placement, fontStyle) 
           const maxWidthB = canvas.width * 0.4; // Example: 80% of canvas width
 
           // Determine the appropriate font size
-          const fontSizeB = fitTextToCanvas(ctx, text, maxWidthB,50);
+          const fontSizeB = fitTextToCanvas(ctx, text, maxWidthB,50,fontStyle);
 
           ctx.font = `${fontSizeB}px ${fontStyle}`;
+
+          console.log(fontStyle);
+          
         
           // Measure the adjusted text width
           const textWidthB = ctx.measureText(text).width;
@@ -66,9 +69,11 @@ export function drawVerticalText(ctx, text, canvas, color,placement, fontStyle) 
           const maxWidthF = canvas.width * 0.8; // Example: 80% of canvas width
       
           // Determine the appropriate font size
-          const fontSizeF = fitTextToCanvas(ctx, text, maxWidthF,70);
+          const fontSizeF = fitTextToCanvas(ctx, text, maxWidthF,70,fontStyle);
 
           ctx.font = `${fontSizeF}px ${fontStyle}`;
+          console.log(fontStyle);
+          
         
           // Measure the adjusted text width
           const textWidthF = ctx.measureText(text).width;

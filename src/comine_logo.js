@@ -19,12 +19,12 @@ export const combineLogoChange = (sockTexture, logo, logoPlacement,text,textColo
   // Apply logo if any
   if (logo) {
     console.log(logo);
-    applylogo(ctx, canvasWidth, canvasHeight, logo, logoPlacement,sockTexture.image, fontStyle);
+    applylogo(ctx, canvasWidth, canvasHeight, logo, logoPlacement,sockTexture.image);
 
   }
   if(text) {
     ctx.globalCompositeOperation = 'source-atop'; // Use 'source-atop' to apply color overlay
-    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor,placement);
+    const updatedCtx = drawVerticalText(ctx, text, canvas, textColor,placement,fontStyle);
     updatedCtx.globalCompositeOperation = 'source-over'; // Reset to default
   }
 

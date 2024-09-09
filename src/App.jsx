@@ -15,7 +15,7 @@ import "./../src/globals.css";
 import Swatches from "./components/colorswatches";
 import * as THREE from "three";
 import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, events } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Modal, Button, Form, Input, Tooltip, Checkbox } from "antd";
 // Component Import
@@ -325,53 +325,53 @@ export default function Home() {
       reader.onloadend = () => {
         // Display the selected image in the UI
         setSelectedUploadedTexture(reader.result);
-
-        // Further process the image for texture merging
-        if (defaultSockTexture) {
-          const img = new Image();
-          img.src = reader.result;
-
-          img.onload = () => {
-            // Create a canvas to draw the image and apply transformations
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            // Set canvas dimensions to match the image
-            canvas.width = img.width;
-            canvas.height = img.height;
-
-            // Flip the image upside down
-            ctx.translate(0, img.height);
-            ctx.scale(1, -1);
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-
-            // Create a new Image object with the flipped image
-            const flippedImage = new Image();
-            flippedImage.src = canvas.toDataURL();
-
-            flippedImage.onload = () => {
-              // Merge the flipped image with the existing texture and logo
-              const mergedTexture = combineTextures(
-                defaultSockTexture,
-                flippedImage,
-                logo,
-                logoPlacement,
-                sockText,
-                sockTextColor,
-                sockTextPlacement,
-                selectedFont
-              );
-              mergedTexture.encoding = THREE.sRGBEncoding;
-              // mergedTexture.minFilter = THREE.LinearFilter;
-              mergedTexture.magFilter = THREE.LinearFilter;
-              setTexture(mergedTexture);
-            };
-          };
-        }
+        processTexture(reader.result); // Move the processing logic to a separate function
       };
       reader.readAsDataURL(file);
     }
+  };
 
+  const processTexture = (textureURL) => {
+    if (textureURL && defaultSockTexture) {
+      const img = new Image();
+      img.src = textureURL;
+
+      img.onload = () => {
+        // Create a canvas to draw the image and apply transformations
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas dimensions to match the image
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Flip the image upside down
+        ctx.translate(0, img.height);
+        ctx.scale(1, -1);
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+
+        // Create a new Image object with the flipped image
+        const flippedImage = new Image();
+        flippedImage.src = canvas.toDataURL();
+
+        flippedImage.onload = () => {
+          // Merge the flipped image with the existing texture and logo
+          const mergedTexture = combineTextures(
+            defaultSockTexture,
+            flippedImage,
+            logo,
+            logoPlacement,
+            sockText,
+            sockTextColor,
+            sockTextPlacement,
+            selectedFont
+          );
+          mergedTexture.encoding = THREE.sRGBEncoding;
+          mergedTexture.magFilter = THREE.LinearFilter;
+          setTexture(mergedTexture);
+        };
+      };
+    }
   };
   const handleTextureDelete = () => {
     setSelectedUploadedTexture(null);
@@ -431,18 +431,17 @@ export default function Home() {
   };
   useEffect(() => {
     if (pattern) {
-      console.log(pattern);
+      // console.log(pattern);
       updatePattern(pattern); // Ensure texture updates on pattern change
     } else if (selectedUploadedTexture) {
-      console.log(selectedUploadedTexture);
-      // handleTextureChange();
+      // console.log(selectedUploadedTexture);
+      processTexture(selectedUploadedTexture);
     } else if (dsockColor) {
-      console.log(dsockColor);
-      handleColorOnChange(dsockColor)
+      // console.log(dsockColor);
+      handleColorOnChange(dsockColor);
     } else {
-      console.log("noyhing");
+      // console.log("nothing");
       handleTextPlacement(sockTextPlacement); // Ensure texture updates on pattern change
-
     }
 
   }, [
@@ -694,11 +693,29 @@ export default function Home() {
       setTexture(updatedTexture);
     }
   };
+  const handleFontChange = (event) => {
+    console.log(event.target.value);
+    let style = event.target.value
+    
+    setSelectedFont(style);
+    if (defaultSockTexture) {
+      const updatedTexture = combineLogoChange(
+        defaultSockTexture,
+        logo,
+        logoPlacement,
+        sockText,
+        sockTextColor,
+        sockTextPlacement,
+        style
+        
+      );
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
+  };
   // --------------------------------------------------------------------
 
-  const handleFontChange = (event) => {
-    setSelectedFont(event.target.value);
-  };
 
 
   const handleSave = async () => {
@@ -950,12 +967,20 @@ export default function Home() {
         <label className="text-gray-600 text-sm font-medium mr-2">Choose Font:</label>
         <select
           value={selectedFont}
-          onChange={handleFontChange} // Update selected Google Font
+          onChange={(event)=> handleFontChange(event)} // Update selected Google Font
           className="border border-gray-300 rounded-md p-1 text-sm"
         >
-          <option value="Roboto">Roboto</option>
-          <option value="Open Sans">Open Sans</option>
-          <option value="Lato">Lato</option>
+          <option value="Arial">Arial</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Trebuchet MS">Trebuchet MS</option>
+          <option value="Comic Sans MS">Comic Sans MS</option>
+          <option value="Impact">Impact</option>
+          <option value="Lucida Sans">Lucida Sans</option>
+
         </select>
       </div>
     </div>
