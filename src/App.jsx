@@ -543,21 +543,21 @@ export default function Home() {
     setLogo(null)
 
     // Clear the image from the model
-    // if (defaultSockTexture) {
-    //   const updatedTexture = combineLogoChange(
-    //     defaultSockTexture,
-    //     logo, // Set to null or a default placeholder as needed
-    //     "no_logo",
-    //     sockText,
-    //     sockTextColor,
-    //     sockTextPlacement,
-    //     selectedFont
-    //   );
-    //   updatedTexture.encoding = THREE.sRGBEncoding;
-    //   // updatedTexture.minFilter = THREE.LinearFilter;
-    //   updatedTexture.magFilter = THREE.LinearFilter;
-    //   setTexture(updatedTexture);
-    // }
+    if (defaultSockTexture) {
+      const updatedTexture = combineLogoChange(
+        defaultSockTexture,
+        logo, // Set to null or a default placeholder as needed
+        "no_logo",
+        sockText,
+        sockTextColor,
+        sockTextPlacement,
+        selectedFont
+      );
+      updatedTexture.encoding = THREE.sRGBEncoding;
+      // updatedTexture.minFilter = THREE.LinearFilter;
+      updatedTexture.magFilter = THREE.LinearFilter;
+      setTexture(updatedTexture);
+    }
 
     // Clear the file input value
     const logoInput = document.getElementById("logoInput");
@@ -736,19 +736,26 @@ export default function Home() {
     canvas.width = texture.image.width;
     canvas.height = texture.image.height;
     const context = canvas.getContext("2d");
+    
+    // Flip the image vertically
+    context.translate(0, canvas.height);
+    context.scale(1, -1); // Scale Y-axis by -1 to flip vertically
+    
+    // Draw the image
     context.drawImage(texture.image, 0, 0);
+    
 
     canvas.toBlob(async (blob) => {
       const formData = new FormData();
       formData.append("file", blob, "customized_sock_texture.png");
       const username = "socksadmin";
-      const password = "8jPu epUh nWyj gHAF Gjbx aqiV";
+      const password = "JoIl 8Qvr L7j5 6ZRN 9MDT nlm6";
 
       const credentials = btoa(`${username}:${password}`);
 
       try {
         const response = await fetch(
-          "https://socks.phpnode.net/wp-json/wp/v2/media",
+          "https://gocustomsock.com/wp-json/wp/v2/media",
           {
             method: "POST",
             headers: {
@@ -786,12 +793,18 @@ export default function Home() {
       sockDesign: parseInt(imageId, 10),
       cuffColor,
       toeColor,
-      heelColor
+      heelColor,
+      sockText,
+      selectedFont,
+      sockTextColor
+
+
+      
     };
 
     try {
       const response = await axios.post(
-        "https://socks.phpnode.net/wp-json/socks/v1/order",
+        "https://gocustomsock.com/wp-json/socks/v1/order",
         data,
         {
           headers: {
