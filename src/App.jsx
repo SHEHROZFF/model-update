@@ -436,7 +436,7 @@ export default function Home() {
     } else if (selectedUploadedTexture) {
       // console.log(selectedUploadedTexture);
       console.log("texture");
-      
+
       processTexture(selectedUploadedTexture);
     } else if (dsockColor) {
       // console.log(dsockColor);
@@ -444,7 +444,7 @@ export default function Home() {
     } else {
       // console.log("nothing");
       console.log("nothing");
-      
+
       handleTextPlacement(sockTextPlacement); // Ensure texture updates on pattern change
     }
 
@@ -690,7 +690,7 @@ export default function Home() {
         sockTextColor,
         placement,
         selectedFont
-        
+
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.magFilter = THREE.LinearFilter;
@@ -700,7 +700,7 @@ export default function Home() {
   const handleFontChange = (event) => {
     console.log(event.target.value);
     let style = event.target.value
-    
+
     setSelectedFont(style);
     if (defaultSockTexture) {
       const updatedTexture = combineLogoChange(
@@ -711,7 +711,7 @@ export default function Home() {
         sockTextColor,
         sockTextPlacement,
         style
-        
+
       );
       updatedTexture.encoding = THREE.sRGBEncoding;
       updatedTexture.magFilter = THREE.LinearFilter;
@@ -949,49 +949,29 @@ export default function Home() {
           <>
             <div className="w-full h-full flex justify-between items-center my-2 mx-1 lg:mx-2">
 
-            <div className="p-6 rounded-lg text-center relative h-28 w-60 md:w-96 flex flex-col justify-center items-start space-y-3">
-      <p className="text-gray-500 text-sm capitalize font-semibold text-left">
-        Enter your text here
-      </p>
-      <input
-        id="textInput"
-        type="text"
-        placeholder="Type to Preview"
-        className={`border-2 border-gray-300 rounded-md p-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm`}
-        style={{ fontFamily: selectedFont }} // Apply selected Google Font
-        ref={inputRef} // Reference to access the input value directly
-      />
-      <button
-        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-sm px-4 font-medium"
-        onClick={() => handleSubmitText(inputRef.current.value)} // Submit on button click
-      >
-        Submit
-      </button>
-      <div className="mt-3">
-        <label className="text-gray-600 text-sm font-medium mr-2">Choose Font:</label>
-        <select
-          value={selectedFont}
-          onChange={(event)=> handleFontChange(event)} // Update selected Google Font
-          className="border border-gray-300 rounded-md p-1 text-sm"
-        >
-          <option value="Arial">Arial</option>
-          <option value="Verdana">Verdana</option>
-          <option value="Helvetica">Helvetica</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Courier New">Courier New</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Trebuchet MS">Trebuchet MS</option>
-          <option value="Comic Sans MS">Comic Sans MS</option>
-          <option value="Impact">Impact</option>
-          <option value="Lucida Sans">Lucida Sans</option>
-
-        </select>
-      </div>
-    </div>
+              <div className="p-6 rounded-lg text-center relative h-28 w-60 md:w-96 flex flex-col justify-center items-start space-y-2">
+                <p className="text-gray-500 text-sm capitalize font-semibold text-left">
+                  Enter your text here
+                </p>
+                <input
+                  id="textInput"
+                  type="text"
+                  placeholder="Type to Preview"
+                  className={`border-2 border-gray-300 rounded-md p-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm`}
+                  style={{ fontFamily: selectedFont }} // Apply selected Google Font
+                  ref={inputRef} // Reference to access the input value directly
+                />
+                <button
+                  className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-sm px-4 font-medium"
+                  onClick={() => handleSubmitText(inputRef.current.value)} // Submit on button click
+                >
+                  Submit
+                </button>
+              </div>
 
               {sockText && (
                 <>
-                  <div className="w-full lg:w-1/2 border border-gray-200 bg-white p-5 space-y-1 lg:space-y-3">
+                  <div className="w-full border border-gray-200 bg-white p-5 space-y-1 lg:space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-bold tracking-tight"> Customize Color:</span>
                       <div className="bg-transparent rounded-full flex justify-center items-center border border-gray-800 cursor-pointer w-8 h-8">
@@ -1022,6 +1002,26 @@ export default function Home() {
                           </div>
                         ))}
                       </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <label className="text-gray-600 text-sm font-medium mr-2">Choose Font:</label>
+                      <select
+                        value={selectedFont}
+                        onChange={(event) => handleFontChange(event)} // Update selected Google Font
+                        className="border border-gray-300 rounded-md p-1 text-sm"
+                      >
+                        <option value="Arial">Arial</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Trebuchet MS">Trebuchet MS</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Impact">Impact</option>
+                        <option value="Lucida Sans">Lucida Sans</option>
+
+                      </select>
                     </div>
                   </div>
                 </>
@@ -1069,7 +1069,7 @@ export default function Home() {
       case "Choose Pattern":
         return (
           <>
-            <div className="flex flex-col justify-center items-center my-3 mx-0 md:my-2 md:mx-2 h-24 w-[240px]">
+            <div className="flex flex-col justify-center items-center my-3 mx-0 md:my-2 md:mx-2 h-24 lg:h-40 w-[240px]">
               <select
                 value={pattern}
                 onChange={handlePatternChange}
@@ -1088,7 +1088,7 @@ export default function Home() {
               </select>
 
               {pattern === "dots" && (
-                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full gap-2 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center mt-3">
                     Colors:
                   </h2>
@@ -1192,7 +1192,7 @@ export default function Home() {
                     <br />
                     <span className="text-xs">(Scroll To View)</span>
                   </h2>
-                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-12 overflow-y-auto">
+                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-12">
                     {csts3.map((color, index) => (
                       <input
                         key={index}
@@ -1207,12 +1207,12 @@ export default function Home() {
               )}
 
               {pattern === "custom_4" && (
-                <div className="flex flex-col justify-center items-center w-full gap-4 cursor-pointer">
+                <div className="flex flex-col justify-center items-center w-full h-full gap-4 cursor-pointer">
                   <h2 className="text-sm font-semibold text-nowrap text-gray-600 text-center">
                     Colors: <br />
                     <span className="text-xs">(Scroll To View)</span>
                   </h2>
-                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-12 overflow-y-auto">
+                  <div className="grid grid-cols-5 items-center justify-center gap-2 h-20 overflow-y-auto">
                     {csts4.map((color, index) => (
                       <input
                         key={index}
@@ -1736,7 +1736,7 @@ export default function Home() {
           </div>
         </div>
         <motion.div
-          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-10 md:-bottom-6 bg-transparent overflow-visible p-3"
+          className="mx-auto w-full h-[28%] lg:h-[25%] absolute left-0 bottom-10 md:bottom-10 bg-transparent overflow-visible p-3"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
