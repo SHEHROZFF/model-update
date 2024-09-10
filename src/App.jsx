@@ -871,7 +871,7 @@ export default function Home() {
                 </div>
               ) : (
                 <div className="relative">
-                  <div className="w-60  rounded-lg  shadow-lg relative overflow-visible bg-white">
+                  <div className="w-60 md:w-64 rounded-lg  shadow-lg relative overflow-visible bg-white">
                     <img
                       src={selectedImage}
                       alt="Selected"
@@ -888,7 +888,7 @@ export default function Home() {
                 </div>
               )}
               {selectedImage && (
-                <div className="w-full space-y-4 px-5">
+                <div className="w-60 md:w-96 space-y-4 px-5">
                   <div className="grid grid-cols-2 gap-4">
                     {['calf', 'footbed', 'calf_footbed', 'repeating'].map((placement) => (
                       <div
@@ -984,7 +984,7 @@ export default function Home() {
 
               {sockText && (
                 <>
-                  <div className="w-full border border-gray-200 bg-white p-5 space-y-1 lg:space-y-3">
+                  <div className="w-full border border-gray-200 bg-white p-5 space-y-1 lg:space-y-3 rounded-lg -mt-8">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-bold tracking-tight"> Customize Color:</span>
                       <div className="bg-transparent rounded-full flex justify-center items-center border border-gray-800 cursor-pointer w-8 h-8">
@@ -1004,15 +1004,16 @@ export default function Home() {
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         {['bottom', 'Front'].map((placement) => (
                           <div
-                            key={placement}
-                            className={`flex items-center justify-center text-sm p1 lg:p-2 border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-red-500 text-white border-red-500' : 'bg-white text-gray-700 border-gray-300'
-                              } hover:bg-blue-100 hover:text-black`}
-                            onClick={() => {
-                              handleTextPlacement(placement);
-                            }}
-                          >
-                            {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
-                          </div>
+                          key={placement}
+                          className={`flex items-center justify-center text-sm p1 lg:p-2 border rounded-lg cursor-pointer transition duration-150 ease-in-out ${logoPlacement === placement ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-300'
+                            } hover:bg-blue-100 hover:text-black`}
+                          onClick={() => {
+                            handleTextPlacement(placement);
+                          }}
+                        >
+                          {placement.charAt(0).toUpperCase() + placement.slice(1).replace('_', ' ')}
+                        </div>
+                        
                         ))}
                       </div>
                     </div>
