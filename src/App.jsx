@@ -752,7 +752,8 @@ export default function Home() {
       const password = "JoIl 8Qvr L7j5 6ZRN 9MDT nlm6";
 
       const credentials = btoa(`${username}:${password}`);
-
+      // console.log("skjdkj");
+      
       try {
         const response = await fetch(
           "https://gocustomsock.com/wp-json/wp/v2/media",
@@ -794,9 +795,9 @@ export default function Home() {
       cuffColor,
       toeColor,
       heelColor,
-      sockText,
-      selectedFont,
-      sockTextColor
+      text:sockText,
+      textstyle:selectedFont,
+      textcolor:sockTextColor
 
 
       
